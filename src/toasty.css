@@ -1,0 +1,64 @@
+/* toast stylings */
+
+/* entire toast container */
+.toast-container {
+    display: inline;
+    position: fixed;
+    z-index: 999999;
+    bottom: 10px;
+     right: 10px;
+}
+
+/* each toast gets this style */
+.toast {
+    position: relative;
+    font-family: sans-serif;
+    padding: 16px;
+     border: 1px solid;
+    margin: 0.5em auto;
+    border-left: 6px solid transparent;
+    -webkit-transform: translate3d(0, 0, 0);
+            transform: translate3d(0, 0, 0);
+}
+
+/* successful toast class */
+.toast--success {
+    color: #3C763D;
+    background-color: #E9FFD9;
+    border-color: #A6CA8A;
+}
+
+/* informational toast class */
+.toast--info {
+    color: #31708F;
+    background-color: #EAF2FA;
+    border-color: #91C5F2;
+}
+
+/* warning toast class */
+.toast--warning {
+    color: #8A6D3B;
+    background-color: #FFF8C4;
+    border-color: #F2C779;
+}
+
+/* error toast class */
+.toast--error {
+    color: #A94442;
+    background-color: #FFECEC;
+    border-color: #F5ACA6;
+}
+
+/**
+ * Available toast animations:
+ * ------------------------------------------------------------------------- */
+
+/* slide fade left animation: */
+.toast--slideFadeLeft-init { opacity: 0; right: -100%; transition: 0.3s all ease; }
+.toast--slideFadeLeft-show { opacity: 1; right: 0%; }
+.toast--slideFadeLeft-hide { opacity: 0; right: -100%; }
+
+/* DEFAULT ANIMATION FADE: */
+.toast--default-animation-init { opacity: 0; transition: 0.3s all ease; }
+.toast--default-animation-show { opacity: 1; }
+.toast--default-animation-hide { opacity: 0; }
