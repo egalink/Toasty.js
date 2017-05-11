@@ -48,8 +48,8 @@
         }
     };
 
-    var classes = { // auto class names for each HTML element.
-        
+    // default class map for the classes object values:
+    var clasmap = {
           container: '{:classname}-container',
         progressbar: '{:classname}-progressbar',
 
@@ -68,11 +68,15 @@
         }
     };
 
+    // auto class names for each HTML element:
+    var classes = {};
+
     var Toasty = {
 
         config: function(opts) {
             setOptions(opts);
             init();
+            console.log(clasmap);
         },
 
         info: function(msg, duration) {
@@ -123,8 +127,14 @@
         return obj;
     }
 
+    function getClasmap() {
+        var string = JSON.stringify(clasmap);
+        var object = JSON.parse(string);
+        return object;
+    }
+
     function setClasses(dict) {
-        classes = walker(classes, dict);
+        classes = walker(getClasmap(), dict);
     }
 
     function setOptions(opts) {
@@ -132,7 +142,6 @@
     }
 
     function calculateAutoCloseDuration(msg, duration) {
-
         if (options.duration == 0 && duration == undefined)
             duration = msg.length *100;
         else
@@ -142,7 +151,6 @@
     }
 
     function playsound(type, container) {
-
         var sound = options.sounds[type],
             audio = document.createElement('audio');
             audio.autoplay = 'autoplay';
@@ -234,7 +242,6 @@
 
     // let's to create the toast:
     function createToast(html, type, duration) {
-
         // check if the toast container exists: 
         var toastContainer = document.querySelector('.' + classes.container);
         var toastContainerExists = !! toastContainer;
@@ -290,8 +297,7 @@
     }
 
     // initialize the plugin configuration:
-    function init()
-    {
+    function init() {
         setClasses({
             '{:classname}': options.classname,
             '{:animation}': options.animation
