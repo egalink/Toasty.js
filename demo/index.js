@@ -5,7 +5,8 @@
     Toasty.setOptions({
         animated: true,
         duration: 0, // if set to 0, the duration for each toast is calculated by message length.
-        enableSounds: true
+        enableSounds: true,
+        autoClose: true,
     });
 
     // configure the toasts:

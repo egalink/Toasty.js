@@ -1,19 +1,37 @@
+/*!
+ * Toasty.js v1.0.4
+ *
+ * A minimal JavaScript notification plugin that provides a simple way
+ * to display customizable toast messages.
+ *
+ * Edgar Jakim Hernández Arrieta <egalink@gmail.com>
+ * license: MIT
+ * https://github.com/egalink/Toasty.js
+ */
 ;(function() {
 
     'use strict';
 
     var options = {
+        
         prependTo: document.body.childNodes[0], //  The placement where prepend the toast container.
 
-        animated: true, // ........................ Defines whether toasts will be displayed or hidden with animation:
-                        // ............................ FALSE - show the toast without CSS animation
-                        // ............................ TRUE  - otherwise.
+        animated: true, // ......... Defines whether toasts will be displayed or hidden with animation:
+                        // ............. FALSE - show the toast without CSS3 animation.
+                        // ............. TRUE  - otherwise.
 
-        duration: 4000, // ........................ Duration that the toast will be displayed in milliseconds:
-                        // ............................ Default value is set to 4000 (four seconds). 
-                        // ............................ If set to 0, the duration for each toast is calculated by message length.
+        duration: 4000, // ......... Duration that the toast will be displayed in milliseconds:
+                        // ............. Default value is set to 4000 (four seconds). 
+                        // ............. If set to 0, the duration for each toast is calculated by message length.
 
-        enableSounds: false, // ....................... Set to TRUE to enable toast sounds.
+        enableSounds: false, // .... ENABLE or DISABLE toast sounds:
+                             // ........ TRUE  - enable toast sounds.
+                             // ........ FALSE - otherwise.
+
+        autoClose: true, // ........ ENABLE or DISABLE auto hiding on toast messages:
+                         // ............ TRUE  - Enable auto hiding.
+                         // ............ FALSE - Disable auto hiding. Instead the user must click on toast message to close it.
+
         sounds: {
             info: '../src/sounds/success,\ warning/1.mp3',
             success: '../src/sounds/success,\ warning/2.mp3',
@@ -118,15 +136,7 @@
         container.insertBefore(el, container.childNodes[0]);
     }
 
-    // hide the toast:
-    function hideToast(el, container) {
-        el.remove();
-        var num = document.querySelector('.' + classes.container).childNodes.length;
-        if (num < 1)
-            container.remove();
-    }
-
-    // show the toast with an CSS animation:
+    // show the toast with an CSS3 animation:
     function showAnimatedToast(el, container) {
         container.classList.add(classes.animate.cont);
         el.classList.add(classes.animate.init);
@@ -136,7 +146,15 @@
         }, 0);
     }
 
-    // hide the toast with an CSS animation:
+    // hide the toast:
+    function hideToast(el, container) {
+        el.remove();
+        var num = document.querySelector('.' + classes.container).childNodes.length;
+        if (num < 1)
+            container.remove();
+    }
+
+    // hide the toast with an CSS3 animation:
     function hideAnimatedToast(el, container) {
         el.addEventListener('transitionend', function(e) {
             var parent = e.currentTarget.parentNode;
@@ -145,6 +163,22 @@
             hideToast(el, container);
         });
         el.classList.add(classes.animate.hide);
+    }
+
+    // hide the toast on click it.
+    function closeOnClick(el, container) {
+        el.addEventListener('click', function(e) {
+            e.stopPropagation();
+            hideToast(e.target, container);
+        });
+    }
+
+    // hide the toast on click it with an CSS3 animation.
+    function closeOnClickAnimated(el, container) {
+        el.addEventListener('click', function(e) {
+            e.stopPropagation();
+            hideAnimatedToast(e.target, container);
+        });
     }
 
     // let's to create the toast:
@@ -178,12 +212,20 @@
             // show the toast with animation:
             showAnimatedToast(newToast, toastContainer);
             // prepare the toast to hide it:
-            setTimeout(function() { hideAnimatedToast(newToast, toastContainer); }, duration);
+            if (! options.autoClose)
+                closeOnClickAnimated(newToast, toastContainer);
+            else 
+                setTimeout(function() { hideAnimatedToast(newToast, toastContainer); }, duration);
+
         }  else {
             // show the toast without animation:
             showToast(newToast, toastContainer);
             // prepare the toast to hide it:
-            setTimeout(function() { hideToast(newToast, toastContainer); }, duration);
+            if (! options.autoClose)
+                closeOnClick(newToast, toastContainer);
+            else
+                setTimeout(function() { hideToast(newToast, toastContainer); }, duration);
+
         }
     }
 
