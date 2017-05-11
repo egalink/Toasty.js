@@ -5,18 +5,21 @@
     display: inline;
     position: fixed;
     z-index: 999999;
-    bottom: 10px;
-     right: 10px;
+    bottom: 0px;
+     right: 0px;
+    pointer-events: none;
 }
 
 /* each toast gets this style */
 .toast {
     position: relative;
-    font-family: sans-serif;
     padding: 16px;
      border: 1px solid;
-    margin: 0.5em auto;
+    margin: 0.5em 0.5em;
     border-left: 6px solid transparent;
+    border-radius: 2px;
+    -webkit-box-shadow: 0px 0px 9px rgba(0,0,0, 0.25);
+            box-shadow: 0px 0px 9px rgba(0,0,0, 0.25);
     -webkit-transform: translate3d(0, 0, 0);
             transform: translate3d(0, 0, 0);
 }
@@ -53,12 +56,37 @@
  * Available toast animations:
  * ------------------------------------------------------------------------- */
 
-/* slide fade left animation: */
-.toast--slideFadeLeft-init { opacity: 0; right: -100%; transition: 0.3s all ease; }
-.toast--slideFadeLeft-show { opacity: 1; right: 0%; }
-.toast--slideFadeLeft-hide { opacity: 0; right: -100%; }
+/* ANIMATION 00 - slide right left fade (DEFAULT ANIMATION): */
+.toast-container--default-animation {}
+.toast--default-animation-init { opacity: 0; left: -100%; transition: 0.3s all ease; }
+.toast--default-animation-show { opacity: 1; left: 0%; }
+.toast--default-animation-hide { opacity: 0; left: -100%; }
+/* ------------------------------------------------------------------------- */
 
-/* DEFAULT ANIMATION FADE: */
-.toast--default-animation-init { opacity: 0; transition: 0.3s all ease; }
-.toast--default-animation-show { opacity: 1; }
-.toast--default-animation-hide { opacity: 0; }
+/* ANIMATION 01 - slide fade left animation: */
+.toast-container--slideFadeLeft { height: 100vh; }
+.toast--slideFadeLeft-init { opacity: 0; left: 100%; transition: 0.3s all ease; }
+.toast--slideFadeLeft-show { opacity: 1; left: 0%; }
+.toast--slideFadeLeft-hide { opacity: 0; left: 100%; }
+/* ------------------------------------------------------------------------- */
+
+/* ANIMATION 02 - slide fade right animation: */
+.toast-container--slideFadeRight { height: 100vh; }
+.toast--slideFadeRight-init { opacity: 0; right: 100%; transition: 0.3s all ease; }
+.toast--slideFadeRight-show { opacity: 1; right: 0%; }
+.toast--slideFadeRight-hide { opacity: 0; right: 100%; }
+/* ------------------------------------------------------------------------- */
+
+/* ANIMATION 03 - slide down fade animation: */
+.toast-container--slideDownFade { height: 100vh; }
+.toast--slideDownFade-init { opacity: 0; top: -100%; transition: 0.3s all ease; }
+.toast--slideDownFade-show { opacity: 1; top: 0%; }
+.toast--slideDownFade-hide { opacity: 0; top: 100%; }
+/* ------------------------------------------------------------------------- */
+
+/* ANIMATION 04 - slide up down fade animation: */
+.toast-container--slideUpDownFade { height: 100vh; }
+.toast--slideUpDownFade-init { opacity: 0; bottom: -100%; transition: 0.3s all ease; }
+.toast--slideUpDownFade-show { opacity: 1; bottom: 0%; }
+.toast--slideUpDownFade-hide { opacity: 0; bottom: -100%; }
+/* ------------------------------------------------------------------------- */

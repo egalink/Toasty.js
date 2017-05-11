@@ -1,10 +1,12 @@
+@import url('https://fonts.googleapis.com/css?family=Muli');
 
 * {
     box-sizing: border-box;
+    outline: none;
 }
 
 html {
-    font-family: sans-serif;
+    font-family: 'Muli', sans-serif;
     line-height: 1.5em;
     background-color: #fefefe;
 }

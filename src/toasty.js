@@ -29,6 +29,7 @@
             init: 'toast--default-animation-init',
             show: 'toast--default-animation-show',
             hide: 'toast--default-animation-hide',
+            cont: 'toast-container--default-animation'
         },
         toasts: { // available toast types for notifications.
             info: 'toast--info',
@@ -78,7 +79,7 @@
     function calculateAutoCloseDuration(msg, duration) {
 
         if (options.duration == 0 && duration == undefined)
-            duration = msg.length *80;
+            duration = msg.length *100;
         else
             duration = duration || options.duration;
 
@@ -93,8 +94,8 @@
         classes = extend(dict, classes);
     }
 
-    function playsound(type, container)
-    {
+    function playsound(type, container) {
+
         var sound = options.sounds[type],
             audio = document.createElement('audio');
             audio.autoplay = 'autoplay';
@@ -127,6 +128,7 @@
 
     // show the toast with an CSS animation:
     function showAnimatedToast(el, container) {
+        container.classList.add(classes.animate.cont);
         el.classList.add(classes.animate.init);
         showToast(el, container);
         setTimeout(function() {
@@ -183,8 +185,6 @@
             // prepare the toast to hide it:
             setTimeout(function() { hideToast(newToast, toastContainer); }, duration);
         }
-
-        // end main function.
     }
 
     window.Toasty = Toasty;
