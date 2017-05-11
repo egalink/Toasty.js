@@ -74,7 +74,7 @@
 
 /* progress bar color for each toast type: */
 .toast-progressbar--info { background-color: #91C5F2; }
-.toast-progressbar--success { background-color: #91C5F2; }
+.toast-progressbar--success { background-color: #A6CA8A; }
 .toast-progressbar--warning { background-color: #F2C779; }
 .toast-progressbar--error { background-color: #F5ACA6; }
 
