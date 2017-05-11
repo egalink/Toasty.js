@@ -32,6 +32,10 @@
                          // ............ TRUE  - Enable auto hiding.
                          // ............ FALSE - Disable auto hiding. Instead the user must click on toast message to close it.
 
+        showProgressBar: true, // . ENABLE or DISABLE progressbar:
+                               // ..... TRUE  - enable the progressbar only if the autoClose option value is set to TRUE.
+                               // ..... FALSE - disable the progressbar. 
+
         sounds: {
             info: '../src/sounds/success,\ warning/1.mp3',
             success: '../src/sounds/success,\ warning/2.mp3',
@@ -43,6 +47,7 @@
     var classes = {
         container: 'toast-container',
         default: 'toast',
+        progressBar: 'toast-progressbar',
         animate: {
             init: 'toast--default-animation-init',
             show: 'toast--default-animation-show',
@@ -181,6 +186,28 @@
         });
     }
 
+    function showProgressBar(newToast, duration) {
+        var progressBar = document.createElement('div');
+            progressBar.className = classes.progressBar;
+            newToast.appendChild(progressBar);
+
+        var iterat = 0,
+            offset = 0;
+
+        var interval = setInterval(function() {
+
+            iterat ++;
+            offset = Math.round((1000 *iterat) / duration);
+        
+            if (offset == 100) {
+                clearInterval(interval);
+            } else {
+                progressBar.style.width = offset + '%';
+            }
+
+        }, 10);
+    }
+
     // let's to create the toast:
     function createToast(html, type, duration) {
 
@@ -204,10 +231,12 @@
             document.body.insertBefore(toastContainer, options.prependTo);
         }
 
+        // enable or disable toast sounds:
         if (options.enableSounds == true) {
             playsound(type, toastContainer);
         }
 
+        // show / hide the toast messages:
         if (options.animated) {
             // show the toast with animation:
             showAnimatedToast(newToast, toastContainer);
@@ -227,6 +256,13 @@
                 setTimeout(function() { hideToast(newToast, toastContainer); }, duration);
 
         }
+
+        // show a progressbar on toast messages:
+        if (options.showProgressBar == true && options.autoClose == true) {
+            showProgressBar(newToast, duration);
+        }
+
+        // end main function.
     }
 
     window.Toasty = Toasty;

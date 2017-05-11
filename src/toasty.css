@@ -10,6 +10,18 @@
     pointer-events: none;
 }
 
+/* toast progressbar */
+.toast-progressbar {
+    position: absolute;
+    background-color: rgba(0,0,0, 0.2);
+    height: 100%;
+    width: 0%;
+    left: 0px;
+    bottom: 0px;
+    opacity: 0.5;
+    transition: 0s width ease;
+}
+
 /* each toast gets this style */
 .toast {
     position: relative;
