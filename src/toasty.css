@@ -1,4 +1,3 @@
-/* toast stylings */
 
 /* entire toast container */
 .toast-container {
@@ -10,19 +9,11 @@
     pointer-events: none;
 }
 
-/* toast progressbar */
-.toast-progressbar {
-    position: absolute;
-    background-color: rgba(0,0,0, 0.2);
-    height: 100%;
-    width: 0%;
-    left: 0px;
-    bottom: 0px;
-    opacity: 0.5;
-    transition: 0s width ease;
-}
+/**
+ * Toast stylings:
+ * ------------------------------------------------------------------------- */
 
-/* each toast gets this style */
+/* each toast gets this style: */
 .toast {
     position: relative;
     padding: 16px;
@@ -38,28 +29,28 @@
             transform: translate3d(0, 0, 0);
 }
 
-/* successful toast class */
+/* successful toast class: */
 .toast--success {
     color: #3C763D;
     background-color: #E9FFD9;
     border-color: #A6CA8A;
 }
 
-/* informational toast class */
+/* informational toast class: */
 .toast--info {
     color: #31708F;
     background-color: #EAF2FA;
     border-color: #91C5F2;
 }
 
-/* warning toast class */
+/* warning toast class: */
 .toast--warning {
     color: #8A6D3B;
     background-color: #FFF8C4;
     border-color: #F2C779;
 }
 
-/* error toast class */
+/* error toast class: */
 .toast--error {
     color: #A94442;
     background-color: #FFECEC;
@@ -67,14 +58,35 @@
 }
 
 /**
+ * Progress bar styling:
+ * ------------------------------------------------------------------------- */
+
+/* each progress bar gets this style: */
+.toast-progressbar {
+    position: absolute;
+    height: 4px;
+    width: 0%;
+    left: 0px;
+    bottom: 0px;
+    opacity: 0.5;
+    transition: 0s width ease;
+}
+
+/* progress bar color for each toast type: */
+.toast-progressbar--info { background-color: #91C5F2; }
+.toast-progressbar--success { background-color: #91C5F2; }
+.toast-progressbar--warning { background-color: #F2C779; }
+.toast-progressbar--error { background-color: #F5ACA6; }
+
+/**
  * Available toast animations:
  * ------------------------------------------------------------------------- */
 
 /* ANIMATION 00 - slide right left fade (DEFAULT ANIMATION): */
-.toast-container--default-animation {}
-.toast--default-animation-init { opacity: 0; left: -100%; transition: 0.3s all ease; }
-.toast--default-animation-show { opacity: 1; left: 0%; }
-.toast--default-animation-hide { opacity: 0; left: -100%; }
+.toast-container--default {}
+.toast--default-init { opacity: 0; left: -100%; transition: 0.3s all ease; }
+.toast--default-show { opacity: 1; left: 0%; }
+.toast--default-hide { opacity: 0; left: -100%; }
 /* ------------------------------------------------------------------------- */
 
 /* ANIMATION 01 - slide fade left animation: */

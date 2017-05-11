@@ -1,5 +1,5 @@
 /*!
- * Toasty.js v1.0.4
+ * Toasty.js v1.1.0
  *
  * A minimal JavaScript notification plugin that provides a simple way
  * to display customizable toast messages.
@@ -14,6 +14,10 @@
 
     var options = {
         
+        classname: 'toast', // ..... The class name user in each toast alert.
+
+        animation: 'default', // ... The CSS class transition.
+
         prependTo: document.body.childNodes[0], //  The placement where prepend the toast container.
 
         animated: true, // ......... Defines whether toasts will be displayed or hidden with animation:
@@ -41,33 +45,35 @@
             success: '../src/sounds/success,\ warning/2.mp3',
             warning: '../src/sounds/success,\ warning/3.mp3',
             error: '../src/sounds/errors/1.mp3'
-        },
+        }
     };
 
-    var classes = {
-        container: 'toast-container',
-        default: 'toast',
-        progressBar: 'toast-progressbar',
+    var classes = { // auto class names for each HTML element.
+        
+          container: '{:classname}-container',
+        progressbar: '{:classname}-progressbar',
+
         animate: {
-            init: 'toast--default-animation-init',
-            show: 'toast--default-animation-show',
-            hide: 'toast--default-animation-hide',
-            cont: 'toast-container--default-animation'
+            init: '{:classname}--{:animation}-init',
+            show: '{:classname}--{:animation}-show',
+            hide: '{:classname}--{:animation}-hide'
         },
+
         toasts: { // available toast types for notifications.
-            info: 'toast--info',
-            success: 'toast--success',
-            warning: 'toast--warning',
-            error: 'toast--error',
-            sound: 'toast--notify-sound'
+               info: '{:classname}--info',
+            success: '{:classname}--success',
+            warning: '{:classname}--warning',
+              error: '{:classname}--error',
+              sound: '{:classname}--notify-sound'
         }
     };
 
     var Toasty = {
 
-        setOptions: setOptions,
-
-        setClasses: setClasses,
+        config: function(opts) {
+            setOptions(opts);
+            init();
+        },
 
         info: function(msg, duration) {
             duration = calculateAutoCloseDuration(msg, duration);
@@ -99,6 +105,32 @@
         return toExtend;
     }
 
+    function walker(obj, map) {
+    
+        for (var o in obj) if (obj.hasOwnProperty(o) == true) {
+            // ini loop:
+            switch (typeof obj[o]) {
+                case 'object':
+                    walker(obj[o], map);
+                    break;
+                case 'string':
+                    for (var m in map) if (map.hasOwnProperty(m) == true) obj[o] = obj[o].replace(m, map[m]);
+                    break;
+            }
+            // end loop.
+        }
+
+        return obj;
+    }
+
+    function setClasses(dict) {
+        classes = walker(classes, dict);
+    }
+
+    function setOptions(opts) {
+        options = extend(opts, options);
+    }
+
     function calculateAutoCloseDuration(msg, duration) {
 
         if (options.duration == 0 && duration == undefined)
@@ -107,14 +139,6 @@
             duration = duration || options.duration;
 
         return Math.floor(duration);
-    }
-
-    function setOptions(opts) {
-        options = extend(opts, options);
-    }
-
-    function setClasses(dict) {
-        classes = extend(dict, classes);
     }
 
     function playsound(type, container) {
@@ -143,7 +167,7 @@
 
     // show the toast with an CSS3 animation:
     function showAnimatedToast(el, container) {
-        container.classList.add(classes.animate.cont);
+        container.classList.add(classes.container + '--' + options.animation);
         el.classList.add(classes.animate.init);
         showToast(el, container);
         setTimeout(function() {
@@ -186,9 +210,9 @@
         });
     }
 
-    function showProgressBar(newToast, duration) {
+    function showProgressBar(newToast, duration, type) {
         var progressBar = document.createElement('div');
-            progressBar.className = classes.progressBar;
+            progressBar.className = classes.progressbar + ' ' + classes.progressbar + '--' + type;
             newToast.appendChild(progressBar);
 
         var iterat = 0,
@@ -223,7 +247,7 @@
 
         // create a new toast instance
         var newToast = document.createElement('div');
-            newToast.className = classes.default + ' ' + classes.toasts[type];
+            newToast.className = options.classname + ' ' + classes.toasts[type];
             newToast.innerHTML = html;
 
         // insert the toast container into the HTML:
@@ -259,11 +283,22 @@
 
         // show a progressbar on toast messages:
         if (options.showProgressBar == true && options.autoClose == true) {
-            showProgressBar(newToast, duration);
+            showProgressBar(newToast, duration, type);
         }
 
         // end main function.
     }
+
+    // initialize the plugin configuration:
+    function init()
+    {
+        setClasses({
+            '{:classname}': options.classname,
+            '{:animation}': options.animation
+        });
+    }
+
+    init();
 
     window.Toasty = Toasty;
 

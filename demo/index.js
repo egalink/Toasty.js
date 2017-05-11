@@ -2,12 +2,13 @@
 
     'use strict';
 
-    Toasty.setOptions({
+    Toasty.config({
         animated: true,
         duration: 0, // if set to 0, the duration for each toast is calculated by message length.
         enableSounds: true,
         autoClose: true,
         showProgressBar: true,
+        animation: 'default'
     });
 
     // configure the toasts:
