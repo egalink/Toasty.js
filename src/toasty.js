@@ -1,5 +1,5 @@
 /*!
- * Toasty.js v1.0.4
+ * Toasty.js v1.0.6
  *
  * A minimal JavaScript notification plugin that provides a simple way
  * to display customizable toast messages.
@@ -199,7 +199,7 @@
             iterat ++;
             offset = Math.round((1000 *iterat) / duration);
         
-            if (offset == 100) {
+            if (offset >= 100) {
                 clearInterval(interval);
             } else {
                 progressBar.style.width = offset + '%';
