@@ -41,10 +41,10 @@
         // if the enableSounds option value is set to BOOLEAN TRUE:
         // NOTE: The paths must point from the project's root folder.
         sounds: {
-            info: '../src/sounds/success,\ warning/1.mp3', // path to sound for informational message.
-            success: '../src/sounds/success,\ warning/2.mp3', // path to sound for successfull message.
-            warning: '../src/sounds/success,\ warning/3.mp3', // path to sound for warn message.
-            error: '../src/sounds/errors/1.mp3' // path to sound for error message.
+            info: '//cdn.rawgit.com/egalink/Toasty.js/master/src/sounds/success,\ warning/1.mp3', // path to sound for informational message.
+            success: '//cdn.rawgit.com/egalink/Toasty.js/master/src/sounds/success,\ warning/2.mp3', // path to sound for successfull message.
+            warning: '//cdn.rawgit.com/egalink/Toasty.js/master/src/sounds/success,\ warning/3.mp3', // path to sound for warn message.
+            error: '//cdn.rawgit.com/egalink/Toasty.js/master/src/sounds/errors/1.mp3' // path to sound for error message.
         },
 
         prependTo: document.body.childNodes[0] // The placement where prepend the toast container.
