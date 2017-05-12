@@ -1,5 +1,5 @@
 /*!
- * Toasty.js v1.1.5
+ * Toasty.js v1.2.0
  *
  * A minimal JavaScript notification plugin that provides a simple way
  * to display customizable toast messages.
@@ -16,10 +16,7 @@
 
         classname: 'toast', // STRING: main class name used to styling each toast message with CSS.
 
-        animation: false, // STRING|BOOLEAN: Defines whether toasts will be displayed or hidden with animation:
-                              // .... String: Name of the CSS animation that will be used to shown or hide the toast.
-                              // .... If it set to BOOLEAN TRUE  - the toast will be shown or hide with CSS default animation.
-                              // .... If it set to BOOLEAN FALSE - the toast will be shown or hide without CSS animation.
+        animation: 'default', // STRING: Name of the CSS animation that will be used to shown or hide the toast.
 
         duration: 4000, // INTEGER: Duration that the toast will be displayed in milliseconds:
                         // .... Default value is set to 4000 (4 seconds). 
@@ -50,8 +47,10 @@
         prependTo: document.body.childNodes[0] // The placement where prepend the toast container.
     };
 
+    var classes = {}; // auto class names for each HTML element.
+
     // default class map for the classes object values:
-    var clasmap = {
+    var classesMap = {
           container: '{:classname}-container',
         progressbar: '{:classname}-progressbar',
 
@@ -61,7 +60,8 @@
             hide: '{:classname}--{:animation}-hide'
         },
 
-        toasts: { // available toast types for notifications.
+        // available toast types for notifications:
+        toasts: {
                info: '{:classname}--info',
             success: '{:classname}--success',
             warning: '{:classname}--warning',
@@ -70,14 +70,32 @@
         }
     };
 
-    // auto class names for each HTML element:
-    var classes = {};
+    // available CSS animations registered in toasty.css file:
+    var animations = [
+        'default',
+        'slideFadeLeft',
+        'slideFadeRight',
+        'slideDownFade',
+        'slideUpDownFade',
+        'slideRightLeftFade'
+    ];
 
     var Toasty = {
 
         config: function(opts) {
-            setOptions(opts);
-            init();
+            
+            options = setOptions(opts);
+
+            // defines the option.animation value to show the toast animatedly:
+            if (typeof options.animation != 'string') options.animation = 'default';
+
+            for (var key in animations) if (classes.hasOwnProperty(animations[key]) === false) {
+                    classes[animations[key]] = setClasses({
+                        '{:classname}': options.classname,
+                        '{:animation}': animations[key]
+                    });
+                }
+
             return this;
         },
 
@@ -102,6 +120,23 @@
         }
 
     };
+
+    function whichTransitionEvent() {
+        
+        var t,
+            el = document.createElement('transitionElement');
+
+        var transitions = {
+            'transition'      : 'transitionend',
+            'OTransition'     : 'oTransitionEnd',
+            'MozTransition'   : 'transitionend',
+            'WebkitTransition': 'webkitTransitionEnd'
+        };
+
+        for (t in transitions) if (el.style[t] !== undefined) {
+            return transitions[t];
+        }
+    }
 
     function extend(obj, toExtend) {
         for (var key in obj) {
@@ -129,18 +164,26 @@
         return obj;
     }
 
-    function getClasmap() {
-        var string = JSON.stringify(clasmap);
+    function parentElement(el) {
+        return el.parentElement || el.parentNode;
+    }
+
+    function getClassesMap() {
+        var string = JSON.stringify(classesMap);
         var object = JSON.parse(string);
         return object;
     }
 
+    function getClassesByAnimation() {
+        return classes[options.animation];
+    }
+
     function setClasses(dict) {
-        classes = walker(getClasmap(), dict);
+        return walker(getClassesMap(), dict);
     }
 
     function setOptions(opts) {
-        options = extend(opts, options);
+        return extend(opts, options);
     }
 
     function calculateAutoCloseDuration(msg, duration) {
@@ -158,57 +201,71 @@
             audio.autoplay = 'autoplay';
             audio.onended = function () {
                 this.remove();
-                var num = document.querySelector('.' + classes.container).childNodes.length;
+                var num = document.querySelector('.' + getClassesByAnimation().container).childNodes.length;
                 if (num < 1)
                     container.remove();
             }
 
-        audio.className = classes.toasts['sound'];
+        audio.className = getClassesByAnimation().toasts['sound'];
         audio.innerHTML = '<source src="' + sound + '" type="audio/mpeg"/>' +
                           '<embed hidden="true" autostart="true" loop="false" src="' + sound + '" />';
 
         container.appendChild(audio);
     }
 
-    // show the toast:
-    function showToast(el, container) {
-        container.insertBefore(el, container.childNodes[0]);
-    }
-
     // show the toast with an CSS3 animation:
-    function showAnimatedToast(el, container) {
-        container.classList.add(classes.container + '--' + options.animation);
-        el.classList.add(classes.animate.init);
-        showToast(el, container);
-        setTimeout(function() {
-            el.classList.add(classes.animate.show);
+    function showToast(el, container) {
+
+        var animation = getClassesByAnimation();
+        
+        var timer = 0,
+            delay = function(callback, ms) {
+                clearTimeout(timer);
+                timer = setTimeout(callback, ms);
+            };
+
+        delay(function() {
+            container.insertBefore(el, container.childNodes[0]);
+            el.classList.add(animation.animate.show);
         }, 0);
     }
 
     // hide the toast:
-    function hideToast(el, container) {
+    function removeToast(el) {
+        var container = parentElement(el);
         el.remove();
-        var num = document.querySelector('.' + classes.container).childNodes.length;
+        var num = container.childNodes.length;
         if (num < 1)
             container.remove();
     }
 
     // hide the toast with an CSS3 animation:
-    function hideAnimatedToast(el, container) {
-        el.addEventListener('transitionend', function(e) {
-            var parent = e.currentTarget.parentNode;
-            if (parent == null)
-                return;
-            hideToast(el, container);
-        });
-        el.classList.add(classes.animate.hide);
+    function hideToast(el, duration) {
+
+        var animation = getClassesByAnimation();
+
+        var timer = 0,
+            delay = function(callback, ms) {
+                clearTimeout(timer);
+                timer = setTimeout(callback, ms);
+            };
+
+        delay(function() {
+
+            el.addEventListener(whichTransitionEvent(), function(e) {
+                delay(function() { removeToast(el); }, 0);
+            });
+
+            el.classList.add(animation.animate.hide);
+
+        }, duration);
     }
 
     // hide the toast on click it.
     function closeOnClick(el, container) {
         el.addEventListener('click', function(e) {
             e.stopPropagation();
-            hideToast(e.target, container);
+            hideToast(e.target);
         });
     }
 
@@ -216,13 +273,13 @@
     function closeOnClickAnimated(el, container) {
         el.addEventListener('click', function(e) {
             e.stopPropagation();
-            hideAnimatedToast(e.target, container);
+            hideAnimatedToast(e.target);
         });
     }
 
     function showProgressBar(newToast, duration, type) {
         var progressBar = document.createElement('div');
-            progressBar.className = classes.progressbar + ' ' + classes.progressbar + '--' + type;
+            progressBar.className = getClassesByAnimation().progressbar + ' ' + getClassesByAnimation().progressbar + '--' + type;
             newToast.appendChild(progressBar);
 
         var iterat = 0,
@@ -244,54 +301,56 @@
 
     // let's to create the toast:
     function createToast(html, type, duration) {
-        // check if the toast container exists: 
-        var toastContainer = document.querySelector('.' + classes.container);
-        var toastContainerExists = !! toastContainer;
+        
+        var animation = getClassesByAnimation();
+        var container = null;
+
+        // check if the toast container exists:
+        if (typeof options.animation == 'string') {
+            container = document.querySelector('.' + animation.container + '--' + options.animation);
+        } else {
+            container = document.querySelector('.' + animation.container);
+        }
+
+        var containerExists = !! container;
 
         // create the toast container if not exists:
-        if (! toastContainerExists) {
-            toastContainer = document.createElement('div');
-            toastContainer.className = classes.container;
+        if (! containerExists) {
+            container = document.createElement('div');
+            container.classList.add(animation.container);
+            container.classList.add(animation.container + '--' + options.animation);
         }
 
         // create a new toast instance
         var newToast = document.createElement('div');
-            newToast.className = options.classname + ' ' + classes.toasts[type];
+            newToast.classList.add(options.classname);
+            newToast.classList.add(animation.toasts[type]);
+            newToast.classList.add(animation.animate.init);
             newToast.innerHTML = html;
 
         // insert the toast container into the HTML:
-        if (! toastContainerExists) {
-            document.body.insertBefore(toastContainer, options.prependTo);
+        if (! containerExists) {
+            document.body.insertBefore(container, options.prependTo);
         }
 
         // enable or disable toast sounds:
         if (options.enableSounds == true) {
-            playsound(type, toastContainer);
+            console.info('revisar funcionamiento del metodo playSound()');
+            playsound(type, container);
         }
 
-        // show / hide the toast messages:
-        if (typeof options.animation == 'string') {
-            // show the toast with animation:
-            showAnimatedToast(newToast, toastContainer);
-            // prepare the toast to hide it:
-            if (! options.autoClose)
-                closeOnClickAnimated(newToast, toastContainer);
-            else 
-                setTimeout(function() { hideAnimatedToast(newToast, toastContainer); }, duration);
+        // show the toast message:
+        showToast(newToast, container);
 
-        }  else {
-            // show the toast without animation:
-            showToast(newToast, toastContainer);
-            // prepare the toast to hide it:
-            if (! options.autoClose)
-                closeOnClick(newToast, toastContainer);
-            else
-                setTimeout(function() { hideToast(newToast, toastContainer); }, duration);
-
-        }
+        // prepare the toast to hide it:
+        if (! options.autoClose)
+            closeOnClickAnimated(newToast, container);
+        else
+            hideToast(newToast, duration);
 
         // show a progressbar on toast messages:
         if (options.progressBar == true && options.autoClose == true) {
+            console.info('revisar funcionamiento del metodo showProgressBar()');
             showProgressBar(newToast, duration, type);
         }
 
@@ -299,18 +358,7 @@
     }
 
     // initialize the plugin configuration:
-    function init() {
-
-        // defines the option.animation value to show the toast animatedly:
-        if (typeof options.animation == 'boolean') {
-            options.animation = (options.animation == true)? 'default' : false;
-        }
-
-        setClasses({
-            '{:classname}': options.classname,
-            '{:animation}': options.animation
-        });
-    }
+    function init() { Toasty.config(); }
 
     init();
 

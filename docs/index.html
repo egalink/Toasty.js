@@ -33,7 +33,7 @@
 
         <section class="content">            
             <h2 >Installation</h2>
-            <p >
+            <p>
                 Following the steps below you will be able to get the plugin up and running.
                 <br/>
                 If you notice any bugs, please post them to
@@ -118,12 +118,36 @@ var options = {
 
 var toasty = Toasty.config(options);
 
-// ...</code></pre>
+// then, run the toast messages:
+toasty.success('Configured successfully!');
 
+// ...</code></pre>
         </section>
 
+        <section class="content">            
+            <h2 >Other Examples</h2>
+            <br/>
+
+            <h3>Show &amp; Hide animations</h3>
+            <p>Using with class names. (like animate.css)</p>
+
+<pre><code data-language="javascript">Toasty.config({
+    animation: 'slideUpDownFade'
+}).info('A informational message appears!');
+</code></pre>
+
+            <p class="text-right">
+                <a id="run-transition1" class="btn btn--default" href="">Example 01</a>
+                <a id="run-transition2" class="btn btn--default" href="">Example 02</a>
+            </p>
+        </section>
+
+        <link href="../src/toasty.css" rel="stylesheet"/>
+        <script type="text/javascript" src="../src/toasty.js"></script>
+        <!--
         <link href="//cdn.rawgit.com/egalink/Toasty.js/master/src/toasty.css" rel="stylesheet"/>
         <script type="text/javascript" src="//cdn.rawgit.com/egalink/Toasty.js/master/src/toasty.js"></script>
+        -->
         <script type="text/javascript" src="./main.js"></script>
 
     </body>
