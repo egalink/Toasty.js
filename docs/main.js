@@ -9,7 +9,7 @@ Rainbow.extend("css",[{name:"comment",pattern:/\/\*[\s\S]*?\*\//gm},{name:"const
 w.onload = (function(){});
 
     // for local development:
-    var getCDN = (true)? '../src' : '//cdn.rawgit.com/egalink/Toasty.js/master/src'; 
+    var getCDN = (false)? '../src' : '//cdn.rawgit.com/egalink/Toasty.js/master/src'; 
     var toasty = Toasty.config({
 
         classname: 'toast', // STRING: main class name used to styling each toast message with CSS.
