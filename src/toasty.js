@@ -176,7 +176,8 @@
 
     function setConfiguration(opts) {
         
-        options = setOptions(opts);
+        if (!! opts)
+            options = setOptions(opts);
 
         // defines the option.animation value to show the toast animatedly:
         if (typeof options.animation != 'string') options.animation = 'default';
@@ -281,7 +282,7 @@
         var animation = getClassesByAnimation();
         var progressBar = document.createElement('div');
             progressBar.classList.add(animation.progressbar);
-            progressBar.classList.add(animation.progressbar);
+            progressBar.classList.add(animation.progressbar + '--' + type);
             el.appendChild(progressBar);
 
         var iterat = 0,

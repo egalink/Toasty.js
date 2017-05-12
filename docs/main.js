@@ -16,11 +16,11 @@ w.onload = (function(){});
 
         animation: 'default', // STRING: Name of the CSS animation that will be used to shown or hide the toast.
 
-        duration: 4000, // INTEGER: Duration that the toast will be displayed in milliseconds:
+        duration: 0, // INTEGER: Duration that the toast will be displayed in milliseconds:
                         // .... Default value is set to 4000 (4 seconds). 
                         // .... If it set to 0, the duration for each toast is calculated by message length.
 
-        enableSounds: false, // BOOLEAN: enable or disable toast sounds:
+        enableSounds: true, // BOOLEAN: enable or disable toast sounds:
                              // .... Set to BOOLEAN TRUE  - to enable toast sounds.
                              // .... Set to BOOLEAN FALSE - otherwise.
 
@@ -28,7 +28,7 @@ w.onload = (function(){});
                          // .... Set to BOOLEAN TRUE  - to enable auto hiding.
                          // .... Set to BOOLEAN FALSE - disable auto hiding. Instead the user must click on toast message to close it.
 
-        progressBar: false, // BOOLEAN: enable or disable the progressbar:
+        progressBar: true, // BOOLEAN: enable or disable the progressbar:
                             // .... Set to BOOLEAN TRUE  - enable the progressbar only if the autoClose option value is set to BOOLEAN TRUE.
                             // .... Set to BOOLEAN FALSE - disable the progressbar. 
 
