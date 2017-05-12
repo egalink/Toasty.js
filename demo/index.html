@@ -1,36 +1,130 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
+        
         <meta charset="utf-8"/>
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
         <title>Toasty.js</title>
         <link href="./favicon.ico" rel="shortcut icon"/>
-        <link href="./index.css" rel="stylesheet"/>
-        <link href="../src/toasty.css" rel="stylesheet"/>
+        <link href="./main.css" rel="stylesheet"/>
     </head>
     <body>
         
-        <div class="content">
-
-            <h1 class="text-center">Toasty.js</h1>
-            <p class="text-center">
-                Toasty.js is a minimal JavaScript notification plugin that provides a simple way
-                to display customizable toast messages
+        <section id="presentation" class="fullpage fullpage--centered">
+            <div class="content">
+                <h1 class="text-center">
+                    <b>Toasty.js</b>
+                </h1>
+                <p class="text-center">
+                    A minimal JavaScript notification plugin that provides a simple way
+                    to display customizable toast messages with custom CSS3 transition
+                    effects on the web page.
+                </p>
                 <br/>
-                with custom CSS3 transition effects on the web page.
+                <h2 class="text-center">examples:</h2>
+                <p class="buttonlist text-center">
+                    <button id="info" class="btn btn--primary" type="button">Info Toast</button>
+                    <button id="success" class="btn btn--success" type="button">Success Toast</button>
+                    <button id="warning" class="btn btn--warning" type="button">Warning Toast</button>
+                    <button id="error" class="btn btn--caution" type="button">Error Toast</button>
+                </p>
+            </div>
+        </section>
+
+        <section class="content">            
+            <h2 >Installation</h2>
+            <p >
+                Following the steps below you will be able to get the plugin up and running.
+                <br/>
+                If you notice any bugs, please post them to
+                <a href="https://github.com/egalink/Toasty.js/issues" target="_blank">GitHub</a> issues.
             </p>
             <br/>
-            <h3 class="text-center">examples:</h3>
-            <p class="text-center">
-                <button id="info" class="btn btn--primary" type="button">Info Toast</button>
-                <button id="success" class="btn btn--success" type="button">Success Toast</button>
-                <button id="warning" class="btn btn--warning" type="button">Warning Toast</button>
-                <button id="error" class="btn btn--caution" type="button">Error Toast</button>
-            </p>
+            <h3>link files</h3>
 
-        </div>
+<pre><code data-language="html">&lt;!-- Put these into the &lt;head&gt; of your HTML --&gt;
+&lt;link href="toasty.css" rel="stylesheet"&gt;
+&lt;script src="toasty.js"&gt;&lt;/script&gt;</code></pre>
 
+            <p>and plugin is ready to use it...</p>
+        </section>
+
+        <section class="content">
+            <h2>How to use it</h2>
+            <p>Create toast messages using any of the following methods:</p>
+
+<pre><code data-language="html">&lt;!-- Put this right before the &lt;/body&gt; closing tag --&gt;
+&lt;script type="text/javascript"&gt;
+    
+    // this show an informational message:
+    Toasty.info('Here is some information!');
+
+    // this show a successful message:
+    Toasty.success('You did something good!');
+
+    // show a warning message:
+    Toasty.warning('Warning! Do not proceed any further!');
+
+    // and this a error message:
+    Toasty.error('Something terrible happened!');
+
+&lt;/script&gt;</code></pre>
+
+            <p>but, where is the customization? ...Go for it!</p>
+        </section>
+
+
+        <section class="content">
+            <h2>Customization</h2>
+            <p>Config the toast messages by overriding the default settings as shown below:</p>
+
+<pre><code data-language="javascript">
+var options = {
+
+    classname: 'toast', // STRING: main class name used to styling each toast message with CSS.
+
+    animation: false, // STRING|BOOLEAN: Defines whether toasts will be displayed or hidden with animation:
+                          // .... String: Name of the CSS animation that will be used to shown or hide the toast.
+                          // .... If it set to BOOLEAN TRUE  - the toast will be shown or hide with CSS default animation.
+                          // .... If it set to BOOLEAN FALSE - the toast will be shown or hide without CSS animation.
+
+    duration: 4000, // INTEGER: Duration that the toast will be displayed in milliseconds:
+                    // .... Default value is set to 4000 (4 seconds). 
+                    // .... If it set to 0, the duration for each toast is calculated by message length.
+
+    enableSounds: false, // BOOLEAN: enable or disable toast sounds:
+                         // .... Set to BOOLEAN TRUE  - to enable toast sounds.
+                         // .... Set to BOOLEAN FALSE - otherwise.
+
+    autoClose: true, // BOOLEAN: enable or disable auto hiding on toast messages:
+                     // .... Set to BOOLEAN TRUE  - to enable auto hiding.
+                     // .... Set to BOOLEAN FALSE - disable auto hiding. Instead the user must click on toast message to close it.
+
+    progressBar: false, // BOOLEAN: enable or disable the progressbar:
+                        // .... Set to BOOLEAN TRUE  - enable the progressbar only if the autoClose option value is set to BOOLEAN TRUE.
+                        // .... Set to BOOLEAN FALSE - disable the progressbar. 
+
+    // Yep, support custom sounds for each toast message when are shown
+    // if the enableSounds option value is set to BOOLEAN TRUE:
+    // NOTE: The paths must point from the project's root folder.
+    sounds: {
+        info: '../src/sounds/success,\ warning/1.mp3', // path to sound for informational message.
+        success: '../src/sounds/success,\ warning/2.mp3', // path to sound for successfull message.
+        warning: '../src/sounds/success,\ warning/3.mp3', // path to sound for warn message.
+        error: '../src/sounds/errors/1.mp3' // path to sound for error message.
+    }
+
+};
+
+var toasty = Toasty.config(options);
+
+// ...</code></pre>
+
+        </section>
+
+        <link href="../src/toasty.css" rel="stylesheet"/>
         <script type="text/javascript" src="../src/toasty.js"></script>
-        <script type="text/javascript" src="./index.js"></script>
+        <script type="text/javascript" src="./main.js"></script>
+
     </body>
 </html>

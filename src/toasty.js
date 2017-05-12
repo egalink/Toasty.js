@@ -1,5 +1,5 @@
 /*!
- * Toasty.js v1.1.0
+ * Toasty.js v1.1.5
  *
  * A minimal JavaScript notification plugin that provides a simple way
  * to display customizable toast messages.
@@ -13,39 +13,41 @@
     'use strict';
 
     var options = {
-        
-        classname: 'toast', // ..... The class name user in each toast alert.
 
-        animation: 'default', // ... The CSS class transition.
+        classname: 'toast', // STRING: main class name used to styling each toast message with CSS.
 
-        prependTo: document.body.childNodes[0], //  The placement where prepend the toast container.
+        animation: false, // STRING|BOOLEAN: Defines whether toasts will be displayed or hidden with animation:
+                              // .... String: Name of the CSS animation that will be used to shown or hide the toast.
+                              // .... If it set to BOOLEAN TRUE  - the toast will be shown or hide with CSS default animation.
+                              // .... If it set to BOOLEAN FALSE - the toast will be shown or hide without CSS animation.
 
-        animated: true, // ......... Defines whether toasts will be displayed or hidden with animation:
-                        // ............. FALSE - show the toast without CSS3 animation.
-                        // ............. TRUE  - otherwise.
+        duration: 4000, // INTEGER: Duration that the toast will be displayed in milliseconds:
+                        // .... Default value is set to 4000 (4 seconds). 
+                        // .... If it set to 0, the duration for each toast is calculated by message length.
 
-        duration: 4000, // ......... Duration that the toast will be displayed in milliseconds:
-                        // ............. Default value is set to 4000 (four seconds). 
-                        // ............. If set to 0, the duration for each toast is calculated by message length.
+        enableSounds: false, // BOOLEAN: enable or disable toast sounds:
+                             // .... Set to BOOLEAN TRUE  - to enable toast sounds.
+                             // .... Set to BOOLEAN FALSE - otherwise.
 
-        enableSounds: false, // .... ENABLE or DISABLE toast sounds:
-                             // ........ TRUE  - enable toast sounds.
-                             // ........ FALSE - otherwise.
+        autoClose: true, // BOOLEAN: enable or disable auto hiding on toast messages:
+                         // .... Set to BOOLEAN TRUE  - to enable auto hiding.
+                         // .... Set to BOOLEAN FALSE - disable auto hiding. Instead the user must click on toast message to close it.
 
-        autoClose: true, // ........ ENABLE or DISABLE auto hiding on toast messages:
-                         // ............ TRUE  - Enable auto hiding.
-                         // ............ FALSE - Disable auto hiding. Instead the user must click on toast message to close it.
+        progressBar: false, // BOOLEAN: enable or disable the progressbar:
+                            // .... Set to BOOLEAN TRUE  - enable the progressbar only if the autoClose option value is set to BOOLEAN TRUE.
+                            // .... Set to BOOLEAN FALSE - disable the progressbar. 
 
-        showProgressBar: true, // . ENABLE or DISABLE progressbar:
-                               // ..... TRUE  - enable the progressbar only if the autoClose option value is set to TRUE.
-                               // ..... FALSE - disable the progressbar. 
-
+        // Yep, support custom sounds for each toast message when are shown
+        // if the enableSounds option value is set to BOOLEAN TRUE:
+        // NOTE: The paths must point from the project's root folder.
         sounds: {
-            info: '../src/sounds/success,\ warning/1.mp3',
-            success: '../src/sounds/success,\ warning/2.mp3',
-            warning: '../src/sounds/success,\ warning/3.mp3',
-            error: '../src/sounds/errors/1.mp3'
-        }
+            info: '../src/sounds/success,\ warning/1.mp3', // path to sound for informational message.
+            success: '../src/sounds/success,\ warning/2.mp3', // path to sound for successfull message.
+            warning: '../src/sounds/success,\ warning/3.mp3', // path to sound for warn message.
+            error: '../src/sounds/errors/1.mp3' // path to sound for error message.
+        },
+
+        prependTo: document.body.childNodes[0] // The placement where prepend the toast container.
     };
 
     // default class map for the classes object values:
@@ -76,7 +78,7 @@
         config: function(opts) {
             setOptions(opts);
             init();
-            console.log(clasmap);
+            return this;
         },
 
         info: function(msg, duration) {
@@ -231,7 +233,7 @@
             iterat ++;
             offset = Math.round((1000 *iterat) / duration);
         
-            if (offset >= 100) {
+            if (offset > 100) {
                 clearInterval(interval);
             } else {
                 progressBar.style.width = offset + '%';
@@ -268,7 +270,7 @@
         }
 
         // show / hide the toast messages:
-        if (options.animated) {
+        if (typeof options.animation == 'string') {
             // show the toast with animation:
             showAnimatedToast(newToast, toastContainer);
             // prepare the toast to hide it:
@@ -289,7 +291,7 @@
         }
 
         // show a progressbar on toast messages:
-        if (options.showProgressBar == true && options.autoClose == true) {
+        if (options.progressBar == true && options.autoClose == true) {
             showProgressBar(newToast, duration, type);
         }
 
@@ -298,6 +300,12 @@
 
     // initialize the plugin configuration:
     function init() {
+
+        // defines the option.animation value to show the toast animatedly:
+        if (typeof options.animation == 'boolean') {
+            options.animation = (options.animation == true)? 'default' : false;
+        }
+
         setClasses({
             '{:classname}': options.classname,
             '{:animation}': options.animation
