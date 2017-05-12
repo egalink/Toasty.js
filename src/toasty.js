@@ -1,5 +1,5 @@
 /*!
- * Toasty.js v1.2.0
+ * Toasty.js v1.2.10
  *
  * A minimal JavaScript notification plugin that provides a simple way
  * to display customizable toast messages.
@@ -83,19 +83,7 @@
     var Toasty = {
 
         config: function(opts) {
-            
-            options = setOptions(opts);
-
-            // defines the option.animation value to show the toast animatedly:
-            if (typeof options.animation != 'string') options.animation = 'default';
-
-            for (var key in animations) if (classes.hasOwnProperty(animations[key]) === false) {
-                    classes[animations[key]] = setClasses({
-                        '{:classname}': options.classname,
-                        '{:animation}': animations[key]
-                    });
-                }
-
+            setConfiguration(opts);
             return this;
         },
 
@@ -186,6 +174,21 @@
         return extend(opts, options);
     }
 
+    function setConfiguration(opts) {
+        
+        options = setOptions(opts);
+
+        // defines the option.animation value to show the toast animatedly:
+        if (typeof options.animation != 'string') options.animation = 'default';
+
+        for (var key in animations) if (classes.hasOwnProperty(animations[key]) === false) {
+                classes[animations[key]] = setClasses({
+                    '{:classname}': options.classname,
+                    '{:animation}': animations[key]
+                });
+            }
+    }
+
     function calculateAutoCloseDuration(msg, duration) {
         if (options.duration == 0 && duration == undefined)
             duration = msg.length *100;
@@ -195,18 +198,20 @@
         return Math.floor(duration);
     }
 
-    function playsound(type, container) {
+    function playSound(type, container) {
+
+        var animation = getClassesByAnimation();
         var sound = options.sounds[type],
             audio = document.createElement('audio');
             audio.autoplay = 'autoplay';
-            audio.onended = function () {
+            audio.onended = function() {
+                var parent = parentElement(this);
                 this.remove();
-                var num = document.querySelector('.' + getClassesByAnimation().container).childNodes.length;
-                if (num < 1)
-                    container.remove();
+                if (parent.childNodes.length < 1)
+                    parent.remove();
             }
 
-        audio.className = getClassesByAnimation().toasts['sound'];
+        audio.className = animation.toasts['sound'];
         audio.innerHTML = '<source src="' + sound + '" type="audio/mpeg"/>' +
                           '<embed hidden="true" autostart="true" loop="false" src="' + sound + '" />';
 
@@ -261,26 +266,23 @@
         }, duration);
     }
 
-    // hide the toast on click it.
-    function closeOnClick(el, container) {
+    // hide the toast on click it with an CSS3 animation:
+    function closeOnClick(el) {
+        var name = options.classname + '--close-on-click';
+        el.classList.add(name);
         el.addEventListener('click', function(e) {
             e.stopPropagation();
-            hideToast(e.target);
+            el.classList.remove(name);
+            hideToast(e.target, 0);
         });
     }
 
-    // hide the toast on click it with an CSS3 animation.
-    function closeOnClickAnimated(el, container) {
-        el.addEventListener('click', function(e) {
-            e.stopPropagation();
-            hideAnimatedToast(e.target);
-        });
-    }
-
-    function showProgressBar(newToast, duration, type) {
+    function showProgressBar(el, duration, type) {
+        var animation = getClassesByAnimation();
         var progressBar = document.createElement('div');
-            progressBar.className = getClassesByAnimation().progressbar + ' ' + getClassesByAnimation().progressbar + '--' + type;
-            newToast.appendChild(progressBar);
+            progressBar.classList.add(animation.progressbar);
+            progressBar.classList.add(animation.progressbar);
+            el.appendChild(progressBar);
 
         var iterat = 0,
             offset = 0;
@@ -306,11 +308,10 @@
         var container = null;
 
         // check if the toast container exists:
-        if (typeof options.animation == 'string') {
+        if (typeof options.animation == 'string')
             container = document.querySelector('.' + animation.container + '--' + options.animation);
-        } else {
+        else
             container = document.querySelector('.' + animation.container);
-        }
 
         var containerExists = !! container;
 
@@ -329,28 +330,24 @@
             newToast.innerHTML = html;
 
         // insert the toast container into the HTML:
-        if (! containerExists) {
+        if (! containerExists)
             document.body.insertBefore(container, options.prependTo);
-        }
 
         // enable or disable toast sounds:
-        if (options.enableSounds == true) {
-            console.info('revisar funcionamiento del metodo playSound()');
-            playsound(type, container);
-        }
+        if (options.enableSounds == true)
+            playSound(type, container);
 
         // show the toast message:
         showToast(newToast, container);
 
         // prepare the toast to hide it:
         if (! options.autoClose)
-            closeOnClickAnimated(newToast, container);
+            closeOnClick(newToast);
         else
             hideToast(newToast, duration);
 
         // show a progressbar on toast messages:
         if (options.progressBar == true && options.autoClose == true) {
-            console.info('revisar funcionamiento del metodo showProgressBar()');
             showProgressBar(newToast, duration, type);
         }
 
@@ -358,10 +355,8 @@
     }
 
     // initialize the plugin configuration:
-    function init() { Toasty.config(); }
-
-    init();
-
+    function init() { setConfiguration(); }
     window.Toasty = Toasty;
+    init();
 
 })();

@@ -75,7 +75,7 @@ a:hover { text-decoration: underline; }
     position: relative;
 }
 #presentation h1 b:before {
-    content: 'v1.2.0';
+    content: 'v1.2.10';
     font-size: 13px;
     position: absolute;
     top: -16px;

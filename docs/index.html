@@ -83,10 +83,7 @@ var options = {
 
     classname: 'toast', // STRING: main class name used to styling each toast message with CSS.
 
-    animation: false, // STRING|BOOLEAN: Defines whether toasts will be displayed or hidden with animation:
-                          // .... String: Name of the CSS animation that will be used to shown or hide the toast.
-                          // .... If it set to BOOLEAN TRUE  - the toast will be shown or hide with CSS default animation.
-                          // .... If it set to BOOLEAN FALSE - the toast will be shown or hide without CSS animation.
+    animation: 'default', // STRING: Name of the CSS animation that will be used to shown or hide the toast.
 
     duration: 4000, // INTEGER: Duration that the toast will be displayed in milliseconds:
                     // .... Default value is set to 4000 (4 seconds). 

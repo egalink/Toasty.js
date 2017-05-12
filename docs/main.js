@@ -9,21 +9,18 @@ Rainbow.extend("css",[{name:"comment",pattern:/\/\*[\s\S]*?\*\//gm},{name:"const
 w.onload = (function(){});
 
     // for local development:
-    var getCDN = (true)? '../src' : '//cdn.rawgit.com/egalink/Toasty.js/master/src'; 
+    var getCDN = (false)? '../src' : '//cdn.rawgit.com/egalink/Toasty.js/master/src'; 
     var toasty = Toasty.config({
 
         classname: 'toast', // STRING: main class name used to styling each toast message with CSS.
 
-        animation: true, // STRING|BOOLEAN: Defines whether toasts will be displayed or hidden with animation:
-                              // .... String: Name of the CSS animation that will be used to shown or hide the toast.
-                              // .... If it set to BOOLEAN TRUE  - the toast will be shown or hide with CSS default animation.
-                              // .... If it set to BOOLEAN FALSE - the toast will be shown or hide without CSS animation.
+        animation: 'default', // STRING: Name of the CSS animation that will be used to shown or hide the toast.
 
-        duration: 0, // INTEGER: Duration that the toast will be displayed in milliseconds:
+        duration: 4000, // INTEGER: Duration that the toast will be displayed in milliseconds:
                         // .... Default value is set to 4000 (4 seconds). 
                         // .... If it set to 0, the duration for each toast is calculated by message length.
 
-        enableSounds: true, // BOOLEAN: enable or disable toast sounds:
+        enableSounds: false, // BOOLEAN: enable or disable toast sounds:
                              // .... Set to BOOLEAN TRUE  - to enable toast sounds.
                              // .... Set to BOOLEAN FALSE - otherwise.
 
@@ -31,7 +28,7 @@ w.onload = (function(){});
                          // .... Set to BOOLEAN TRUE  - to enable auto hiding.
                          // .... Set to BOOLEAN FALSE - disable auto hiding. Instead the user must click on toast message to close it.
 
-        progressBar: true, // BOOLEAN: enable or disable the progressbar:
+        progressBar: false, // BOOLEAN: enable or disable the progressbar:
                             // .... Set to BOOLEAN TRUE  - enable the progressbar only if the autoClose option value is set to BOOLEAN TRUE.
                             // .... Set to BOOLEAN FALSE - disable the progressbar. 
 
@@ -79,8 +76,7 @@ w.onload = (function(){});
         runTransition1.addEventListener('click', function(e) {
             e.preventDefault();
             Toasty.config({
-                animation: false,
-                enableSounds: false
+                animation: 'default'
             }).info('A informational message appears!');
         });
 
@@ -88,8 +84,7 @@ w.onload = (function(){});
         runTransition2.addEventListener('click', function(e) {
             e.preventDefault();
             Toasty.config({
-                animation: 'slideFadeRight',
-                enableSounds: false
+                animation: 'slideUpDownFade'
             }).info('A informational message appears!');
         });
 
