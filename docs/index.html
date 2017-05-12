@@ -85,6 +85,10 @@ var options = {
 
     animation: 'default', // STRING: Name of the CSS animation that will be used to shown or hide the toast.
 
+    insertBefore: true, // BOOLEAN: Specifies the way in which the toasts will be inserted in the html code:
+                        // .... Set to BOOLEAN TRUE and the toast messages will be inserted before those already generated toasts.
+                        // .... Set to BOOLEAN FALSE otherwise.
+
     duration: 4000, // INTEGER: Duration that the toast will be displayed in milliseconds:
                     // .... Default value is set to 4000 (4 seconds). 
                     // .... If it set to 0, the duration for each toast is calculated by message length.
@@ -141,6 +145,7 @@ toasty.success('Configured successfully!');
 
         <link href="//cdn.rawgit.com/egalink/Toasty.js/master/src/toasty.css" rel="stylesheet"/>
         <script type="text/javascript" src="//cdn.rawgit.com/egalink/Toasty.js/master/src/toasty.js"></script>
+        <!---->
         <script type="text/javascript" src="./main.js"></script>
 
     </body>

@@ -18,6 +18,10 @@
 
         animation: 'default', // STRING: Name of the CSS animation that will be used to shown or hide the toast.
 
+        insertBefore: true, // BOOLEAN: Specifies the way in which the toasts will be inserted in the html code:
+                            // .... Set to BOOLEAN TRUE and the toast messages will be inserted before those already generated toasts.
+                            // .... Set to BOOLEAN FALSE otherwise.
+
         duration: 4000, // INTEGER: Duration that the toast will be displayed in milliseconds:
                         // .... Default value is set to 4000 (4 seconds). 
                         // .... If it set to 0, the duration for each toast is calculated by message length.
@@ -230,10 +234,10 @@
                 timer = setTimeout(callback, ms);
             };
 
-        delay(function() {
-            container.insertBefore(el, container.childNodes[0]);
-            el.classList.add(animation.animate.show);
-        }, 0);
+        var beforeNode = container.childNodes;
+            beforeNode = beforeNode[(options.insertBefore == true)? 0 : beforeNode.length];
+        container.insertBefore(el, beforeNode);
+        delay(function() { el.classList.add(animation.animate.show); }, 0);
     }
 
     // hide the toast:
@@ -358,6 +362,6 @@
     // initialize the plugin configuration:
     function init() { setConfiguration(); }
     window.Toasty = Toasty;
-    init();
-
+    init(); 
+    
 })();

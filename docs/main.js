@@ -9,14 +9,18 @@ Rainbow.extend("css",[{name:"comment",pattern:/\/\*[\s\S]*?\*\//gm},{name:"const
 w.onload = (function(){});
 
     // for local development:
-    var getCDN = (false)? '../src' : '//cdn.rawgit.com/egalink/Toasty.js/master/src'; 
+    var getCDN = (true)? '../src' : '//cdn.rawgit.com/egalink/Toasty.js/master/src'; 
     var toasty = Toasty.config({
 
         classname: 'toast', // STRING: main class name used to styling each toast message with CSS.
 
         animation: 'default', // STRING: Name of the CSS animation that will be used to shown or hide the toast.
 
-        duration: 0, // INTEGER: Duration that the toast will be displayed in milliseconds:
+        insertBefore: true, // BOOLEAN: Specifies the way in which the toasts will be inserted in the html code:
+                            // .... Set to BOOLEAN TRUE and the toast messages will be inserted before those already generated toasts.
+                            // .... Set to BOOLEAN FALSE otherwise.
+
+        duration: 9000, // INTEGER: Duration that the toast will be displayed in milliseconds:
                         // .... Default value is set to 4000 (4 seconds). 
                         // .... If it set to 0, the duration for each toast is calculated by message length.
 
@@ -76,7 +80,7 @@ w.onload = (function(){});
         runTransition1.addEventListener('click', function(e) {
             e.preventDefault();
             Toasty.config({
-                animation: 'default'
+                animation: 'slideFadeRight'
             }).info('A informational message appears!');
         });
 
