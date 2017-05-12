@@ -1,5 +1,5 @@
 /*!
- * Toasty.js v1.1.0
+ * Toasty.js v1.1.4
  *
  * A minimal JavaScript notification plugin that provides a simple way
  * to display customizable toast messages.
@@ -13,16 +13,15 @@
     'use strict';
 
     var options = {
-        
-        classname: 'toast', // ..... The class name user in each toast alert.
 
-        animation: 'default', // ... The CSS class transition.
+        classname: 'toast', // STRING: main class name used to styling each toast message with CSS.
+        
+        animation: 'default', // ... STRING|BOOLEAN: Defines whether toasts will be displayed or hidden with animation.
+                              // ....... if it set to BOOLEAN FALSE, the toast will be shown/hide without CSS animation.
+                              // ....... if it set to BOOLEAN TRUE, the toast will be shown/hide with CSS default animation.
+                              // ....... String: Name of the CSS animation that will be used to shown/hide the toast.
 
         prependTo: document.body.childNodes[0], //  The placement where prepend the toast container.
-
-        animated: true, // ......... Defines whether toasts will be displayed or hidden with animation:
-                        // ............. FALSE - show the toast without CSS3 animation.
-                        // ............. TRUE  - otherwise.
 
         duration: 4000, // ......... Duration that the toast will be displayed in milliseconds:
                         // ............. Default value is set to 4000 (four seconds). 
@@ -76,7 +75,7 @@
         config: function(opts) {
             setOptions(opts);
             init();
-            console.log(clasmap);
+            return this;
         },
 
         info: function(msg, duration) {
@@ -231,7 +230,7 @@
             iterat ++;
             offset = Math.round((1000 *iterat) / duration);
         
-            if (offset == 100) {
+            if (offset > 100) {
                 clearInterval(interval);
             } else {
                 progressBar.style.width = offset + '%';
@@ -268,7 +267,7 @@
         }
 
         // show / hide the toast messages:
-        if (options.animated) {
+        if (typeof options.animation == 'string') {
             // show the toast with animation:
             showAnimatedToast(newToast, toastContainer);
             // prepare the toast to hide it:
@@ -298,6 +297,12 @@
 
     // initialize the plugin configuration:
     function init() {
+
+        // defines the option.animation value to show the toast animatedly:
+        if (typeof options.animation == 'boolean') {
+            options.animation = (options.animation == true)? 'default' : false;
+        }
+
         setClasses({
             '{:classname}': options.classname,
             '{:animation}': options.animation
