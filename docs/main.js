@@ -9,7 +9,6 @@ Rainbow.extend("css",[{name:"comment",pattern:/\/\*[\s\S]*?\*\//gm},{name:"const
 w.onload = (function(){});
 
     // for local development:
-    var getCDN = (false)? '../src' : '//cdn.rawgit.com/egalink/Toasty.js/master/src'; 
     var toasty = Toasty.config({
         classname: 'toast',
         animation: 'default',
@@ -19,10 +18,10 @@ w.onload = (function(){});
         autoClose: true,
         progressBar: true,
         sounds: {
-            info: getCDN + '/sounds/success,\ warning/1.mp3',
-            success: getCDN + '/sounds/success,\ warning/2.mp3',
-            warning: getCDN + '/sounds/success,\ warning/3.mp3',
-            error: getCDN + '/sounds/errors/1.mp3'
+            info: './src/sounds/success,\ warning/1.mp3',
+            success: './src/sounds/success,\ warning/2.mp3',
+            warning: './src/sounds/success,\ warning/3.mp3',
+            error: './src/sounds/errors/1.mp3'
         }
     });
     
