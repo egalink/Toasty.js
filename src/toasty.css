@@ -120,7 +120,7 @@
 
 /* ANIMATION 06 - slide right left fade (DEFAULT ANIMATION): */
 .toast-container--fade {}
-.toast--slideRightLeftFade-init { opacity: 0; transition: 0.3s all ease; }
-.toast--slideRightLeftFade-show { opacity: 1; }
-.toast--slideRightLeftFade-hide { opacity: 0; }
+.toast--slideRightLeftFade-init { opacity: 0; right: -100%; transition: 0.3s all ease; }
+.toast--slideRightLeftFade-show { opacity: 1; right: 0%; }
+.toast--slideRightLeftFade-hide { opacity: 0; right: -100%; }
 /* ------------------------------------------------------------------------- */

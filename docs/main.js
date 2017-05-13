@@ -11,41 +11,19 @@ w.onload = (function(){});
     // for local development:
     var getCDN = (false)? '../src' : '//cdn.rawgit.com/egalink/Toasty.js/master/src'; 
     var toasty = Toasty.config({
-
-        classname: 'toast', // STRING: main class name used to styling each toast message with CSS.
-
-        animation: 'default', // STRING: Name of the CSS animation that will be used to shown or hide the toast.
-
-        insertBefore: true, // BOOLEAN: Specifies the way in which the toasts will be inserted in the html code:
-                            // .... Set to BOOLEAN TRUE and the toast messages will be inserted before those already generated toasts.
-                            // .... Set to BOOLEAN FALSE otherwise.
-
-        duration: 9000, // INTEGER: Duration that the toast will be displayed in milliseconds:
-                        // .... Default value is set to 4000 (4 seconds). 
-                        // .... If it set to 0, the duration for each toast is calculated by message length.
-
-        enableSounds: true, // BOOLEAN: enable or disable toast sounds:
-                             // .... Set to BOOLEAN TRUE  - to enable toast sounds.
-                             // .... Set to BOOLEAN FALSE - otherwise.
-
-        autoClose: true, // BOOLEAN: enable or disable auto hiding on toast messages:
-                         // .... Set to BOOLEAN TRUE  - to enable auto hiding.
-                         // .... Set to BOOLEAN FALSE - disable auto hiding. Instead the user must click on toast message to close it.
-
-        progressBar: true, // BOOLEAN: enable or disable the progressbar:
-                            // .... Set to BOOLEAN TRUE  - enable the progressbar only if the autoClose option value is set to BOOLEAN TRUE.
-                            // .... Set to BOOLEAN FALSE - disable the progressbar. 
-
-        // Yep, support custom sounds for each toast message when are shown
-        // if the enableSounds option value is set to BOOLEAN TRUE:
-        // NOTE: The paths must point from the project's root folder.
+        classname: 'toast',
+        animation: 'default',
+        insertBefore: true,
+        duration: 0,
+        enableSounds: true,
+        autoClose: true,
+        progressBar: true,
         sounds: {
-            info: getCDN + '/sounds/success,\ warning/1.mp3', // path to sound for informational message.
-            success: getCDN + '/sounds/success,\ warning/2.mp3', // path to sound for successfull message.
-            warning: getCDN + '/sounds/success,\ warning/3.mp3', // path to sound for warn message.
-            error: getCDN + '/sounds/errors/1.mp3' // path to sound for error message.
+            info: getCDN + '/sounds/success,\ warning/1.mp3',
+            success: getCDN + '/sounds/success,\ warning/2.mp3',
+            warning: getCDN + '/sounds/success,\ warning/3.mp3',
+            error: getCDN + '/sounds/errors/1.mp3'
         }
-
     });
     
 
@@ -76,20 +54,15 @@ w.onload = (function(){});
     });
 
     // Show & Hide animations section:
-    var runTransition1 = document.getElementById('run-transition1');
-        runTransition1.addEventListener('click', function(e) {
+    var selectTransition = document.getElementById('select-transition');
+        selectTransition.addEventListener('change', function(e) {
             e.preventDefault();
-            Toasty.config({
-                animation: 'slideFadeRight'
-            }).info('A informational message appears!');
-        });
-
-    var runTransition2 = document.getElementById('run-transition2');
-        runTransition2.addEventListener('click', function(e) {
-            e.preventDefault();
-            Toasty.config({
-                animation: 'slideUpDownFade'
-            }).info('A informational message appears!');
+            var animation = e.target.value;
+            if (animation != '')
+                Toasty.config({
+                    animation: animation,
+                    duration: 2000,
+                }).info('A toast message appears with "' + animation + '" animation!');
         });
 
 })(window);
