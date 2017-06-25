@@ -16,6 +16,8 @@
 
         classname: 'toast', // STRING: main class name used to styling each toast message with CSS.
 
+        useAnimateCss: true,
+
         animation: 'default', // STRING: Name of the CSS animation that will be used to shown or hide the toast.
 
         insertBefore: true, // BOOLEAN: Specifies the way in which the toasts will be inserted in the html code:
@@ -59,9 +61,9 @@
         progressbar: '{:classname}-progressbar',
 
         animate: {
-            init: '{:classname}--{:animation}-init',
-            show: '{:classname}--{:animation}-show',
-            hide: '{:classname}--{:animation}-hide'
+            init: '{:animation}',
+            show: '{:animation}',
+            hide: '{:animation}'
         },
 
         // available toast types for notifications:
@@ -77,11 +79,6 @@
     // available CSS animations registered in toasty.css file:
     var animations = [
         'default',
-        'slideFadeLeft',
-        'slideFadeRight',
-        'slideDownFade',
-        'slideUpDownFade',
-        'slideRightLeftFade'
     ];
 
     var Toasty = {
@@ -112,23 +109,6 @@
         }
 
     };
-
-    function whichTransitionEvent() {
-        
-        var t,
-            el = document.createElement('transitionElement');
-
-        var transitions = {
-            'transition'      : 'transitionend',
-            'OTransition'     : 'oTransitionEnd',
-            'MozTransition'   : 'transitionend',
-            'WebkitTransition': 'webkitTransitionEnd'
-        };
-
-        for (t in transitions) if (el.style[t] !== undefined) {
-            return transitions[t];
-        }
-    }
 
     function extend(obj, toExtend) {
         for (var key in obj) {
@@ -247,28 +227,6 @@
         var num = container.childNodes.length;
         if (num < 1)
             container.remove();
-    }
-
-    // hide the toast with an CSS3 animation:
-    function hideToast(el, duration) {
-
-        var animation = getClassesByAnimation();
-
-        var timer = 0,
-            delay = function(callback, ms) {
-                clearTimeout(timer);
-                timer = setTimeout(callback, ms);
-            };
-
-        delay(function() {
-
-            el.addEventListener(whichTransitionEvent(), function(e) {
-                delay(function() { removeToast(el); }, 0);
-            });
-
-            el.classList.add(animation.animate.hide);
-
-        }, duration);
     }
 
     // hide the toast on click it with an CSS3 animation:

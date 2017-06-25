@@ -6,62 +6,22 @@ Rainbow.extend("css",[{name:"comment",pattern:/\/\*[\s\S]*?\*\//gm},{name:"const
 
     'use strict';
 
-w.onload = (function(){});
-
-    // for local development:
-    var toasty = Toasty.config({
-        classname: 'toast',
-        animation: 'default',
-        insertBefore: true,
-        duration: 0,
-        enableSounds: true,
-        autoClose: true,
-        progressBar: true,
-        sounds: {
-            info: './src/sounds/success,\ warning/1.mp3',
-            success: './src/sounds/success,\ warning/2.mp3',
-            warning: './src/sounds/success,\ warning/3.mp3',
-            error: './src/sounds/errors/1.mp3'
+    var toasty = new Toasty({
+        duration: 1000,
+        transition: "default",
+        autoClose: false,
+        onShow: function(type) {
+            console.log("El mensaje se Muestra: ", type);
+        },
+        onHide: function(type) {
+            console.log("El mensaje se Oculta: ", type);
         }
     });
-    
 
-    // configure the toasts:
-    var successBtn = document.querySelector('#success');
-    var infoBtn = document.querySelector('#info');
-    var warningBtn = document.querySelector('#warning');
-    var errorBtn = document.querySelector('#error');
-
-    infoBtn.addEventListener('click', function(e)
-    {
-        toasty.info('Here is some information!');
-    });
-
-    successBtn.addEventListener('click', function(e)
-    {
-        toasty.success('You did something good!');
-    });
-
-    warningBtn.addEventListener('click', function(e)
-    {
-        toasty.warning('Warning! Do not proceed any further!');
-    });
-
-    errorBtn.addEventListener('click', function(e)
-    {
-        toasty.error('Something terrible happened!');
-    });
-
-    // Show & Hide animations section:
-    var selectTransition = document.getElementById('select-transition');
-        selectTransition.addEventListener('change', function(e) {
-            e.preventDefault();
-            var animation = e.target.value;
-            if (animation != '')
-                Toasty.config({
-                    animation: animation,
-                    duration: 2000,
-                }).info('A toast message appears with "' + animation + '" animation!');
-        });
+    toasty.info("The informational messaje appears!");
+    console.log(toasty);
+    // toasty.success("The success messaje appears!");
+    // toasty.warning("The warning messaje appears!");
+    // toasty.error("The error messaje appears!");
 
 })(window);

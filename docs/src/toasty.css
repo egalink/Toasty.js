@@ -1,11 +1,15 @@
 
 /* entire toast container */
 .toast-container {
-    display: inline;
+     display: block;
     position: fixed;
-    z-index: 999999;
-    bottom: 0px;
+     z-index: 999999;
+       top: 0px;
      right: 0px;
+    bottom: 0px;
+      left: 0px;
+    max-height: 100%;
+     max-width: 100%;
     pointer-events: none;
 }
 
@@ -21,19 +25,16 @@
     margin: 0.5em 0.5em;
     border-left: 6px solid transparent;
     border-radius: 2px;
-    pointer-events: none;    
+    pointer-events: none;  
+    max-width: 50%;  
     -webkit-box-shadow: 0px 0px 9px rgba(0,0,0, 0.25);
             box-shadow: 0px 0px 9px rgba(0,0,0, 0.25);
     -webkit-transform: translate3d(0, 0, 0);
             transform: translate3d(0, 0, 0);
 }
-.toast--close-on-click { cursor: pointer; pointer-events: auto; }
-
-/* successful toast class: */
-.toast--success {
-    color: #3C763D;
-    background-color: #E9FFD9;
-    border-color: #A6CA8A;
+.toast.close-on-click {
+    cursor: pointer;
+    pointer-events: auto;
 }
 
 /* informational toast class: */
@@ -41,6 +42,13 @@
     color: #31708F;
     background-color: #EAF2FA;
     border-color: #91C5F2;
+}
+
+/* successful toast class: */
+.toast--success {
+    color: #3C763D;
+    background-color: #E9FFD9;
+    border-color: #A6CA8A;
 }
 
 /* warning toast class: */
@@ -85,42 +93,42 @@
 
 /* ANIMATION 01 - fade (DEFAULT ANIMATION): */
 .toast-container--default {}
-.toast--default-init { opacity: 0; transition: 0.3s all ease; }
-.toast--default-show { opacity: 1; }
-.toast--default-hide { opacity: 0; }
+.toast.default-init { opacity: 0; transition: 0.3s all ease; }
+.toast.default-show { opacity: 1; }
+.toast.default-hide { opacity: 0; }
 /* ------------------------------------------------------------------------- */
 
 /* ANIMATION 02 - slide fade left animation: */
 .toast-container--slideFadeLeft { height: 100vh; }
-.toast--slideFadeLeft-init { opacity: 0; left: 100%; transition: 0.3s all ease; }
-.toast--slideFadeLeft-show { opacity: 1; left: 0%; }
-.toast--slideFadeLeft-hide { opacity: 0; left: 100%; }
+.toast.slideFadeLeft-init { opacity: 0; left: 100%; transition: 0.3s all ease; }
+.toast.slideFadeLeft-show { opacity: 1; left: 0%; }
+.toast.slideFadeLeft-hide { opacity: 0; left: 100%; }
 /* ------------------------------------------------------------------------- */
 
 /* ANIMATION 03 - slide fade right animation: */
 .toast-container--slideFadeRight { height: 100vh; }
-.toast--slideFadeRight-init { opacity: 0; right: 100%; transition: 0.3s all ease; }
-.toast--slideFadeRight-show { opacity: 1; right: 0%; }
-.toast--slideFadeRight-hide { opacity: 0; right: 100%; }
+.toast.slideFadeRight-init { opacity: 0; right: 100%; transition: 0.3s all ease; }
+.toast.slideFadeRight-show { opacity: 1; right: 0%; }
+.toast.slideFadeRight-hide { opacity: 0; right: 100%; }
 /* ------------------------------------------------------------------------- */
 
 /* ANIMATION 04 - slide down fade animation: */
 .toast-container--slideDownFade { height: 100vh; }
-.toast--slideDownFade-init { opacity: 0; top: -100%; transition: 0.3s all ease; }
-.toast--slideDownFade-show { opacity: 1; top: 0%; }
-.toast--slideDownFade-hide { opacity: 0; top: 100%; }
+.toast.slideDownFade-init { opacity: 0; top: -100%; transition: 0.3s all ease; }
+.toast.slideDownFade-show { opacity: 1; top: 0%; }
+.toast.slideDownFade-hide { opacity: 0; top: 100%; }
 /* ------------------------------------------------------------------------- */
 
 /* ANIMATION 05 - slide up down fade animation: */
 .toast-container--slideUpDownFade { height: 100vh; }
-.toast--slideUpDownFade-init { opacity: 0; bottom: -100%; transition: 0.3s all ease; }
-.toast--slideUpDownFade-show { opacity: 1; bottom: 0%; }
-.toast--slideUpDownFade-hide { opacity: 0; bottom: -100%; }
+.toast.slideUpDownFade-init { opacity: 0; bottom: -100%; transition: 0.3s all ease; }
+.toast.slideUpDownFade-show { opacity: 1; bottom: 0%; }
+.toast.slideUpDownFade-hide { opacity: 0; bottom: -100%; }
 /* ------------------------------------------------------------------------- */
 
 /* ANIMATION 06 - slide right left fade (DEFAULT ANIMATION): */
 .toast-container--fade {}
-.toast--slideRightLeftFade-init { opacity: 0; right: -100%; transition: 0.3s all ease; }
-.toast--slideRightLeftFade-show { opacity: 1; right: 0%; }
-.toast--slideRightLeftFade-hide { opacity: 0; right: -100%; }
+.toast.slideRightLeftFade-init { opacity: 0; right: -100%; transition: 0.3s all ease; }
+.toast.slideRightLeftFade-show { opacity: 1; right: 0%; }
+.toast.slideRightLeftFade-hide { opacity: 0; right: -100%; }
 /* ------------------------------------------------------------------------- */
