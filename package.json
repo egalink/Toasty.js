@@ -1,0 +1,38 @@
+{
+  "name": "Toasty.js",
+  "description": "A minimal JavaScript notification plugin that provides a simple way to display customizable toast messages.",
+  "version": "1.3.10",
+  "main": "gulpfile.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "gulp": "^3.9.1"
+  },
+  "scripts": {
+    "test": "gulp"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/egalink/Toasty.js.git"
+  },
+  "keywords": [
+    "minimal",
+    "javascript",
+    "plugin",
+    "simple",
+    "way",
+    "display",
+    "customizable",
+    "toast",
+    "messages",
+    "alerts"
+  ],
+  "author": "Edgar Jakim Hernández Arrieta",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/egalink/Toasty.js/issues"
+  },
+  "homepage": "https://egalink.github.io/Toasty.js/"
+}
