@@ -10,13 +10,7 @@ Rainbow.extend("css",[{name:"comment",pattern:/\/\*[\s\S]*?\*\//gm},{name:"const
         duration: 0,
         autoClose: true,
         enableSounds: true,
-        progressBar: true,
-        onShow: function(type) {
-            console.log("El mensaje se Muestra: ", type);
-        },
-        onHide: function(type) {
-            console.log("El mensaje se Oculta: ", type);
-        }
+        progressBar: true
     });
 
     var tran = document.getElementById('select-transition')
@@ -43,7 +37,6 @@ Rainbow.extend("css",[{name:"comment",pattern:/\/\*[\s\S]*?\*\//gm},{name:"const
 
         return type;
     }
-
     var conf = function(value) {
         //
         toasty.configure({ transition: value });

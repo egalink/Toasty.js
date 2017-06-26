@@ -107,7 +107,7 @@ select {
     position: relative;
 }
 #presentation h1 b:before {
-    content: 'v1.2.10';
+    content: 'v1.3.10';
     font-size: 13px;
     position: absolute;
     top: -16px;

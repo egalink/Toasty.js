@@ -1,5 +1,5 @@
 /*!
- * Toasty.js v2.0.0
+ * Toasty.js v1.3.10
  *
  * A minimal JavaScript notification plugin that provides a simple way
  * to display customizable toast messages.
@@ -203,7 +203,7 @@
 
         audio.className = playerclass;
         audio.innerHTML = '<source src="' + sound + '" type="audio/mpeg"/>' +
-                          '<embed hidden="true" autostart="true" loop="false" src="' + sound + '" />';
+                          '<embed hidden="true" autoplay="false" loop="false" src="' + sound + '" />';
 
         container.appendChild(audio);
     };
@@ -429,7 +429,7 @@
     }
 
     function whichTransitionEvent () {
-        
+        //
         var t,
             el = document.createElement('transitionElement');
 
@@ -446,7 +446,22 @@
     }
 
     function parentElement (el) {
+        //
         return el.parentElement || el.parentNode;
+    }
+
+    /**
+     * IE Fallbacks:
+     */
+
+    // Create Element.remove() function if not exist:
+    if ('remove' in Element.prototype) {
+        // the browser supports .remove() function...
+    } else {
+        Element.prototype.remove = function() {
+            if (this.parentNode)
+                this.parentNode.removeChild(this);
+        };
     }
 
     // object:
