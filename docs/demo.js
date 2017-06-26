@@ -14,25 +14,25 @@ Rainbow.extend("css",[{name:"comment",pattern:/\/\*[\s\S]*?\*\//gm},{name:"const
     });
 
     var tran = document.getElementById('select-transition')
-    var btns = document.querySelectorAll('.btn');
+    var btns = document.querySelectorAll('.btn-example');
 
-    var show = function (type) {
+    var show = function (type, message) {
         //
         switch (type) {
             case 'info':
-                toasty.info("A info toast message appears!");
+                toasty.info(message);
                 break;
             case 'success':
-                toasty.success("A success toast message appears!");
+                toasty.success(message);
                 break;
             case 'warning':
-                toasty.warning("A warning toast message appears!");
+                toasty.warning(message);
                 break;
             case 'error':
-                toasty.error("A error toast message appears!");
+                toasty.error(message);
                 break;
             default:
-                console.error("No toast to show!");
+                console.error("Error - no toast to show!");
         }
 
         return type;
@@ -47,7 +47,7 @@ Rainbow.extend("css",[{name:"comment",pattern:/\/\*[\s\S]*?\*\//gm},{name:"const
         btns[btn].addEventListener('click', function(e) {
             // show a toast:
             e.preventDefault();
-            show(this.id);
+            show(this.id, this.title);
         }, false);
     }
 

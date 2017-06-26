@@ -96,21 +96,21 @@
 
 /* TRANSITION 01 - a fade transition (DEFAULT TRANSITION): */
 .toast-container--default { right: 0; bottom: 0; }
-.toast.default-init { opacity: 0; transition: 0.3s all ease; }
+.toast.default-init { opacity: 0; transition: .48s all ease-in-out; }
 .toast.default-show { opacity: 1; }
 .toast.default-hide { opacity: 0; }
 /* ------------------------------------------------------------------------- */
 
 /* TRANSITION 02 - a slideFadeLeft transition: */
 .toast-container--slideFadeLeft { right: 0; bottom: 0; }
-.toast.slideFadeLeft-init { right: -100%; opacity: 0; transition: 0.3s all ease-in-out; }
+.toast.slideFadeLeft-init { right: -100%; opacity: 0; transition: .48s all ease-in-out; }
 .toast.slideFadeLeft-show { right: 0; opacity: 1; }
 .toast.slideFadeLeft-hide { right: 100%; opacity: 0; }
 /* ------------------------------------------------------------------------- */
 
 /* TRANSITION 03 - a slideFadeRight transition: */
 .toast-container--slideFadeRight { right: 0; bottom: 0; }
-.toast.slideFadeRight-init { right: 100%; opacity: 0; transition: 0.3s all ease-in-out; }
+.toast.slideFadeRight-init { right: 100%; opacity: 0; transition: .48s all ease-in-out; }
 .toast.slideFadeRight-show { right: 0; opacity: 1; }
 .toast.slideFadeRight-hide { right: -100%; opacity: 0; }
 /* ------------------------------------------------------------------------- */

@@ -10,31 +10,34 @@
     </head>
     <body>
         
-        <section id="presentation" class="fullpage fullpage--centered">
+        <section id="presentation" class="">
             <div class="content">
                 <h1 class="text-center">
                     <b>Toasty.js</b>
                 </h1>
                 <p class="text-center">
                     A minimal JavaScript notification plugin that provides a simple way
-                    to display customizable toast messages with custom CSS3 transition
-                    effects on the web page.
+                    to display customizable toast messages on the web page
+                    with CSS3 transition effects.
                 </p>
                 <br/>
-                <h2 class="text-center">examples:</h2>
-                <p class="buttonlist text-center">
-                    <button id="info" class="btn btn--primary" type="button">Info Toast</button>
-                    <button id="success" class="btn btn--success" type="button">Success Toast</button>
-                    <button id="warning" class="btn btn--warning" type="button">Warning Toast</button>
-                    <button id="error" class="btn btn--caution" type="button">Error Toast</button>
-                </p>
                 <p class="text-center">
-                    <label for="select-transition">transition - </label>
+                    <a class="btn btn--download" href="//github.com/egalink/Toasty.js" target="_blank">download</a>
+                </p>
+                <br/>
+                <h2 class="text-center">or try it:</h2>
+                <p class="text-center transition-select">
                     <select id="select-transition">
-                        <option value="default">default</option>
+                        <option value="default">transition: default</option>
                         <option value="slideFadeLeft">slideFadeLeft</option>
                         <option value="slideFadeRight">slideFadeRight</option>
                     </select>
+                </p>
+                <p class="buttonlist text-center">
+                    <button id="info" class="btn btn--primary btn-example" type="button" title="Here is some information!">Info Toast</button>
+                    <button id="success" class="btn btn--success btn-example" type="button" title="You did something good!">Success Toast</button>
+                    <button id="warning" class="btn btn--warning btn-example" type="button" title="Warning! Do not proceed any further!">Warning Toast</button>
+                    <button id="error" class="btn btn--caution btn-example" type="button" title="Something terrible happened!">Error Toast</button>
                 </p>
             </div>
         </section>

@@ -58,7 +58,7 @@ a:hover {
 }
 
 select {
-    padding: 3px 9px;
+    color: inherit;
 }
 
 
@@ -97,8 +97,8 @@ select {
 #presentation {
     padding: 0;
     position: relative;
-    height: 100vh;
-    width: 100%;
+    min-height: 100vh;
+    max-width: 100%;
 }
 
 /* title page: */
@@ -118,6 +118,13 @@ select {
     min-width: 120px;
 }
 
+#presentation .transition-select select {
+    border: 2px solid #AFAFAF;
+    font-size: inherit;
+    padding: 12px 24px;
+    width: 84%;
+    border-radius: 3px;
+}
 
 /* CSS BUTTONS LIBRARY:
  * ------------------------------------------------------------------------- */
@@ -138,13 +145,14 @@ select {
     -ms-user-select: none;
     user-select: none;
     transition: all 0.2s ease 0s;
-    /* saf3+, chrome1+ */
+    border-radius: 3px;    
 }
 .btn:active {
     outline: 0;
     box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
 }
 
+/* saf3+, chrome1+ */
 @media screen and (-webkit-min-device-pixel-ratio: 0) {
     .btn {
         padding: 0.65em 1em;
@@ -160,7 +168,8 @@ select {
 .btn--primary,
 .btn--success,
 .btn--warning,
-.btn--caution {
+.btn--caution,
+.btn--download {
     color: #FEFEFE !important;
     text-decoration: none !important;
 }
@@ -246,6 +255,21 @@ select {
     color: #312F2F;
     background-color: #E0DCDC;
     border-color: #8C8C8C;
+}
+
+.btn--download {
+    background-color: #F44336;
+    border-color: #F44336;
+}
+.btn--download.hover,
+.btn--download:hover {
+    background-color: #E03C30;
+    border-color: #D0382D;
+}
+.btn--download.focus,
+.btn--download:focus {
+    background-color: #E03C30;
+    border-color: #D0382D;
 }
 
 .btn--link {
