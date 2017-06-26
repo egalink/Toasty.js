@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" class="no-js test">
+<html lang="en" class="no-js">
     <head>
         
         <meta charset="utf-8"/>
@@ -27,6 +27,14 @@
                     <button id="success" class="btn btn--success" type="button">Success Toast</button>
                     <button id="warning" class="btn btn--warning" type="button">Warning Toast</button>
                     <button id="error" class="btn btn--caution" type="button">Error Toast</button>
+                </p>
+                <p class="text-center">
+                    <label for="select-transition">transition - </label>
+                    <select id="select-transition">
+                        <option value="default">default</option>
+                        <option value="slideFadeLeft">slideFadeLeft</option>
+                        <option value="slideFadeRight">slideFadeRight</option>
+                    </select>
                 </p>
             </div>
         </section>
@@ -136,19 +144,6 @@ toasty.success('Configured successfully!');
     animation: 'slideUpDownFade'
 }).info('A informational message appears!');
 </code></pre>
-
-            <p class="text-right">
-                Play with all available Toasty.js CSS animations.
-                <select id="select-transition">
-                    <option value="">select an animation...</option>
-                    <option value="default">default</option>
-                    <option value="slideFadeLeft">slideFadeLeft</option>
-                    <option value="slideFadeRight">slideFadeRight</option>
-                    <option value="slideDownFade">slideDownFade</option>
-                    <option value="slideUpDownFade">slideUpDownFade</option>
-                    <option value="slideRightLeftFade">slideRightLeftFade</option>
-                </select>
-            </p>
         </section>
 
         <link href="./src/toasty.css" rel="stylesheet"/>

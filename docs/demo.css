@@ -37,7 +37,7 @@ h2 {
     font-size: 1.65em;
 }
 p {
-    font-size: 1em;
+    font-size: 1.15em;
     color: #68696b;
 }
 
@@ -56,6 +56,11 @@ a:active {
 a:hover {
     text-decoration: underline;
 }
+
+select {
+    padding: 3px 9px;
+}
+
 
 .fullpage {
     position: absolute;

@@ -16,9 +16,6 @@
         "default",
         "slideFadeLeft",
         "slideFadeRight",
-        "slideDownFade",
-        "slideUpDownFade",
-        "slideRightLeftFade",
     ];
 
     var _defaults = {
@@ -78,21 +75,22 @@
                info: '{:classname}--info',
             success: '{:classname}--success',
             warning: '{:classname}--warning',
-              error: '{:classname}--error',
-              sound: '{:classname}--notify-sound'
+              error: '{:classname}--error'
         },
         animate: {
             init: '{:transition}-init',
             show: '{:transition}-show',
             hide: '{:transition}-hide'
         },
-        progressbar: '{:classname}-progressbar'
+        progressbar: '{:classname}-progressbar',
+        playerclass: '{:classname}-soundplayer'
     };
 
     /*!
      * Private functions:
      */
 
+    // the method to extend default options in settings:
     var _extend = function (defaults, options) {
         //
         var config = {};
@@ -103,26 +101,15 @@
         return config;
     };
 
+    // get the auto close duration to be set in each toast message:
     var _getAutoCloseDuration = function (message, duration, settings) {
         //
             duration = duration || settings.duration;
         if (duration == 0)
-            duration = message.length *100;
+            duration = message.length *50;
 
         return Math.floor(duration);
     };
-
-    var _hideToastOnClick = function (type, el, duration, animate, callback, class2close) {
-        //
-        function hideOnClick (e) {
-            e.stopPropagation();
-            el.classList.remove(class2close);
-            _hideToast(type, el, duration, animate, callback);
-        }
-
-        el.classList.add(class2close);
-        el.addEventListener('click', hideOnClick);
-    }
 
     // show the toast message with an CSS3 transition:
     var _showToast = function (type, el, container, animate, insertBefore, callback) {
@@ -188,6 +175,63 @@
         delay(hide, duration);
     };
 
+    // hide the toast message with an CSS3 transition when the user
+    // clicks on the message:
+    var _hideToastOnClick = function (type, el, duration, animate, callback, class2close) {
+        //
+        function hideOnClick (e) {
+            e.stopPropagation();
+            el.classList.remove(class2close);
+            _hideToast(type, el, duration, animate, callback);
+        }
+
+        el.classList.add(class2close);
+        el.addEventListener('click', hideOnClick);
+    };
+
+    var _playSound = function (type, container, sounds, playerclass) {
+        //
+        var sound = sounds[type],
+            audio = document.createElement('audio');
+            audio.autoplay = 'autoplay';
+            audio.onended = function() {
+                var parent = parentElement(this);
+                this.remove();
+                if (parent.childNodes.length < 1)
+                    parent.remove();
+            }
+
+        audio.className = playerclass;
+        audio.innerHTML = '<source src="' + sound + '" type="audio/mpeg"/>' +
+                          '<embed hidden="true" autostart="true" loop="false" src="' + sound + '" />';
+
+        container.appendChild(audio);
+    };
+
+    var _showProgressBar = function (type, el, duration, transition) {
+        //
+        var progressBar = document.createElement('div');
+            progressBar.classList.add(transition.progressbar);
+            progressBar.classList.add(transition.progressbar + '--' + type);
+            el.appendChild(progressBar);
+
+        var iterat = 0,
+            offset = 0;
+
+        var interval = setInterval(function() {
+
+            iterat ++;
+            offset = Math.round((1000 *iterat) / duration);
+        
+            if (offset > 100) {
+                clearInterval(interval);
+            } else {
+                progressBar.style.width = offset + '%';
+            }
+
+        }, 10);
+    };
+
     /*!
      * The exposed public object:
      */
@@ -211,7 +255,26 @@
             }
     };
 
-    // type of messages:
+    Toasty.prototype.configure = function (options) {
+        //
+        var hasSettings = Object.keys(this.settings).length;
+        if (hasSettings > 1)
+            this.settings = _extend(this.settings, options);
+        else
+            this.settings = _extend(_defaults, options);
+
+        return this;
+    };
+
+    Toasty.prototype.transition = function (name) {
+        //
+        this.classmap[name] = cloner(_mappings);
+        this.classmap[name] = walker(this.classmap[name], {
+            '{:classname}': this.settings.classname,
+            '{:transition}': name
+        });
+        return this;
+    };
 
     Toasty.prototype.toast = function (type, message, duration) {
         //
@@ -245,7 +308,17 @@
 
         // insert the toast container into the HTML:
         if (! containerExists)
-            document.body.insertBefore(container, options.prependTo);
+            document.body
+                    .insertBefore(container, options.prependTo);
+
+        // enable or disable toast sounds:
+        if (options.enableSounds == true)
+            _playSound(
+                type,
+                container,
+                options.sounds,
+                transition.playerclass
+            );
 
 
         // STEP 1:
@@ -292,21 +365,16 @@
         // --------------------------------------------------------------------
         // END: prepare the toast to hide it.
 
+        // enable or disable the progressbar:
+        if (options.progressBar == true && options.autoClose == true)
+            _showProgressBar(
+                type,
+                newToast,
+                duration,
+                transition
+            );
 
-        return;
-
-        /*
-        // enable or disable toast sounds:
-        if (options.enableSounds == true)
-            playSound(type, container);
-
-        // show a progressbar on toast messages:
-        if (options.progressBar == true && options.autoClose == true) {
-            showProgressBar(newToast, duration, type);
-        }
-        */
-
-        // end main function.
+        return this;
     };
 
     Toasty.prototype.info = function (message, duration) {
@@ -331,21 +399,6 @@
         //
         duration = _getAutoCloseDuration(message, duration, this.settings);
         this.toast("error", message, duration);
-    };
-
-    // public methods:
-    Toasty.prototype.configure = function (options) {
-        //
-        this.settings = _extend(_defaults, options);
-    };
-
-    Toasty.prototype.transition = function (name) {
-        //
-        this.classmap[name] = cloner(_mappings);
-        this.classmap[name] = walker(this.classmap[name], {
-            '{:classname}': this.settings.classname,
-            '{:transition}': name
-        });
     };
 
     // helpers:

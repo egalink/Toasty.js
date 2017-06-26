@@ -7,9 +7,10 @@ Rainbow.extend("css",[{name:"comment",pattern:/\/\*[\s\S]*?\*\//gm},{name:"const
     'use strict';
 
     var toasty = new Toasty({
-        duration: 1000,
-        transition: "default",
-        autoClose: false,
+        duration: 0,
+        autoClose: true,
+        enableSounds: true,
+        progressBar: true,
         onShow: function(type) {
             console.log("El mensaje se Muestra: ", type);
         },
@@ -18,10 +19,50 @@ Rainbow.extend("css",[{name:"comment",pattern:/\/\*[\s\S]*?\*\//gm},{name:"const
         }
     });
 
-    toasty.info("The informational messaje appears!");
-    console.log(toasty);
-    // toasty.success("The success messaje appears!");
-    // toasty.warning("The warning messaje appears!");
-    // toasty.error("The error messaje appears!");
+    var tran = document.getElementById('select-transition')
+    var btns = document.querySelectorAll('.btn');
+
+    var show = function (type) {
+        //
+        switch (type) {
+            case 'info':
+                toasty.info("A info toast message appears!");
+                break;
+            case 'success':
+                toasty.success("A success toast message appears!");
+                break;
+            case 'warning':
+                toasty.warning("A warning toast message appears!");
+                break;
+            case 'error':
+                toasty.error("A error toast message appears!");
+                break;
+            default:
+                console.error("No toast to show!");
+        }
+
+        return type;
+    }
+
+    var conf = function(value) {
+        //
+        toasty.configure({ transition: value });
+    }
+
+    for (var btn in btns) if (btns.hasOwnProperty(btn) === true) {
+        //
+        btns[btn].addEventListener('click', function(e) {
+            // show a toast:
+            e.preventDefault();
+            show(this.id);
+        }, false);
+    }
+
+    tran.addEventListener('change', function(e) {
+        // change the transition:
+        conf(this.value)
+    }, false);
+
+    conf(tran.value);
 
 })(window);
