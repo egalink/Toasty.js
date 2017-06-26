@@ -1,116 +1,13 @@
-
-/* entire toast container */
-.toast-container {
-     display: block;
-    position: fixed;
-     z-index: 999999;
-    max-height: 100%;
-     max-width: 100%;
-    pointer-events: none;
-    -webkit-transition: all 1s ease-in-out;
-       -moz-transition: all 1s ease-in-out;
-         -o-transition: all 1s ease-in-out;
-            transition: all 1s ease-in-out;
-}
-
-.toast-container .toast-soundplayer {
-    display: none;
-    visibility: hidden;
-}
-
-/**
- * Toast stylings:
- * ------------------------------------------------------------------------- */
-
-/* each toast gets this style: */
-.toast {
-    position: relative;
-    padding: 16px;
-    border: 1px solid;
-    margin: 0.5em 0.5em;
-    border-left: 6px solid transparent;
-    border-radius: 2px;
-    pointer-events: none;
-    -webkit-box-shadow: 0px 0px 9px rgba(0,0,0, 0.25);
-            box-shadow: 0px 0px 9px rgba(0,0,0, 0.25);
-    -webkit-transform: translate3d(0, 0, 0);
-            transform: translate3d(0, 0, 0);
-}
-.toast.close-on-click {
-    cursor: pointer;
-    pointer-events: auto;
-}
-
-/* informational toast class: */
-.toast--info {
-    color: #31708F;
-    background-color: #EAF2FA;
-    border-color: #91C5F2;
-}
-
-/* successful toast class: */
-.toast--success {
-    color: #3C763D;
-    background-color: #E9FFD9;
-    border-color: #A6CA8A;
-}
-
-/* warning toast class: */
-.toast--warning {
-    color: #8A6D3B;
-    background-color: #FFF8C4;
-    border-color: #F2C779;
-}
-
-/* error toast class: */
-.toast--error {
-    color: #A94442;
-    background-color: #FFECEC;
-    border-color: #F5ACA6;
-}
-
-/**
- * Progress bar styling:
- * ------------------------------------------------------------------------- */
-
-/* each progress bar gets this style: */
-.toast-progressbar {
-    position: absolute;
-    height: 4px;
-    width: 0%;
-    left: 0px;
-    bottom: 0px;
-    opacity: 0.5;
-    transition: 0s width ease;
-}
-
-/* progress bar color for each toast type: */
-.toast-progressbar--info { background-color: #91C5F2; }
-.toast-progressbar--success { background-color: #A6CA8A; }
-.toast-progressbar--warning { background-color: #F2C779; }
-.toast-progressbar--error { background-color: #F5ACA6; }
-
-/**
- * Available toast transitions:
- * ------------------------------------------------------------------------- */
-
-/* TRANSITION 01 - a fade transition (DEFAULT TRANSITION): */
-.toast-container--default { right: 0; bottom: 0; }
-.toast.default-init { opacity: 0; transition: .48s all ease-in-out; }
-.toast.default-show { opacity: 1; }
-.toast.default-hide { opacity: 0; }
-/* ------------------------------------------------------------------------- */
-
-/* TRANSITION 02 - a slideFadeLeft transition: */
-.toast-container--slideFadeLeft { right: 0; bottom: 0; }
-.toast.slideFadeLeft-init { right: -100%; opacity: 0; transition: .48s all ease-in-out; }
-.toast.slideFadeLeft-show { right: 0; opacity: 1; }
-.toast.slideFadeLeft-hide { right: 100%; opacity: 0; }
-/* ------------------------------------------------------------------------- */
-
-/* TRANSITION 03 - a slideFadeRight transition: */
-.toast-container--slideFadeRight { right: 0; bottom: 0; }
-.toast.slideFadeRight-init { right: 100%; opacity: 0; transition: .48s all ease-in-out; }
-.toast.slideFadeRight-show { right: 0; opacity: 1; }
-.toast.slideFadeRight-hide { right: -100%; opacity: 0; }
-/* ------------------------------------------------------------------------- */
+.toast-container{display:block;position:fixed;z-index:999999;max-height:100%;max-width:100%;pointer-events:none;-webkit-transition:all 1s ease-in-out;-moz-transition:all 1s ease-in-out;-o-transition:all 1s ease-in-out;transition:all 1s ease-in-out}
+.toast-container .toast-soundplayer{display:none;visibility:hidden}.toast{position:relative;padding:16px;border:1px solid;margin:.5em .5em;border-left:6px solid transparent;border-radius:2px;pointer-events:none;-webkit-box-shadow:0 0 9px rgba(0,0,0,0.25);box-shadow:0 0 9px rgba(0,0,0,0.25);-webkit-transform:translate3d(0,0,0);transform:translate3d(0,0,0)}
+.toast.close-on-click{cursor:pointer;pointer-events:auto}.toast--info{color:#31708f;background-color:#eaf2fa;border-color:#91c5f2}
+.toast--success{color:#3c763d;background-color:#e9ffd9;border-color:#a6ca8a}.toast--warning{color:#8a6d3b;background-color:#fff8c4;border-color:#f2c779}
+.toast--error{color:#a94442;background-color:#ffecec;border-color:#f5aca6}.toast-progressbar{position:absolute;height:4px;width:0;left:0;bottom:0;opacity:.5;transition:0s width ease}
+.toast-progressbar--info{background-color:#91c5f2}.toast-progressbar--success{background-color:#a6ca8a}
+.toast-progressbar--warning{background-color:#f2c779}.toast-progressbar--error{background-color:#f5aca6}
+.toast-container--default{right:0;bottom:0}.toast.default-init{opacity:0;transition:.48s all ease-in-out}
+.toast.default-show{opacity:1}.toast.default-hide{opacity:0}.toast-container--slideFadeLeft{right:0;bottom:0}
+.toast.slideFadeLeft-init{right:-100%;opacity:0;transition:.48s all ease-in-out}.toast.slideFadeLeft-show{right:0;opacity:1}
+.toast.slideFadeLeft-hide{right:100%;opacity:0}.toast-container--slideFadeRight{right:0;bottom:0}
+.toast.slideFadeRight-init{right:100%;opacity:0;transition:.48s all ease-in-out}.toast.slideFadeRight-show{right:0;opacity:1}
+.toast.slideFadeRight-hide{right:-100%;opacity:0}

@@ -6,9 +6,13 @@
   "directories": {
     "doc": "docs"
   },
-  "dependencies": {},
+  "dependencies": {
+    "gulp-uglifycss": "^1.0.8"
+  },
   "devDependencies": {
-    "gulp": "^3.9.1"
+    "gulp": "^3.9.1",
+    "gulp-uglify": "^3.0.0",
+    "pump": "^1.0.2"
   },
   "scripts": {
     "test": "gulp"
