@@ -12,10 +12,10 @@ Rainbow.extend("css",[{name:"comment",pattern:/\/\*[\s\S]*?\*\//gm},{name:"const
         enableSounds: true,
         progressBar: true,
         sounds: {
-            info: "../dist/sounds/info/1.mp3",
-            success: "../dist/sounds/success/1.mp3",
-            warning: "../dist/sounds/warning/1.mp3",
-            error: "../dist/sounds/error/1.mp3",
+            info: "./dist/sounds/info/1.mp3",
+            success: "./dist/sounds/success/1.mp3",
+            warning: "./dist/sounds/warning/1.mp3",
+            error: "./dist/sounds/error/1.mp3",
         }
     });
 
