@@ -19,11 +19,14 @@ Rainbow.extend("css",[{name:"comment",pattern:/\/\*[\s\S]*?\*\//gm},{name:"const
         }
     });
 
-    var tran = document.getElementById('select-transition')
+    var tran = document.getElementById('select-transition');
     var btns = document.querySelectorAll('.btn-example');
+    var down = document.getElementById('action-download');
 
     var show = function (type, message) {
         //
+        conf(tran);
+        
         switch (type) {
             case 'info':
                 toasty.info(message);
@@ -43,9 +46,13 @@ Rainbow.extend("css",[{name:"comment",pattern:/\/\*[\s\S]*?\*\//gm},{name:"const
 
         return type;
     }
-    var conf = function(value) {
+    var conf = function(select) {
         //
-        toasty.configure({ transition: value });
+        var option = select.options[select.selectedIndex];
+            toasty.configure({
+                transition: select.value,
+                insertBefore: option.getAttribute('data-insertbefore') === 'true'
+            });
     }
 
     for (var btn in btns) if (btns.hasOwnProperty(btn) === true) {
@@ -59,9 +66,17 @@ Rainbow.extend("css",[{name:"comment",pattern:/\/\*[\s\S]*?\*\//gm},{name:"const
 
     tran.addEventListener('change', function(e) {
         // change the transition:
-        conf(this.value)
+        conf(this)
     }, false);
 
-    conf(tran.value);
+    down.addEventListener('click', function(e) {
+        toasty.configure({
+            transition: 'slideLeftFade',
+            autoClose: true
+        })
+        .success("<span class=\"fa fa-download\"></span> Preparing download...", 1000);
+    });
+
+    conf(tran);
 
 })(window);

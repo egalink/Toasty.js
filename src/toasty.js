@@ -13,16 +13,19 @@
     'use strict';
     
     var _transitions = [
-        "default",
-        "slideFadeLeft",
-        "slideFadeRight",
+        "fade",
+        "slideLeftFade",
+        "slideLeftRightFade",
+        "slideRightFade",
+        "slideRightLeftFade",
+        "pinInTop"
     ];
 
     var _defaults = {
         // STRING: main class name used to styling each toast message with CSS:
         classname: "toast", 
         // STRING: Name of the CSS transition that will be used to shown or hide the toast:
-        transition: "default",
+        transition: "fade",
         // BOOLEAN: Specifies the way in which the toasts will be inserted in the html code:
         // .... Set to BOOLEAN TRUE and the toast messages will be inserted before those already generated toasts.
         // .... Set to BOOLEAN FALSE otherwise.
@@ -70,20 +73,21 @@
     };
 
     var _mappings = {
-        container: '{:classname}-container',
+        container: "{:classname}-container",
+        mainwrapp: "{:classname}-wrapper",
         toasts: {
-               info: '{:classname}--info',
-            success: '{:classname}--success',
-            warning: '{:classname}--warning',
-              error: '{:classname}--error'
+               info: "{:classname}--info",
+            success: "{:classname}--success",
+            warning: "{:classname}--warning",
+              error: "{:classname}--error",
         },
         animate: {
-            init: '{:transition}-init',
-            show: '{:transition}-show',
-            hide: '{:transition}-hide'
+            init: "{:transition}-init",
+            show: "{:transition}-show",
+            hide: "{:transition}-hide",
         },
-        progressbar: '{:classname}-progressbar',
-        playerclass: '{:classname}-soundplayer'
+        progressbar: "{:classname}-progressbar",
+        playerclass: "{:classname}-soundplayer"
     };
 
     /*!
@@ -150,7 +154,7 @@
             clearTimeout(timer);
             timer = setTimeout(callback, ms);
         };
-        
+
         function onHideToast(e) {
             e.target.removeEventListener(e.type, onHideToast, false);
             delay(remove, 0);
@@ -159,11 +163,12 @@
         };
 
         function remove () {
-            var container = parentElement(el);
+            var container = parentElement(el); // the wrapper.
             el.remove();
             var num = container.childNodes.length;
-            if (num < 1)
-                container.remove();
+            if (num < 1) {
+                parentElement(container).remove();
+            }
         };
 
         function hide () {
@@ -196,16 +201,16 @@
             audio.autoplay = 'autoplay';
             audio.onended = function() {
                 var parent = parentElement(this);
-                this.remove();
+                    this.remove();
                 if (parent.childNodes.length < 1)
-                    parent.remove();
+                    parentElement(parent).remove();
             }
 
         audio.className = playerclass;
         audio.innerHTML = '<source src="' + sound + '" type="audio/mpeg"/>' +
                           '<embed hidden="true" autoplay="false" loop="false" src="' + sound + '" />';
 
-        container.appendChild(audio);
+        parentElement(container).appendChild(audio);
     };
 
     var _showProgressBar = function (type, el, duration, transition) {
@@ -293,10 +298,19 @@
         var containerExists = !! container;
 
         // create the toast container if not exists:
-        if (! containerExists) {
+        if (containerExists) {
+            container = container.querySelector('.' + transition.mainwrapp); // use the wrapper instead of main container.
+        } else {
             container = document.createElement('div');
             container.classList.add(transition.container);
             container.classList.add(transition.container + '--' + options.transition);
+
+            // create a alert wrapper instance:
+            var wrapp = document.createElement('div');
+                wrapp.classList.add(transition.mainwrapp);
+
+            // append the alert wrapper and now, this is the main container:
+            container.appendChild(container = wrapp);
         }
 
         // create a new toast instance
@@ -309,7 +323,8 @@
         // insert the toast container into the HTML:
         if (! containerExists)
             document.body
-                    .insertBefore(container, options.prependTo);
+                    .insertBefore(parentElement(container), options.prependTo);
+
 
         // enable or disable toast sounds:
         if (options.enableSounds == true)
@@ -336,7 +351,6 @@
 
         // --------------------------------------------------------------------
         // END: showing the toas message
-
 
         // STEP 2:
         // INI: prepare the toast to hide it.
@@ -373,6 +387,7 @@
                 duration,
                 transition
             );
+
 
         return this;
     };

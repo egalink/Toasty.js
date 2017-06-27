@@ -9,27 +9,35 @@
     </head>
     <body>
         
-        <section id="presentation" class="">
+        <section id="presentation">
             <div class="content">
                 <h1 class="text-center">
                     <b>Toasty.js</b>
                 </h1>
-                <p class="text-center">
+                <p class="main-description text-center">
                     A minimal JavaScript notification plugin that provides a simple way
                     to display customizable toast messages on the web page
                     with CSS3 transition effects.
                 </p>
-                <br/>
                 <p class="text-center">
-                    <a class="btn btn--download" href="//github.com/egalink/Toasty.js" target="_blank">download</a>
+                    <a id="action-download" class="btn btn--download" href="//github.com/egalink/Toasty.js/archive/master.zip">
+                        <span class="fa fa-download"></span> download
+                    </a>
+                    <span class="separator">or</span>
+                    <a class="btn btn--default" href="//github.com/egalink/Toasty.js/" target="_blank">
+                        <span class="fa fa-github"></span>  view on GitHub
+                    </a>
                 </p>
                 <br/>
                 <h2 class="text-center">or try it:</h2>
                 <p class="text-center transition-select">
                     <select id="select-transition">
-                        <option value="default">transition: default</option>
-                        <option value="slideFadeLeft">slideFadeLeft</option>
-                        <option value="slideFadeRight">slideFadeRight</option>
+                        <option value="fade" data-insertbefore="true">transition: fade</option>
+                        <option value="slideLeftFade" data-insertbefore="true">slideLeftFade</option>
+                        <option value="slideLeftRightFade" data-insertbefore="true">slideLeftRightFade</option>
+                        <option value="slideRightFade" data-insertbefore="true">slideRightFade</option>
+                        <option value="slideRightLeftFade" data-insertbefore="true">slideRightLeftFade</option>
+                        <option value="pinInTop" data-insertbefore="true">pinInTop</option>
                     </select>
                 </p>
                 <p class="buttonlist text-center">

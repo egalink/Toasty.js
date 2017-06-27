@@ -1,13 +1,23 @@
-.toast-container{display:block;position:fixed;z-index:999999;max-height:100%;max-width:100%;pointer-events:none;-webkit-transition:all 1s ease-in-out;-moz-transition:all 1s ease-in-out;-o-transition:all 1s ease-in-out;transition:all 1s ease-in-out}
-.toast-container .toast-soundplayer{display:none;visibility:hidden}.toast{position:relative;padding:16px;border:1px solid;margin:.5em .5em;border-left:6px solid transparent;border-radius:2px;pointer-events:none;-webkit-box-shadow:0 0 9px rgba(0,0,0,0.25);box-shadow:0 0 9px rgba(0,0,0,0.25);-webkit-transform:translate3d(0,0,0);transform:translate3d(0,0,0)}
+.toast-container{position:fixed;z-index:999999;pointer-events:none;line-height:initial;-webkit-transition:all 1s ease-in-out;-moz-transition:all 1s ease-in-out;-o-transition:all 1s ease-in-out;transition:all 1s ease-in-out}
+.toast-container .toast-wrapper{position:relative}.toast-container .toast-soundplayer{display:none;visibility:hidden}
+.toast{position:relative;padding:16px;border:1px solid;margin:.5em .5em;border-left:6px solid transparent;border-radius:2px;pointer-events:none;-webkit-box-shadow:0 0 9px rgba(0,0,0,0.25);box-shadow:0 0 9px rgba(0,0,0,0.25);-webkit-transform:translate3d(0,0,0);transform:translate3d(0,0,0)}
 .toast.close-on-click{cursor:pointer;pointer-events:auto}.toast--info{color:#31708f;background-color:#eaf2fa;border-color:#91c5f2}
 .toast--success{color:#3c763d;background-color:#e9ffd9;border-color:#a6ca8a}.toast--warning{color:#8a6d3b;background-color:#fff8c4;border-color:#f2c779}
 .toast--error{color:#a94442;background-color:#ffecec;border-color:#f5aca6}.toast-progressbar{position:absolute;height:4px;width:0;left:0;bottom:0;opacity:.5;transition:0s width ease}
 .toast-progressbar--info{background-color:#91c5f2}.toast-progressbar--success{background-color:#a6ca8a}
 .toast-progressbar--warning{background-color:#f2c779}.toast-progressbar--error{background-color:#f5aca6}
-.toast-container--default{right:0;bottom:0}.toast.default-init{opacity:0;transition:.48s all ease-in-out}
-.toast.default-show{opacity:1}.toast.default-hide{opacity:0}.toast-container--slideFadeLeft{right:0;bottom:0}
-.toast.slideFadeLeft-init{right:-100%;opacity:0;transition:.48s all ease-in-out}.toast.slideFadeLeft-show{right:0;opacity:1}
-.toast.slideFadeLeft-hide{right:100%;opacity:0}.toast-container--slideFadeRight{right:0;bottom:0}
-.toast.slideFadeRight-init{right:100%;opacity:0;transition:.48s all ease-in-out}.toast.slideFadeRight-show{right:0;opacity:1}
-.toast.slideFadeRight-hide{right:-100%;opacity:0}
+.toast-container--fade{right:0;bottom:0}.toast-container--fade .toast-wrapper{display:inline-block}
+.toast.fade-init{opacity:0;transition:.48s all ease-in-out}.toast.fade-show{opacity:1}
+.toast.fade-hide{opacity:0}.toast-container--slideLeftFade{right:0;bottom:0}.toast-container--slideLeftFade .toast-wrapper{display:inline-block}
+.toast.slideLeftFade-init{right:-100%;opacity:0;transition:.48s all ease-in-out}.toast.slideLeftFade-show{right:0;opacity:1}
+.toast.slideLeftFade-hide{right:100%;opacity:0}.toast-container--slideLeftRightFade{right:0;bottom:0}
+.toast-container--slideLeftRightFade .toast-wrapper{display:inline-block}.toast.slideLeftRightFade-init{right:-100%;opacity:0;transition:.48s all ease-in-out}
+.toast.slideLeftRightFade-show{right:0;opacity:1}.toast.slideLeftRightFade-hide{right:-100%;opacity:0}
+.toast-container--slideRightFade{right:0;bottom:0}.toast-container--slideRightFade .toast-wrapper{display:inline-block}
+.toast.slideRightFade-init{left:-100%;opacity:0;transition:.48s all ease-in-out}.toast.slideRightFade-show{left:0;opacity:1}
+.toast.slideRightFade-hide{left:100%;opacity:0}.toast-container--slideRightLeftFade{right:0;bottom:0}
+.toast-container--slideRightLeftFade .toast-wrapper{display:inline-block}.toast.slideRightLeftFade-init{left:-100%;opacity:0;transition:.48s all ease-in-out}
+.toast.slideRightLeftFade-show{left:0;opacity:1}.toast.slideRightLeftFade-hide{left:-100%;opacity:0}
+.toast-container--pinInTop{top:0;right:0;bottom:0}.toast-container--pinInTop .toast-wrapper{display:inline-block;height:10px;float:right}
+.toast.pinInTop-init{bottom:-100%;opacity:0;transition:.48s all ease-in-out}.toast.pinInTop-show{bottom:0;opacity:1}
+.toast.pinInTop-hide{bottom:-100%;opacity:0}
