@@ -12,6 +12,7 @@
 }
 .toast-container .toast-wrapper {
     position: relative;
+    padding: 0.5em;
 }
 .toast-container .toast-soundplayer {
     display: none;
@@ -27,10 +28,11 @@
     position: relative;
     padding: 16px;
     border: 1px solid;
-    margin: 0.5em 0.5em;
+    margin: 0.5em 0em;
     border-left: 6px solid transparent;
     border-radius: 2px;
     pointer-events: none;
+    transition: .48s all ease-in-out;
     -webkit-box-shadow: 0px 0px 9px rgba(0,0,0, 0.25);
             box-shadow: 0px 0px 9px rgba(0,0,0, 0.25);
     -webkit-transform: translate3d(0, 0, 0);
@@ -100,9 +102,10 @@
     bottom: 0;
 }
 .toast-container--fade .toast-wrapper { display: inline-block; }
-.toast.fade-init { opacity: 0; transition: .48s all ease-in-out; }
+.toast.fade-init { opacity: 0; }
 .toast.fade-show { opacity: 1; }
 .toast.fade-hide { opacity: 0; }
+/***/
 /* ------------------------------------------------------------------------- */
 
 /* TRANSITION 02 - a [slideLeftFade] transition: */
@@ -111,7 +114,7 @@
     bottom: 0;
 }
 .toast-container--slideLeftFade .toast-wrapper { display: inline-block; }
-.toast.slideLeftFade-init { right: -100%; opacity: 0; transition: .48s all ease-in-out; }
+.toast.slideLeftFade-init { right: -100%; opacity: 0; }
 .toast.slideLeftFade-show { right: 0%; opacity: 1; }
 .toast.slideLeftFade-hide { right: 100%; opacity: 0; }
 /* ------------------------------------------------------------------------- */
@@ -122,7 +125,7 @@
     bottom: 0;
 }
 .toast-container--slideLeftRightFade .toast-wrapper { display: inline-block; }
-.toast.slideLeftRightFade-init { right: -100%; opacity: 0; transition: .48s all ease-in-out; }
+.toast.slideLeftRightFade-init { right: -100%; opacity: 0; }
 .toast.slideLeftRightFade-show { right: 0%; opacity: 1; }
 .toast.slideLeftRightFade-hide { right: -100%; opacity: 0; }
 /* ------------------------------------------------------------------------- */
@@ -133,7 +136,7 @@
     bottom: 0;
 }
 .toast-container--slideRightFade .toast-wrapper { display: inline-block; }
-.toast.slideRightFade-init { left: -100%; opacity: 0; transition: .48s all ease-in-out; }
+.toast.slideRightFade-init { left: -100%; opacity: 0; }
 .toast.slideRightFade-show { left: 0%; opacity: 1; }
 .toast.slideRightFade-hide { left: 100%; opacity: 0; }
 /* ------------------------------------------------------------------------- */
@@ -144,23 +147,103 @@
     bottom: 0;
 }
 .toast-container--slideRightLeftFade .toast-wrapper { display: inline-block; }
-.toast.slideRightLeftFade-init { left: -100%; opacity: 0; transition: .48s all ease-in-out; }
+.toast.slideRightLeftFade-init { left: -100%; opacity: 0; }
 .toast.slideRightLeftFade-show { left: 0%; opacity: 1; }
 .toast.slideRightLeftFade-hide { left: -100%; opacity: 0; }
 /* ------------------------------------------------------------------------- */
 
-/* TRANSITION 06 - a [pinInTop] transition: */
-.toast-container--pinInTop {
+/* TRANSITION 06 - a [slideUpFade] transition: */
+.toast-container--slideUpFade {
        top: 0;
      right: 0;
     bottom: 0;
 }
-.toast-container--pinInTop .toast-wrapper {
+.toast-container--slideUpFade .toast-wrapper {
+    position: relative;
+     width: 100%;
+    height: 100%;
+}
+.toast.slideUpFade-init { bottom: -100%; opacity: 0; }
+.toast.slideUpFade-show { bottom: 0%; opacity: 1; }
+.toast.slideUpFade-hide { bottom: 100%; opacity: 0; }
+/* ------------------------------------------------------------------------- */
+
+/* TRANSITION 07 - a [slideUpDownFade] transition: */
+.toast-container--slideUpDownFade {
+       top: 0;
+     right: 0;
+    bottom: 0;
+}
+.toast-container--slideUpDownFade .toast-wrapper {
+    position: relative;
+     width: 100%;
+    height: 100%;
+}
+.toast.slideUpDownFade-init { bottom: -100%; opacity: 0; }
+.toast.slideUpDownFade-show { bottom: 0%; opacity: 1; }
+.toast.slideUpDownFade-hide { bottom: -100%; opacity: 0; }
+/* ------------------------------------------------------------------------- */
+
+/* TRANSITION 08 - a [slideDownFade] transition: */
+.toast-container--slideDownFade {
+       top: 0;
+     right: 0;
+    bottom: 0;
+}
+.toast-container--slideDownFade .toast-wrapper {
+    position: relative;
+     width: 100%;
+    height: 100%;
+}
+.toast.slideDownFade-init { top: -100%; opacity: 0; }
+.toast.slideDownFade-show { top: 0%; opacity: 1; }
+.toast.slideDownFade-hide { top: 100%; opacity: 0; }
+/* ------------------------------------------------------------------------- */
+
+/* TRANSITION 09 - a [slideDownUpFade] transition: */
+.toast-container--slideDownUpFade {
+       top: 0;
+     right: 0;
+    bottom: 0;
+}
+.toast-container--slideDownUpFade .toast-wrapper {
+    position: relative;
+     width: 100%;
+    height: 100%;
+}
+.toast.slideDownUpFade-init { top: -100%; opacity: 0; }
+.toast.slideDownUpFade-show { top: 0%; opacity: 1; }
+.toast.slideDownUpFade-hide { top: -100%; opacity: 0; }
+/* ------------------------------------------------------------------------- */
+
+/* TRANSITION 10 - a [pinItUp] transition: */
+.toast-container--pinItUp {
+       top: 0;
+     right: 0;
+    bottom: 0;
+}
+.toast-container--pinItUp .toast-wrapper {
     display: inline-block;
-    height: 10px;
+    height: 25px;
     float: right;
 }
-.toast.pinInTop-init { bottom: -100%; opacity: 0; transition: .48s all ease-in-out; }
-.toast.pinInTop-show { bottom: 0%; opacity: 1; }
-.toast.pinInTop-hide { bottom: -100%; opacity: 0; }
+.toast.pinItUp-init { bottom: -100%; opacity: 0; }
+.toast.pinItUp-show { bottom: 0%; opacity: 1; }
+.toast.pinItUp-hide { bottom: 100%; opacity: 0; }
+/* ------------------------------------------------------------------------- */
+
+/* TRANSITION 11 - a [pinItDown] transition: */
+.toast-container--pinItDown {
+       top: 0;
+     right: 0;
+    bottom: 0;
+}
+.toast-container--pinItDown .toast-wrapper {
+    display: inline-block;
+    height: 25px;
+    float: right;
+}
+.toast.pinItDown-init { top: -100%; opacity: 0; }
+.toast.pinItDown-show { top: 0%; opacity: 1; }
+.toast.pinItDown-hide { top: 100%; opacity: 0; }
 /* ------------------------------------------------------------------------- */

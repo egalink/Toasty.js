@@ -18,7 +18,12 @@
         "slideLeftRightFade",
         "slideRightFade",
         "slideRightLeftFade",
-        "pinInTop"
+        "slideUpFade",
+        "slideUpDownFade",
+        "slideDownFade",
+        "slideDownUpFade",
+        "pinItUp",
+        "pinItDown"
     ];
 
     var _defaults = {
