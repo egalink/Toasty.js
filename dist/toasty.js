@@ -1,1 +1,483 @@
-!function(){"use strict";function t(e,n){for(var s in e)if(1==e.hasOwnProperty(s))switch(typeof e[s]){case"object":t(e[s],n);break;case"string":for(var i in n)1==n.hasOwnProperty(i)&&(e[s]=e[s].replace(i,n[i]))}return e}function e(t){var e=JSON.stringify(t);return JSON.parse(e)}function n(){var t,e=document.createElement("transitionElement"),n={transition:"transitionend",OTransition:"oTransitionEnd",MozTransition:"transitionend",WebkitTransition:"webkitTransitionEnd"};for(t in n)if(void 0!==e.style[t])return n[t]}function s(t){return t.parentElement||t.parentNode}var i=["fade","slideLeftFade","slideLeftRightFade","slideRightFade","slideRightLeftFade","slideUpFade","slideUpDownFade","slideDownFade","slideDownUpFade","pinItUp","pinItDown"],o={classname:"toast",transition:"fade",insertBefore:!0,duration:4e3,enableSounds:!1,autoClose:!0,progressBar:!1,sounds:{info:"./dist/sounds/info/1.mp3",success:"./dist/sounds/success/1.mp3",warning:"./dist/sounds/warning/1.mp3",error:"./dist/sounds/error/1.mp3"},onShow:function(t){},onHide:function(t){},prependTo:document.body.childNodes[0]},a={container:"{:classname}-container",mainwrapp:"{:classname}-wrapper",toasts:{info:"{:classname}--info",success:"{:classname}--success",warning:"{:classname}--warning",error:"{:classname}--error"},animate:{init:"{:transition}-init",show:"{:transition}-show",hide:"{:transition}-hide"},progressbar:"{:classname}-progressbar",playerclass:"{:classname}-soundplayer"},r=function(t,e){var n={};for(var s in t)n[s]=e.hasOwnProperty(s)?e[s]:t[s];return n},c=function(t,e,n){return 0==(e=e||n.duration)&&(e=50*t.length),Math.floor(e)},d=function(t,e,s,i,o,a){function r(e){e.target.removeEventListener(e.type,r,!1),"function"==typeof a&&a(t)}var c=0,d=s.childNodes;d=d[!0===o?0:d.length],s.insertBefore(e,d),function(t,e){clearTimeout(c),c=setTimeout(t,e)}(function(){e.addEventListener(n(),r,!1),e.classList.add(i.show)},0)},l=function(t,e,i,o,a){function r(t,e){clearTimeout(l),l=setTimeout(t,e)}function c(e){e.target.removeEventListener(e.type,c,!1),r(d,0),"function"==typeof a&&a(t)}function d(){var t=s(e);e.remove(),t.childNodes.length<1&&s(t).remove()}var l=0;r(function(){e.addEventListener(n(),c,!1),e.classList.add(o.hide)},i)},u=function(t,e,n,s,i,o){e.classList.add(o),e.addEventListener("click",function(a){a.stopPropagation(),e.classList.remove(o),l(t,e,n,s,i)})},p=function(t,e,n,i){var o=n[t],a=document.createElement("audio");a.autoplay="autoplay",a.onended=function(){var t=s(this);this.remove(),t.childNodes.length<1&&s(t).remove()},a.className=i,a.innerHTML='<source src="'+o+'" type="audio/mpeg"/><embed hidden="true" autoplay="false" loop="false" src="'+o+'" />',s(e).appendChild(a)},f=function(t,e,n,s){var i=document.createElement("div");i.classList.add(s.progressbar),i.classList.add(s.progressbar+"--"+t),e.appendChild(i);var o=0,a=0,r=setInterval(function(){o++,(a=Math.round(1e3*o/n))>100?clearInterval(r):i.style.width=a+"%"},10)},m=function(t,e){if(this.settings={},this.classmap={},this.configure("object"==typeof t?t:{}),"object"==typeof i)for(var n in i)!0===i.hasOwnProperty(n)&&this.transition(i[n]);if("object"==typeof e)for(var n in e)!0===e.hasOwnProperty(n)&&this.transition(e[n])};m.prototype.configure=function(t){var e=Object.keys(this.settings).length;return this.settings=e>1?r(this.settings,t):r(o,t),this},m.prototype.transition=function(n){return this.classmap[n]=e(a),this.classmap[n]=t(this.classmap[n],{"{:classname}":this.settings.classname,"{:transition}":n}),this},m.prototype.toast=function(t,e,n){var i=this.classmap,o=this.settings,a=i[o.transition],r=null,c=!!(r="string"==typeof o.transition?document.querySelector("."+a.container+"--"+o.transition):document.querySelector("."+a.container));if(c)r=r.querySelector("."+a.mainwrapp);else{(r=document.createElement("div")).classList.add(a.container),r.classList.add(a.container+"--"+o.transition);var m=document.createElement("div");m.classList.add(a.mainwrapp),r.appendChild(r=m)}var h=document.createElement("div");return h.classList.add(o.classname),h.classList.add(a.toasts[t]),h.classList.add(a.animate.init),h.innerHTML=e,c||document.body.insertBefore(s(r),o.prependTo),1==o.enableSounds&&p(t,r,o.sounds,a.playerclass),d(t,h,r,a.animate,o.insertBefore,o.onShow),o.autoClose?l(t,h,n,a.animate,o.onHide):u(t,h,0,a.animate,o.onHide,"close-on-click"),1==o.progressBar&&1==o.autoClose&&f(t,h,n,a),this},m.prototype.info=function(t,e){e=c(t,e,this.settings),this.toast("info",t,e)},m.prototype.success=function(t,e){e=c(t,e,this.settings),this.toast("success",t,e)},m.prototype.warning=function(t,e){e=c(t,e,this.settings),this.toast("warning",t,e)},m.prototype.error=function(t,e){e=c(t,e,this.settings),this.toast("error",t,e)},"remove"in Element.prototype||(Element.prototype.remove=function(){this.parentNode&&this.parentNode.removeChild(this)}),window.Toasty=m}(window,document);
+/*! Toasty.js - v1.3.0-dev - 2017-06-27
+* https://egalink.github.io/Toasty.js/
+* Copyright (c) 2015-2017 Jakim Hernández; Licensed MIT */
+;(function () {
+
+    'use strict';
+    
+    var _transitions = [
+        "fade",
+        "slideLeftFade",
+        "slideLeftRightFade",
+        "slideRightFade",
+        "slideRightLeftFade",
+        "slideUpFade",
+        "slideUpDownFade",
+        "slideDownFade",
+        "slideDownUpFade",
+        "pinItUp",
+        "pinItDown"
+    ];
+
+    var _defaults = {
+        // STRING: main class name used to styling each toast message with CSS:
+        classname: "toast", 
+        // STRING: Name of the CSS transition that will be used to shown or hide the toast:
+        transition: "fade",
+        // BOOLEAN: Specifies the way in which the toasts will be inserted in the html code:
+        // .... Set to BOOLEAN TRUE and the toast messages will be inserted before those already generated toasts.
+        // .... Set to BOOLEAN FALSE otherwise.
+        insertBefore: true,
+        // INTEGER: Duration that the toast will be displayed in milliseconds:
+        // .... Default value is set to 4000 (4 seconds). 
+        // .... If it set to 0, the duration for each toast is calculated by message length.
+        duration: 4000,
+        // BOOLEAN: enable or disable toast sounds:
+        // .... Set to BOOLEAN TRUE  - to enable toast sounds.
+        // .... Set to BOOLEAN FALSE - otherwise.
+        enableSounds: false,
+        // BOOLEAN: enable or disable auto hiding on toast messages:
+        // .... Set to BOOLEAN TRUE  - to enable auto hiding.
+        // .... Set to BOOLEAN FALSE - disable auto hiding. Instead the user must click on toast message to close it.
+        autoClose: true,
+        // BOOLEAN: enable or disable the progressbar:
+        // .... Set to BOOLEAN TRUE  - enable the progressbar only if the autoClose option value is set to BOOLEAN TRUE.
+        // .... Set to BOOLEAN FALSE - disable the progressbar. 
+        progressBar: false,
+        // Yep, support custom sounds for each toast message when are shown
+        // if the enableSounds option value is set to BOOLEAN TRUE:
+        // NOTE: The paths must point from the project's root folder.
+        sounds: {
+            // path to sound for informational message:
+            info: "./dist/sounds/info/1.mp3",
+            // path to sound for successfull message:
+            success: "./dist/sounds/success/1.mp3",
+            // path to sound for warn message:
+            warning: "./dist/sounds/warning/1.mp3",
+            // path to sound for error message:
+            error: "./dist/sounds/error/1.mp3",
+        },
+
+        // callback:
+        // onShow function will be fired when a toast message appears.
+        onShow: function (type) {},
+
+        // callback:
+        // onHide function will be fired when a toast message disappears.
+        onHide: function (type) {},
+
+        // The placement where prepend the toast container:
+        prependTo: document.body.childNodes[0]
+    };
+
+    var _mappings = {
+        container: "{:classname}-container",
+        mainwrapp: "{:classname}-wrapper",
+        toasts: {
+               info: "{:classname}--info",
+            success: "{:classname}--success",
+            warning: "{:classname}--warning",
+              error: "{:classname}--error",
+        },
+        animate: {
+            init: "{:transition}-init",
+            show: "{:transition}-show",
+            hide: "{:transition}-hide",
+        },
+        progressbar: "{:classname}-progressbar",
+        playerclass: "{:classname}-soundplayer"
+    };
+
+    /*!
+     * Private functions:
+     */
+
+    // the method to extend default options in settings:
+    var _extend = function (defaults, options) {
+        //
+        var config = {};
+        
+        for (var key in defaults)
+            config[key] = options.hasOwnProperty(key)? options[key] : defaults[key];
+
+        return config;
+    };
+
+    // get the auto close duration to be set in each toast message:
+    var _getAutoCloseDuration = function (message, duration, settings) {
+        //
+            duration = duration || settings.duration;
+        if (duration == 0)
+            duration = message.length *50;
+
+        return Math.floor(duration);
+    };
+
+    // show the toast message with an CSS3 transition:
+    var _showToast = function (type, el, container, animate, insertBefore, callback) {
+        //
+        var timer = 0;
+
+        function delay (callback, ms) {
+            clearTimeout(timer);
+            timer = setTimeout(callback, ms);
+        };
+
+        function onShowToast (e) {
+            e.target.removeEventListener(e.type, onShowToast, false);
+            if (typeof callback === 'function')
+                callback(type);
+        }
+
+        function show () {
+            el.addEventListener(whichTransitionEvent(), onShowToast, false);
+            el.classList.add(animate.show);
+        };
+
+        var beforeNode = container.childNodes;
+            beforeNode = beforeNode[insertBefore === true ? 0 : beforeNode.length];
+        
+        // insert in the DOM:
+        container.insertBefore(el, beforeNode);
+        // initialize the css transition:
+        delay(show, 0);
+    };
+
+    // hide the toast message with an CSS3 transition:
+    var _hideToast = function (type, el, duration, animate, callback) {
+        //
+        var timer = 0;
+        
+        function delay (callback, ms) {
+            clearTimeout(timer);
+            timer = setTimeout(callback, ms);
+        };
+
+        function onHideToast(e) {
+            e.target.removeEventListener(e.type, onHideToast, false);
+            delay(remove, 0);
+            if (typeof callback === 'function')
+                callback(type);
+        };
+
+        function remove () {
+            var container = parentElement(el); // the wrapper.
+            el.remove();
+            var num = container.childNodes.length;
+            if (num < 1) {
+                parentElement(container).remove();
+            }
+        };
+
+        function hide () {
+            el.addEventListener(whichTransitionEvent(), onHideToast, false);
+            el.classList.add(animate.hide);
+        };
+
+        // initialize the css transition:
+        delay(hide, duration);
+    };
+
+    // hide the toast message with an CSS3 transition when the user
+    // clicks on the message:
+    var _hideToastOnClick = function (type, el, duration, animate, callback, class2close) {
+        //
+        function hideOnClick (e) {
+            e.stopPropagation();
+            el.classList.remove(class2close);
+            _hideToast(type, el, duration, animate, callback);
+        }
+
+        el.classList.add(class2close);
+        el.addEventListener('click', hideOnClick);
+    };
+
+    var _playSound = function (type, container, sounds, playerclass) {
+        //
+        var sound = sounds[type],
+            audio = document.createElement('audio');
+            audio.autoplay = 'autoplay';
+            audio.onended = function() {
+                var parent = parentElement(this);
+                    this.remove();
+                if (parent.childNodes.length < 1)
+                    parentElement(parent).remove();
+            }
+
+        audio.className = playerclass;
+        audio.innerHTML = '<source src="' + sound + '" type="audio/mpeg"/>' +
+                          '<embed hidden="true" autoplay="false" loop="false" src="' + sound + '" />';
+
+        parentElement(container).appendChild(audio);
+    };
+
+    var _showProgressBar = function (type, el, duration, transition) {
+        //
+        var progressBar = document.createElement('div');
+            progressBar.classList.add(transition.progressbar);
+            progressBar.classList.add(transition.progressbar + '--' + type);
+            el.appendChild(progressBar);
+
+        var iterat = 0,
+            offset = 0;
+
+        var interval = setInterval(function() {
+
+            iterat ++;
+            offset = Math.round((1000 *iterat) / duration);
+        
+            if (offset > 100) {
+                clearInterval(interval);
+            } else {
+                progressBar.style.width = offset + '%';
+            }
+
+        }, 10);
+    };
+
+    /*!
+     * The exposed public object:
+     */
+
+    var Toasty = function (options, transitions_) {
+        //
+        this.settings = {};
+        this.classmap = {};
+        this.configure(typeof options === 'object' ? options : {});
+        
+        // add classmap for default transitions:
+        if (typeof _transitions === 'object')
+            for (var key in _transitions) if (_transitions.hasOwnProperty(key) === true) {
+                this.transition(_transitions[key]);
+            }
+
+        // add classmap for the user defined transitions:
+        if (typeof transitions_ === 'object')
+            for (var key in transitions_) if (transitions_.hasOwnProperty(key) === true) {
+                this.transition(transitions_[key]);
+            }
+    };
+
+    Toasty.prototype.configure = function (options) {
+        //
+        var hasSettings = Object.keys(this.settings).length;
+        if (hasSettings > 1)
+            this.settings = _extend(this.settings, options);
+        else
+            this.settings = _extend(_defaults, options);
+
+        return this;
+    };
+
+    Toasty.prototype.transition = function (name) {
+        //
+        this.classmap[name] = cloner(_mappings);
+        this.classmap[name] = walker(this.classmap[name], {
+            '{:classname}': this.settings.classname,
+            '{:transition}': name
+        });
+        return this;
+    };
+
+    Toasty.prototype.toast = function (type, message, duration) {
+        //
+        var classes = this.classmap;
+        var options = this.settings;
+
+        var transition = classes[options.transition];
+        var container = null;
+
+        // check if the toast container exists:
+        if (typeof options.transition == 'string')
+            container = document.querySelector('.' + transition.container + '--' + options.transition);
+        else
+            container = document.querySelector('.' + transition.container);
+
+        var containerExists = !! container;
+
+        // create the toast container if not exists:
+        if (containerExists) {
+            container = container.querySelector('.' + transition.mainwrapp); // use the wrapper instead of main container.
+        } else {
+            container = document.createElement('div');
+            container.classList.add(transition.container);
+            container.classList.add(transition.container + '--' + options.transition);
+
+            // create a alert wrapper instance:
+            var wrapp = document.createElement('div');
+                wrapp.classList.add(transition.mainwrapp);
+
+            // append the alert wrapper and now, this is the main container:
+            container.appendChild(container = wrapp);
+        }
+
+        // create a new toast instance
+        var newToast = document.createElement('div');
+            newToast.classList.add(options.classname);
+            newToast.classList.add(transition.toasts[type]);
+            newToast.classList.add(transition.animate.init);
+            newToast.innerHTML = message;
+
+        // insert the toast container into the HTML:
+        if (! containerExists)
+            document.body
+                    .insertBefore(parentElement(container), options.prependTo);
+
+
+        // enable or disable toast sounds:
+        if (options.enableSounds == true)
+            _playSound(
+                type,
+                container,
+                options.sounds,
+                transition.playerclass
+            );
+
+
+        // STEP 1:
+        // INI: showing the toas message
+        // --------------------------------------------------------------------
+
+        _showToast(
+            type,
+            newToast,
+            container,
+            transition.animate,
+            options.insertBefore,
+            options.onShow
+        );
+
+        // --------------------------------------------------------------------
+        // END: showing the toas message
+
+        // STEP 2:
+        // INI: prepare the toast to hide it.
+        // --------------------------------------------------------------------
+
+        if (! options.autoClose)
+            // hide the toast message on click it with an CSS3 transition:
+            _hideToastOnClick(
+                type,
+                newToast,
+                0, // duration
+                transition.animate,
+                options.onHide,
+                'close-on-click'
+            );
+        else
+            // hide the toast message automatically:
+            _hideToast(
+                type,
+                newToast,
+                duration,
+                transition.animate,
+                options.onHide
+            );
+            
+        // --------------------------------------------------------------------
+        // END: prepare the toast to hide it.
+
+        // enable or disable the progressbar:
+        if (options.progressBar == true && options.autoClose == true)
+            _showProgressBar(
+                type,
+                newToast,
+                duration,
+                transition
+            );
+
+
+        return this;
+    };
+
+    Toasty.prototype.info = function (message, duration) {
+        //
+        duration = _getAutoCloseDuration(message, duration, this.settings);
+        this.toast("info", message, duration);
+    };
+
+    Toasty.prototype.success = function (message, duration) {
+        //
+        duration = _getAutoCloseDuration(message, duration, this.settings);
+        this.toast("success", message, duration);
+    };
+
+    Toasty.prototype.warning = function (message, duration) {
+        //
+        duration = _getAutoCloseDuration(message, duration, this.settings);
+        this.toast("warning", message, duration);
+    };
+
+    Toasty.prototype.error = function (message, duration) {
+        //
+        duration = _getAutoCloseDuration(message, duration, this.settings);
+        this.toast("error", message, duration);
+    };
+
+    // helpers:
+
+    function walker (obj, map) {
+        //
+        for (var o in obj) if (obj.hasOwnProperty(o) == true) {
+            // ini loop:
+            switch (typeof obj[o]) {
+                case 'object':
+                    walker(obj[o], map);
+                    break;
+                case 'string':
+                    for (var m in map) if (map.hasOwnProperty(m) == true) obj[o] = obj[o].replace(m, map[m]);
+                    break;
+            }
+            // end loop.
+        }
+
+        return obj;
+    }
+
+    function cloner (object) {
+        //
+        var string = JSON.stringify(object);
+        var cloned = JSON.parse(string);
+        return cloned;
+    }
+
+    function whichTransitionEvent () {
+        //
+        var t,
+            el = document.createElement('transitionElement');
+
+        var transitions = {
+            'transition'      : 'transitionend',
+            'OTransition'     : 'oTransitionEnd',
+            'MozTransition'   : 'transitionend',
+            'WebkitTransition': 'webkitTransitionEnd'
+        };
+
+        for (t in transitions) if (el.style[t] !== undefined) {
+            return transitions[t];
+        }
+    }
+
+    function parentElement (el) {
+        //
+        return el.parentElement || el.parentNode;
+    }
+
+    /**
+     * IE Fallbacks:
+     */
+
+    // Create Element.remove() function if not exist:
+    if ('remove' in Element.prototype) {
+        // the browser supports .remove() function...
+    } else {
+        Element.prototype.remove = function() {
+            if (this.parentNode)
+                this.parentNode.removeChild(this);
+        };
+    }
+
+    // object:
+    window.Toasty = Toasty;
+
+})(window, document);

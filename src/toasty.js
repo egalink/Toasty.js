@@ -1,13 +1,3 @@
-/*!
- * Toasty.js v1.3.10
- *
- * A minimal JavaScript notification plugin that provides a simple way
- * to display customizable toast messages.
- *
- * Edgar Jakim Hernández Arrieta <egalink@gmail.com>
- * license: MIT
- * https://github.com/egalink/Toasty.js
- */
 ;(function () {
 
     'use strict';
