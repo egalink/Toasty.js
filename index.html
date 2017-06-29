@@ -5,10 +5,13 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
         <title>Toasty.js</title>
         <link href="./assets/favicon.ico" rel="shortcut icon"/>
+        <link href="./assets/font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet"/>
+        <link href="./assets/prism/prism.css" rel="stylesheet"/>
         <link href="./assets/style.css" rel="stylesheet"/>
     </head>
     <body>
-        
+
+        <!-- Presentation: --> 
         <section id="presentation">
             <div class="content">
                 <h1 class="text-center">
@@ -23,13 +26,8 @@
                     <a id="action-download" class="btn btn--download" href="//github.com/egalink/Toasty.js/archive/master.zip">
                         <span class="fa fa-download"></span> download
                     </a>
-                    <span class="separator">or</span>
-                    <a class="btn btn--default" href="//github.com/egalink/Toasty.js/" target="_blank">
-                        <span class="fa fa-github"></span>  view on GitHub
-                    </a>
                 </p>
                 <br/>
-                <h2 class="text-center">or try it:</h2>
                 <p class="text-center transition-select">
                     <select id="select-transition">
                         <option value="fade" data-insertbefore="true">transition: fade</option>
@@ -54,116 +52,173 @@
             </div>
         </section>
 
-        <section class="content">            
-            <h2 >Installation</h2>
-            <p>
-                Following the steps below you will be able to get the plugin up and running.
+        <!-- Installation: -->
+        <section id="installation">
+            <div class="content">
+                <h2 >Installation</h2>
+                <p>
+                    Following the steps below you will be able to get the plugin up and running.
+                    <br/>
+                    If you notice any bugs, please post them to
+                    <a href="https://github.com/egalink/Toasty.js/issues" target="_blank">GitHub</a> issues.
+                </p>
                 <br/>
-                If you notice any bugs, please post them to
-                <a href="https://github.com/egalink/Toasty.js/issues" target="_blank">GitHub</a> issues.
-            </p>
-            <br/>
-            <h3>link files</h3>
+                <h3>Link Files</h3>
+                <p>All ready-to-use files are located in the dist/ directory.</p>
 
-<pre><code data-language="html">&lt;!-- Put these into the &lt;head&gt; of your HTML --&gt;
-&lt;link href="toasty.css" rel="stylesheet"&gt;
-&lt;script src="toasty.js"&gt;&lt;/script&gt;</code></pre>
+<pre><code class="language-markup">&lt;!-- Put these into the &lt;head&gt; of your HTML --&gt;
+&lt;link href="dist/toasty.min.css" rel="stylesheet"&gt;
+&lt;script src="dist/toasty.min.js"&gt;&lt;/script&gt;</code></pre>
 
-            <p>and plugin is ready to use it...</p>
+                <p>toasty.js can also be installed via Bower or <a href="">npm</a>.</p>
+            </div>
         </section>
 
-        <section class="content">
-            <h2>How to use it</h2>
-            <p>Create toast messages using any of the following methods:</p>
+        <!-- How to use: -->
+        <section id="usage">
+            <div class="content">
+                <h2>How to use it</h2>
+                <p>Make a plugin instance:</p>
+            
+<pre><code class="language-js">// Put this right in your main.js file:
+var toast = new Toasty();
+</code></pre>
 
-<pre><code data-language="html">&lt;!-- Put this right before the &lt;/body&gt; closing tag --&gt;
-&lt;script type="text/javascript"&gt;
-    
-    // this show an informational message:
-    Toasty.info('Here is some information!');
+                <p>and you can create toast messages using any of the following methods:</p>
 
-    // this show a successful message:
-    Toasty.success('You did something good!');
+<pre><code class="language-js">// this show an informational message:
+toast.info('Here is some information!');
 
-    // show a warning message:
-    Toasty.warning('Warning! Do not proceed any further!');
+// this show a successful message:
+toast.success('You did something good!');
 
-    // and this a error message:
-    Toasty.error('Something terrible happened!');
+// show a warning message:
+toast.warning('Warning! Do not proceed any further!');
 
-&lt;/script&gt;</code></pre>
+// and this a error message:
+toast.error('Something terrible happened!');
+</code></pre>
 
-            <p>but, where is the customization? ...Go for it!</p>
+                <p>but, where is the customizable options? ...Go for it!</p>
+            </div>
         </section>
 
 
-        <section class="content">
-            <h2>Customization</h2>
-            <p>Config the toast messages by overriding the default settings as shown below:</p>
+        <section id="configuration">
+            <div class="content">
+                <h2>Configuration</h2>
+                <p>Configure the toast messages by overriding the default settings as shown below:</p>
 
-<pre><code data-language="javascript">
-var options = {
-
-    classname: 'toast', // STRING: main class name used to styling each toast message with CSS.
-
-    animation: 'default', // STRING: Name of the CSS animation that will be used to shown or hide the toast.
-
-    insertBefore: true, // BOOLEAN: Specifies the way in which the toasts will be inserted in the html code:
-                        // .... Set to BOOLEAN TRUE and the toast messages will be inserted before those already generated toasts.
-                        // .... Set to BOOLEAN FALSE otherwise.
-
-    duration: 4000, // INTEGER: Duration that the toast will be displayed in milliseconds:
-                    // .... Default value is set to 4000 (4 seconds). 
-                    // .... If it set to 0, the duration for each toast is calculated by message length.
-
-    enableSounds: false, // BOOLEAN: enable or disable toast sounds:
-                         // .... Set to BOOLEAN TRUE  - to enable toast sounds.
-                         // .... Set to BOOLEAN FALSE - otherwise.
-
-    autoClose: true, // BOOLEAN: enable or disable auto hiding on toast messages:
-                     // .... Set to BOOLEAN TRUE  - to enable auto hiding.
-                     // .... Set to BOOLEAN FALSE - disable auto hiding. Instead the user must click on toast message to close it.
-
-    progressBar: false, // BOOLEAN: enable or disable the progressbar:
-                        // .... Set to BOOLEAN TRUE  - enable the progressbar only if the autoClose option value is set to BOOLEAN TRUE.
-                        // .... Set to BOOLEAN FALSE - disable the progressbar. 
-
+<pre><code class="language-js">var options = {
+    // STRING: main class name used to styling each toast message with CSS:
+    classname: "toast", 
+    // STRING: Name of the CSS transition that will be used to show and hide the toast:
+    transition: "fade",
+    // BOOLEAN: Specifies the way in which the toasts will be inserted in the html code:
+    // .... Set to BOOLEAN TRUE and the toast messages will be inserted before those already generated toasts.
+    // .... Set to BOOLEAN FALSE otherwise.
+    insertBefore: true,
+    // INTEGER: Duration that the toast will be displayed in milliseconds:
+    // .... Default value is set to 4000 (4 seconds). 
+    // .... If it set to 0, the duration for each toast is calculated by message length.
+    duration: 4000,
+    // BOOLEAN: enable or disable toast sounds:
+    // .... Set to BOOLEAN TRUE  - to enable toast sounds.
+    // .... Set to BOOLEAN FALSE - otherwise.
+    enableSounds: false,
+    // BOOLEAN: enable or disable auto hiding on toast messages:
+    // .... Set to BOOLEAN TRUE  - to enable auto hiding.
+    // .... Set to BOOLEAN FALSE - disable auto hiding. Instead the user must click on toast message to close it.
+    autoClose: true,
+    // BOOLEAN: enable or disable the progressbar:
+    // .... Set to BOOLEAN TRUE  - enable the progressbar only if the autoClose option value is set to BOOLEAN TRUE.
+    // .... Set to BOOLEAN FALSE - disable the progressbar. 
+    progressBar: false,
     // Yep, support custom sounds for each toast message when are shown
     // if the enableSounds option value is set to BOOLEAN TRUE:
     // NOTE: The paths must point from the project's root folder.
     sounds: {
-        info: '../src/sounds/success,\ warning/1.mp3', // path to sound for informational message.
-        success: '../src/sounds/success,\ warning/2.mp3', // path to sound for successfull message.
-        warning: '../src/sounds/success,\ warning/3.mp3', // path to sound for warn message.
-        error: '../src/sounds/errors/1.mp3' // path to sound for error message.
-    }
+        // path to sound for informational message:
+        info: "./dist/sounds/info/1.mp3",
+        // path to sound for successfull message:
+        success: "./dist/sounds/success/1.mp3",
+        // path to sound for warn message:
+        warning: "./dist/sounds/warning/1.mp3",
+        // path to sound for error message:
+        error: "./dist/sounds/error/1.mp3",
+    },
 
+    // callback:
+    // onShow function will be fired when a toast message appears.
+    onShow: function (type) {},
+
+    // callback:
+    // onHide function will be fired when a toast message disappears.
+    onHide: function (type) {},
+
+    // The placement where prepend the toast container:
+    prependTo: document.body.childNodes[0]
 };
 
-var toasty = Toasty.config(options);
+// more js code...</code></pre>
 
-// then, run the toast messages:
-toasty.success('Configured successfully!');
+                <p>Then you can configure the plugin by passing these options as parameter in:</p>
 
-// ...</code></pre>
-        </section>
-
-        <section class="content">            
-            <h2 >Other Examples</h2>
-            <br/>
-
-            <h3>Show &amp; Hide animations</h3>
-            <p>Using with class names. (like animate.css)</p>
-
-<pre><code data-language="javascript">Toasty.config({
-    animation: 'slideUpDownFade'
-}).info('A informational message appears!');
+<pre><code class="language-js">// the main Toasty function:
+var toast = new Toasty(options);
+// or using the configure public method:
+toast.configure(options);
 </code></pre>
+            </div>
         </section>
 
-        <link href="./dist/toasty.css" rel="stylesheet"/>
-        <script src="./dist/toasty.js" type="text/javascript" ></script>
-        <script src="./assets/main.js" type="text/javascript" ></script>
+        <section id="configuration">
+            <div class="content">
+                <h2>Public Methods</h2>
+                <p>List of available public methos:</p>
+
+<pre><code class="language-js">var toast = new Toasty();
+
+// register a new transition for the plugin:
+toast.transition(name);
+// example:
+toast.transition('my-custom-transition');
+
+// configure the plugin after be instantiated:
+toast.configure(options);
+// example:
+toast.configure({
+    transition: "my-custom-transition",
+    enableSounds: true,
+    autoClose: false,
+    onShow: function (type) {
+        console.log("You open a " + type + " toast message!");
+    }
+});
+
+// make a toast message:
+toast.toast(type, message, duration);
+// example:
+toast.toast("info", "This is a informational custom message!", 2000);
+
+</code></pre>
+
+            </div>
+        </section>
+
+        <footer>
+            <div class="content">
+                <p class="text-center">Copyright &copy; 2017+ Jakim Hernández. Released under the MIT license.</p>
+            </div>
+        </footer>
+
+        <!-- toasty.js plugin files: -->
+        <link href="./dist/toasty.min.css" rel="stylesheet"/>
+        <script src="./dist/toasty.min.js" type="text/javascript"></script>
+
+        <!-- assets: -->
+        <script src="./assets/prism/prism.js" type="text/javascript"></script>
+        <script src="./assets/main.js" type="text/javascript"></script>
 
     </body>
 </html>

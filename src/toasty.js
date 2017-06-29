@@ -19,7 +19,7 @@
     var _defaults = {
         // STRING: main class name used to styling each toast message with CSS:
         classname: "toast", 
-        // STRING: Name of the CSS transition that will be used to shown or hide the toast:
+        // STRING: Name of the CSS transition that will be used to show and hide the toast:
         transition: "fade",
         // BOOLEAN: Specifies the way in which the toasts will be inserted in the html code:
         // .... Set to BOOLEAN TRUE and the toast messages will be inserted before those already generated toasts.
