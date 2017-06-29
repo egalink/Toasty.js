@@ -8,6 +8,7 @@
         <link href="./assets/font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet"/>
         <link href="./assets/prism/prism.css" rel="stylesheet"/>
         <link href="./assets/style.css" rel="stylesheet"/>
+        <link href="./assets/toasty-custom-styles.css" rel="stylesheet"/>
     </head>
     <body>
 
@@ -66,7 +67,7 @@
                 <h3>Link Files</h3>
                 <p>All ready-to-use files are located in the dist/ directory.</p>
 
-<pre><code class="language-markup">&lt;!-- Put these into the &lt;head&gt; of your HTML --&gt;
+<pre><code class="language-markup">&lt;!-- put these into the &lt;head&gt; of your HTML --&gt;
 &lt;link href="dist/toasty.min.css" rel="stylesheet"&gt;
 &lt;script src="dist/toasty.min.js"&gt;&lt;/script&gt;</code></pre>
 
@@ -78,9 +79,9 @@
         <section id="usage">
             <div class="content">
                 <h2>How to use it</h2>
-                <p>Make a plugin instance:</p>
+                <p>Simply make a plugin instance:</p>
             
-<pre><code class="language-js">// Put this right in your main.js file:
+<pre><code class="language-js">// put this right in your main.js file:
 var toast = new Toasty();
 </code></pre>
 
@@ -111,14 +112,17 @@ toast.error('Something terrible happened!');
 
 <pre><code class="language-js">var options = {
     // STRING: main class name used to styling each toast message with CSS:
+    // .... IMPORTANT NOTE:
+    // .... if you change this, the configuration consider that you´re
+    // .... re-stylized the plugin and default toast styles, including css3 transitions are lost.
     classname: "toast", 
-    // STRING: Name of the CSS transition that will be used to show and hide the toast:
+    // STRING: name of the CSS transition that will be used to show and hide the toast:
     transition: "fade",
-    // BOOLEAN: Specifies the way in which the toasts will be inserted in the html code:
+    // BOOLEAN: specifies the way in which the toasts will be inserted in the html code:
     // .... Set to BOOLEAN TRUE and the toast messages will be inserted before those already generated toasts.
     // .... Set to BOOLEAN FALSE otherwise.
     insertBefore: true,
-    // INTEGER: Duration that the toast will be displayed in milliseconds:
+    // INTEGER: duration that the toast will be displayed in milliseconds:
     // .... Default value is set to 4000 (4 seconds). 
     // .... If it set to 0, the duration for each toast is calculated by message length.
     duration: 4000,
@@ -162,13 +166,14 @@ toast.error('Something terrible happened!');
 
 // more js code...</code></pre>
 
-                <p>Then you can configure the plugin by passing these options as parameter in:</p>
+                <p>then you can configure the plugin by passing any of these options as parameter in:</p>
 
 <pre><code class="language-js">// the main Toasty function:
 var toast = new Toasty(options);
-// or using the configure public method:
+// or using this public method:
 toast.configure(options);
 </code></pre>
+
             </div>
         </section>
 
@@ -177,31 +182,258 @@ toast.configure(options);
                 <h2>Public Methods</h2>
                 <p>List of available public methos:</p>
 
-<pre><code class="language-js">var toast = new Toasty();
+<pre><code class="language-js">// the main Toasty function:
+var toast = new Toasty();
 
 // register a new transition for the plugin:
 toast.transition(name);
-// example:
-toast.transition('my-custom-transition');
 
 // configure the plugin after be instantiated:
 toast.configure(options);
-// example:
-toast.configure({
-    transition: "my-custom-transition",
-    enableSounds: true,
-    autoClose: false,
-    onShow: function (type) {
-        console.log("You open a " + type + " toast message!");
-    }
-});
 
 // make a toast message:
 toast.toast(type, message, duration);
-// example:
-toast.toast("info", "This is a informational custom message!", 2000);
 
 </code></pre>
+
+            </div>
+        </section>
+
+        <section id="configuration">
+            <div class="content">
+                <h2>Creating Transitions</h2>
+                <p>You can create new CSS3 transitions to show and hide each toast message.</p>
+                <br/>
+                <h3>The css structure</h3>
+
+<pre><code class="language-css">/* Note that the "transition" property
+ * must be present in the main class. */
+/* each toast message gets this style: */
+.toast {
+    transition: 0.32s all ease-in-out;
+}
+
+/* a [fade] transition (DEFAULT TRANSITION IN THE PLUGIN): */
+.toast-container--fade {
+     right: 0;  
+    bottom: 0;
+}
+.toast-container--fade .toast-wrapper { display: inline-block; }
+.toast.fade-init { opacity: 0; }
+.toast.fade-show { opacity: 1; }
+.toast.fade-hide { opacity: 0; }
+/* ------------------------------------------------------------------------- */
+</code></pre>
+
+                <p>Based on the previous css structure, you can create a new CSS3 transition as follows: </p>
+
+<pre><code class="language-css">/* Note that the "transition" property
+ * must be present in the main class. */
+/* each toast message gets this style: */
+.toast {
+    transition: 0.32s all ease-in-out;
+}
+
+/* a [scale] transition: */
+.toast-container--scale {
+     right: 0;  
+    bottom: 0;
+}
+.toast-container--scale .toast-wrapper { display: inline-block; }
+.toast.scale-init { opacity: 0; transform: scale(0); }
+.toast.scale-show { opacity: 1; transform: scale(1); }
+.toast.scale-hide { opacity: 0; transform: scale(0); }
+/* ------------------------------------------------------------------------- */
+</code></pre>
+
+                <p>now, register the new transition:</p>
+
+<pre><code class="language-js">// the main Toasty function:
+var toast = new Toasty({
+    // STRING: name of the CSS transition that will be used to show and hide the toast:
+    transition: "scale"
+});
+
+// register the new transition:
+toast.transition("scale");
+
+// and run the first alert message:
+toast.info("You have been registred a new scale transition correctly.");
+</code></pre>
+
+                <p>
+                    <button id="new-transition-scale" class="btn btn--primary" type="button">Run Example</button>
+                </p>
+
+            </div>
+        </section>
+
+        <section id="configuration">
+            <div class="content">
+                <h2>Re-styling Toasts.</h2>
+                <p>You are allowed to re-stylize the toast messages as you need them. Like a easily themeable plugin.</p>
+                <br/>
+                <h3>The css structure</h3>
+                <p>Required properties are written in each corresponding class:</p>
+
+<pre><code class="language-css">/* the main container: */
+.toast-container {
+    position: fixed;
+    z-index: 999999;
+    pointer-events: none;
+}
+/* the wrapper where the toast messages appends: */
+.toast-container .toast-wrapper {
+    position: relative;
+}
+/* the class that is assigned to the sound player. */
+/* Normally, this is a hidden wildcard: */
+.toast-container .toast-soundplayer {
+    display: none;
+    visibility: hidden;
+}
+
+/**
+ * Toast messages styles:
+ * -------------------------------------------------- */
+
+/* each toast message gets this style: */
+.toast {
+    position: relative;
+    pointer-events: none;
+    transition: 0.32s all ease-in-out;
+}
+
+/* informational toast class: */
+.toast--info {}
+
+/* successful toast class: */
+.toast--success {}
+
+/* warning toast class: */
+.toast--warning {}
+
+/* error toast class: */
+.toast--error {}
+
+/* this class is assigned to each toast message when autoClose
+ * plugin option is set to BOOLEAN false. */
+/* Normally, this is a pointer events handler:*/
+.toast.close-on-click {
+    cursor: pointer;
+    pointer-events: auto;
+}
+
+/**
+ * Progress bar styles:
+ * -------------------------------------------------- */
+
+/* each progress bar gets this style: */
+.toast-progressbar {
+    transition: width 0s ease;
+}
+
+/* progress bar color for each toast type: */
+.toast-progressbar--info {}
+.toast-progressbar--success {}
+.toast-progressbar--warning {}
+.toast-progressbar--error {}
+
+</code></pre>
+
+                <p>
+                    Based on the previous css structure, then the plugin could
+                    be re-stylized as follows:
+                </p>
+
+<pre><code class="language-css">/* the main container: */
+.alert-container {
+    position: fixed;
+    z-index: 999999;
+    pointer-events: none;
+}
+/* the wrapper where the toast messages appends: */
+.alert-container .alert-wrapper {
+    position: relative;
+}
+/* the class that is assigned to the sound player. */
+/* Normally, this is a hidden wildcard: */
+.alert-container .alert-soundplayer {
+    display: none;
+    visibility: hidden;
+}
+
+/**
+ * Toast messages styles:
+ * -------------------------------------------------- */
+
+/* each toast message gets this style: */
+.alert {
+    position: relative;
+    pointer-events: none;
+    transition: 0.32s all ease-in-out;
+}
+
+/* informational toast class: */
+.alert--info {}
+
+/* successful toast class: */
+.alert--success {}
+
+/* warning toast class: */
+.alert--warning {}
+
+/* error toast class: */
+.alert--error {}
+
+/* this class is assigned to each toast message when autoClose
+ * plugin option is set to BOOLEAN false. */
+/* Normally, this is a pointer events handler:*/
+.toast.close-on-click {
+    cursor: pointer;
+    pointer-events: auto;
+}
+
+/**
+ * Progress bar styles:
+ * -------------------------------------------------- */
+
+/* each progress bar gets this style: */
+.alert-progressbar {
+    transition: width 0s ease;
+}
+
+/* progress bar color for each toast type: */
+.alert-progressbar--info {}
+.alert-progressbar--success {}
+.alert-progressbar--warning {}
+.alert-progressbar--error {}
+
+</code></pre>
+
+                <p>Now, you must configure the toast plugin to attach new CSS styles:</p>
+
+<pre><code class="language-js">// the main Toasty function:
+var toast = new Toasty({
+    // STRING: main class name used to styling each toast message with CSS:
+    // .... IMPORTANT NOTE:
+    // .... if you change this, the configuration consider that you´re
+    // .... re-stylized the plugin and default toast styles, including css3 transitions are lost.
+    classname: "alert",
+    // STRING: name of the CSS transition that will be used to show and hide the toast:
+    transition: "slideDown"
+});
+
+// register the new transition:
+toast.transition("slideDown");
+
+// and run the first alert message:
+toast.info("The toast messages have been re-stylized correctly.");
+</code></pre>
+
+                <p>
+                    <button id="alerts-re-stylized" class="btn btn--primary" type="button">Run Example</button>
+                </p>
 
             </div>
         </section>

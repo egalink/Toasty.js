@@ -1,0 +1,105 @@
+/* a [scale] transition: */
+.toast-container--scale {
+     right: 0;  
+    bottom: 0;
+}
+.toast-container--scale .toast-wrapper { display: inline-block; }
+.toast.scale-init {
+    opacity: 0;
+    -webkit-transform: scale(0);
+        -ms-transform: scale(0);   
+       -moz-transform: scale(0);
+            transform: scale(0);
+}
+.toast.scale-show {
+    opacity: 1;
+    -webkit-transform: scale(1);
+        -ms-transform: scale(1);   
+       -moz-transform: scale(1);
+            transform: scale(1);
+}
+.toast.scale-hide {
+    opacity: 0;
+    -webkit-transform: scale(0);
+        -ms-transform: scale(0);   
+       -moz-transform: scale(0);
+            transform: scale(0);
+}
+/* ------------------------------------------------------------------------- */
+
+
+/* the main container: */
+.alert-container {
+    position: fixed;
+    z-index: 999999;
+    pointer-events: none;
+}
+/* the wrapper where the toast messages appends: */
+.alert-container .alert-wrapper {
+    position: relative;
+}
+/* the class that is assigned to the sound player. */
+/* Normally, this is a hidden wildcard: */
+.alert-container .alert-soundplayer {
+    display: none;
+    visibility: hidden;
+}
+
+/**
+ * Toast messages styles:
+ * -------------------------------------------------- */
+
+/* each toast message gets this style: */
+.alert {
+    position: relative;
+    pointer-events: none;
+    transition: 0.32s all ease-in-out;
+}
+
+/* informational toast class: */
+.alert--info {}
+
+/* successful toast class: */
+.alert--success {}
+
+/* warning toast class: */
+.alert--warning {}
+
+/* error toast class: */
+.alert--error {}
+
+/* this class is assigned to each toast message when autoClose
+ * plugin option is set to BOOLEAN false. */
+/* Normally, this is a pointer events handler:*/
+.toast.close-on-click {
+    cursor: pointer;
+    pointer-events: auto;
+}
+
+/**
+ * Progress bar styles:
+ * -------------------------------------------------- */
+
+/* each progress bar gets this style: */
+.alert-progressbar {}
+
+/* progress bar color for each toast type: */
+.alert-progressbar--info {}
+.alert-progressbar--success {}
+.alert-progressbar--warning {}
+.alert-progressbar--error {}
+
+/**
+ * Alert transitions:
+ * ------------------------------------------------------------------------- */
+
+/* TRANSITION 01 - a [slideDown] transition: */
+.alert-container--slideDown {
+     right: 0;
+    bottom: 0;
+}
+.alert-container--slideDown .alert-wrapper { display: inline-block; }
+.alert.slideDown-init { opacity: 0; }
+.alert.slideDown-show { opacity: 1; }
+.alert.slideDown-hide { opacity: 0; }
+/* ------------------------------------------------------------------------- */

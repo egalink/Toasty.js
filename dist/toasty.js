@@ -21,14 +21,17 @@
 
     var _defaults = {
         // STRING: main class name used to styling each toast message with CSS:
+        // .... IMPORTANT NOTE:
+        // .... if you change this, the configuration consider that you´re
+        // .... re-stylized the plugin and default toast styles, including css3 transitions are lost.
         classname: "toast", 
-        // STRING: Name of the CSS transition that will be used to show and hide the toast:
+        // STRING: name of the CSS transition that will be used to show and hide the toast:
         transition: "fade",
-        // BOOLEAN: Specifies the way in which the toasts will be inserted in the html code:
+        // BOOLEAN: specifies the way in which the toasts will be inserted in the html code:
         // .... Set to BOOLEAN TRUE and the toast messages will be inserted before those already generated toasts.
         // .... Set to BOOLEAN FALSE otherwise.
         insertBefore: true,
-        // INTEGER: Duration that the toast will be displayed in milliseconds:
+        // INTEGER: duration that the toast will be displayed in milliseconds:
         // .... Default value is set to 4000 (4 seconds). 
         // .... If it set to 0, the duration for each toast is calculated by message length.
         duration: 4000,
@@ -140,7 +143,7 @@
         // insert in the DOM:
         container.insertBefore(el, beforeNode);
         // initialize the css transition:
-        delay(show, 0);
+        delay(show, 100);
     };
 
     // hide the toast message with an CSS3 transition:
@@ -175,7 +178,7 @@
         };
 
         // initialize the css transition:
-        delay(hide, duration);
+        delay(hide, duration +100);
     };
 
     // hide the toast message with an CSS3 transition when the user
@@ -213,26 +216,37 @@
 
     var _showProgressBar = function (type, el, duration, transition) {
         //
-        var progressBar = document.createElement('div');
-            progressBar.classList.add(transition.progressbar);
-            progressBar.classList.add(transition.progressbar + '--' + type);
-            el.appendChild(progressBar);
-
-        var iterat = 0,
-            offset = 0;
-
-        var interval = setInterval(function() {
-
-            iterat ++;
-            offset = Math.round((1000 *iterat) / duration);
+        var timer = 0;
         
-            if (offset > 100) {
-                clearInterval(interval);
-            } else {
-                progressBar.style.width = offset + '%';
-            }
+        function delay (callback, ms) {
+            clearTimeout(timer);
+            timer = setTimeout(callback, ms);
+        };
 
-        }, 10);
+        function progressbar () {
+            var progressBar = document.createElement('div');
+                progressBar.classList.add(transition.progressbar);
+                progressBar.classList.add(transition.progressbar + '--' + type);
+                el.appendChild(progressBar);
+
+            var iterat = 0,
+                offset = 0;
+
+            var interval = setInterval(function() {
+
+                iterat ++;
+                offset = Math.round((1000 *iterat) / duration);
+            
+                if (offset > 100) {
+                    clearInterval(interval);
+                } else {
+                    progressBar.style.width = offset + '%';
+                }
+
+            }, 10);
+        }
+
+        delay(progressbar, 100);
     };
 
     /*!

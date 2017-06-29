@@ -11,22 +11,23 @@
   -o-transition: all 1s ease-in-out;
   transition: all 1s ease-in-out;
 }
-
+/* the wrapper where the toast messages appends: */
 .toast-container .toast-wrapper {
   position: relative;
   padding: 0.5em;
 }
-
+/* the class that is assigned to the sound player. */
+/* normally, this is a hidden wildcard: */
 .toast-container .toast-soundplayer {
   display: none;
   visibility: hidden;
 }
 
 /**
- * Toast stylings:
- * ------------------------------------------------------------------------- */
+ * Toast messages styles:
+ * -------------------------------------------------- */
 
-/* each toast gets this style: */
+/* each toast message gets this style: */
 .toast {
   position: relative;
   padding: 16px;
@@ -35,18 +36,13 @@
   border-left: 6px solid transparent;
   border-radius: 2px;
   pointer-events: none;
-  -webkit-transition: .48s all ease-in-out;
-  -o-transition: .48s all ease-in-out;
-  transition: .48s all ease-in-out;
+  -webkit-transition: all 0.32s ease-in-out;
+  -o-transition: all 0.32s ease-in-out;
+  transition: all 0.32s ease-in-out;
   -webkit-box-shadow: 0px 0px 9px rgba(0, 0, 0, .25);
   box-shadow: 0px 0px 9px rgba(0, 0, 0, .25);
   -webkit-transform: translate3d(0, 0, 0);
   transform: translate3d(0, 0, 0);
-}
-
-.toast.close-on-click {
-  cursor: pointer;
-  pointer-events: auto;
 }
 
 /* informational toast class: */
@@ -77,8 +73,16 @@
   border-color: #f5aca6;
 }
 
+/* this class is assigned to each toast message when autoClose
+ * plugin option is set to BOOLEAN false. */
+/* Normally, this is a pointer events handler:*/
+.toast.close-on-click {
+  cursor: pointer;
+  pointer-events: auto;
+}
+
 /**
- * Progress bar styling:
+ * Progress bar styles:
  * ------------------------------------------------------------------------- */
 
 /* each progress bar gets this style: */
@@ -89,9 +93,9 @@
   left: 0px;
   bottom: 0px;
   opacity: 0.5;
-  -webkit-transition: 0s width ease;
-  -o-transition: 0s width ease;
-  transition: 0s width ease;
+  -webkit-transition: width 0s ease;
+  -o-transition: width 0s ease;
+  transition: width 0s ease;
 }
 
 /* progress bar color for each toast type: */
@@ -136,7 +140,6 @@
 .toast.fade-hide {
   opacity: 0;
 }
-/***/
 /* ------------------------------------------------------------------------- */
 
 /* TRANSITION 02 - a [slideLeftFade] transition: */

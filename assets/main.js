@@ -12,7 +12,9 @@
             success: "./dist/sounds/success/1.mp3",
             warning: "./dist/sounds/warning/1.mp3",
             error: "./dist/sounds/error/1.mp3",
-        }
+        },
+        onShow: function (type) { console.log("a toast " + type + " message is shown!"); },
+        onHide: function (type) { console.log("the toast " + type + " message is hidden!"); }
     });
 
     var tran = document.getElementById('select-transition');
@@ -74,5 +76,36 @@
     });
 
     conf(tran);
+
+    // new-transition-scale example:
+    document.getElementById('new-transition-scale').addEventListener('click', function(e) {
+        e.preventDefault();
+
+        // the main Toasty function:
+        var toast = new Toasty({
+            // STRING: name of the CSS transition that will be used to show and hide the toast:
+            transition: "scale"
+        });
+
+        // register the new transition:
+        toast.transition("scale");
+
+        // and run the first alert message:
+        toast.info("You have been registred a new scale transition correctly.");
+    });
+
+    // alerts-re-stylized example:
+    document.getElementById('alerts-re-stylized').addEventListener('click', function(e) {
+        e.preventDefault();
+
+        var toast = new Toasty({
+            classname: "alert",
+            transition: "slideDown"
+        });
+
+        toast.transition("slideDown");
+
+        toast.info("The toast messages have been re-stylized correctly.");
+    });
 
 })(window);
