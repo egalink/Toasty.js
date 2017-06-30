@@ -257,9 +257,9 @@
         var _containsClass = function (el, className) {
             //
             if (document.documentElement.classList) {
-                containsClass = function (el, className) { return el.classList.contains(className); }
+                _containsClass = function (el, className) { return el.classList.contains(className); }
             } else {
-                containsClass = function (el, className) {
+                _containsClass = function (el, className) {
                     if (! el || ! el.className)
                         return false;
                     var regex = new RegExp('(^|\\s)' + className + '(\\s|$)');
@@ -267,56 +267,56 @@
                 }
             }
 
-            return containsClass(el, className);
+            return _containsClass(el, className);
         };
 
         var _addClass = function (el, className) {
             //
             if (document.documentElement.classList)
-                addClass = function (el, className) { el.classList.add(className); }
+                _addClass = function (el, className) { el.classList.add(className); }
             else
-                addClass = function (el, className) {
+                _addClass = function (el, className) {
                     if (! el)
                         return false;
                     if (containsClass(el, className) == false)
                         el.className += (el.className ? " " : "") + className;
                 }
 
-            addClass(el, className);
+            _addClass(el, className);
         };
 
         var _removeClass = function (el, className) {
             //
             if (document.documentElement.classList)
-                removeClass = function (el, className) { el.classList.remove(className); }
+                _removeClass = function (el, className) { el.classList.remove(className); }
             else
-                removeClass = function (el, className) {
+                _removeClass = function (el, className) {
                     if (! el || ! el.className)
                         return false;
                     var regexp = new RegExp("(^|\\s)" + className + "(\\s|$)", "g");
                     el.className = el.className.replace(regexp, "$2");
                 }
 
-            removeClass(el, className);
+            _removeClass(el, className);
         };
 
         var _toggleClass = function (el, className) {
             //
             if (document.documentElement.classList)
-                toggleClass = function (el, className) { return el.classList.toggle(className); }
+                _toggleClass = function (el, className) { return el.classList.toggle(className); }
             else
-                toggleClass = function (el, className)
+                _toggleClass = function (el, className)
                 {
                     if (containsClass(el, className) == true) {
-                        removeClass(el, className);
+                        _removeClass(el, className);
                         return false;
                     } else {
-                        addClass(el, className);
+                        _addClass(el, className);
                         return true;
                     }
                 }
 
-            return toggleClass(el, className);
+            return _toggleClass(el, className);
         };
 
     // ------------------------------------------------------------------------
