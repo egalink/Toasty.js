@@ -1,4 +1,4 @@
-/*! Toasty.js - v1.3.0 - 2017-06-29
+/*! Toasty.js - v1.3.0 - 2017-06-30
 * https://egalink.github.io/Toasty.js/
 * Copyright (c) 2015-2017 Jakim Hernández; Licensed MIT */
 ;(function () {
@@ -135,7 +135,7 @@
 
         function show () {
             el.addEventListener(whichTransitionEvent(), onShowToast, false);
-            el.classList.add(animate.show);
+            _addClass(el, animate.show);
         };
 
         var beforeNode = container.childNodes;
@@ -175,7 +175,7 @@
 
         function hide () {
             el.addEventListener(whichTransitionEvent(), onHideToast, false);
-            el.classList.add(animate.hide);
+            _addClass(el, animate.hide);
         };
 
         // initialize the css transition:
@@ -188,11 +188,11 @@
         //
         function hideOnClick (e) {
             e.stopPropagation();
-            el.classList.remove(class2close);
+            _removeClass(el, class2close);
             _hideToast(type, el, duration, animate, callback);
         }
 
-        el.classList.add(class2close);
+        _addClass(el, class2close);
         el.addEventListener('click', hideOnClick);
     };
 
@@ -226,9 +226,9 @@
 
         function progressbar () {
             var progressBar = document.createElement('div');
-                progressBar.classList.add(transition.progressbar);
-                progressBar.classList.add(transition.progressbar + '--' + type);
-                el.appendChild(progressBar);
+            _addClass(progressBar, transition.progressbar);
+            _addClass(progressBar, transition.progressbar + '--' + type);
+            el.appendChild(progressBar);
 
             var iterat = 0,
                 offset = 0;
@@ -249,6 +249,81 @@
 
         delay(progressbar, 100);
     };
+
+
+    /**
+     * ClassList Fallback
+     * Thanks to: Jean David Daviet
+     * Gist: https://gist.github.com/JeanDavidDaviet/4745497
+     * --------------------------------------------------------------------- */
+    
+        var _containsClass = function (el, className) {
+            //
+            if (document.documentElement.classList) {
+                containsClass = function (el, className) { return el.classList.contains(className); }
+            } else {
+                containsClass = function (el, className) {
+                    if (! el || ! el.className)
+                        return false;
+                    var regex = new RegExp('(^|\\s)' + className + '(\\s|$)');
+                    return el.className.match(regex);
+                }
+            }
+
+            return containsClass(el, className);
+        };
+
+        var _addClass = function (el, className) {
+            //
+            if (document.documentElement.classList)
+                addClass = function (el, className) { el.classList.add(className); }
+            else
+                addClass = function (el, className) {
+                    if (! el)
+                        return false;
+                    if (containsClass(el, className) == false)
+                        el.className += (el.className ? " " : "") + className;
+                }
+
+            addClass(el, className);
+        };
+
+        var _removeClass = function (el, className) {
+            //
+            if (document.documentElement.classList)
+                removeClass = function (el, className) { el.classList.remove(className); }
+            else
+                removeClass = function (el, className) {
+                    if (! el || ! el.className)
+                        return false;
+                    var regexp = new RegExp("(^|\\s)" + className + "(\\s|$)", "g");
+                    el.className = el.className.replace(regexp, "$2");
+                }
+
+            removeClass(el, className);
+        };
+
+        var _toggleClass = function (el, className) {
+            //
+            if (document.documentElement.classList)
+                toggleClass = function (el, className) { return el.classList.toggle(className); }
+            else
+                toggleClass = function (el, className)
+                {
+                    if (containsClass(el, className) == true) {
+                        removeClass(el, className);
+                        return false;
+                    } else {
+                        addClass(el, className);
+                        return true;
+                    }
+                }
+
+            return toggleClass(el, className);
+        };
+
+    // ------------------------------------------------------------------------
+
 
     /*!
      * The exposed public object:
@@ -315,12 +390,12 @@
             container = container.querySelector('.' + transition.mainwrapp); // use the wrapper instead of main container.
         } else {
             container = document.createElement('div');
-            container.classList.add(transition.container);
-            container.classList.add(transition.container + '--' + options.transition);
+            _addClass(container, transition.container);
+            _addClass(container, transition.container + '--' + options.transition);
 
             // create a alert wrapper instance:
             var wrapp = document.createElement('div');
-                wrapp.classList.add(transition.mainwrapp);
+            _addClass(wrapp, transition.mainwrapp);
 
             // append the alert wrapper and now, this is the main container:
             container.appendChild(container = wrapp);
@@ -328,9 +403,9 @@
 
         // create a new toast instance
         var newToast = document.createElement('div');
-            newToast.classList.add(options.classname);
-            newToast.classList.add(transition.toasts[type]);
-            newToast.classList.add(transition.animate.init);
+            _addClass(newToast, options.classname);
+            _addClass(newToast, transition.toasts[type]);
+            _addClass(newToast, transition.animate.init);
             newToast.innerHTML = message;
 
         // insert the toast container into the HTML:
