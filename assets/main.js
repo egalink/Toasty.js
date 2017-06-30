@@ -83,7 +83,6 @@
 
         // the main Toasty function:
         var toast = new Toasty({
-            // STRING: name of the CSS transition that will be used to show and hide the toast:
             transition: "scale"
         });
 
@@ -91,7 +90,7 @@
         toast.transition("scale");
 
         // and run the first alert message:
-        toast.info("You have been registred a new scale transition correctly.");
+        toast.info("You have been registred a new scale transition correctly.", 4000);
     });
 
     // alerts-re-stylized example:
@@ -100,12 +99,15 @@
 
         var toast = new Toasty({
             classname: "alert",
-            transition: "slideDown"
+            transition: "scale",
+            insertBefore: false,
+            progressBar: true,
+            enableSounds: true
         });
 
-        toast.transition("slideDown");
+        toast.transition("scale");
 
-        toast.info("The toast messages have been re-stylized correctly.");
+        toast.info("The toast messages have been re-stylized correctly.", 4000);
     });
 
 })(window);

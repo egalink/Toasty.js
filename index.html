@@ -165,7 +165,7 @@ toast.error('Something terrible happened!');
 };
 
 // more js code...</code></pre>
-
+                
                 <p>then you can configure the plugin by passing any of these options as parameter in:</p>
 
 <pre><code class="language-js">// the main Toasty function:
@@ -199,10 +199,27 @@ toast.toast(type, message, duration);
             </div>
         </section>
 
-        <section id="configuration">
+        <section id="creating-transitions">
             <div class="content">
                 <h2>Creating Transitions</h2>
                 <p>You can create new CSS3 transitions to show and hide each toast message.</p>
+                <br/>
+                <h3>Available CSS3 transition list by default</h3>
+                <p>
+                    <ul>
+                        <li><b>fade (default transition)</b></li>
+                        <li>slideLeftFade</li>
+                        <li>slideLeftRightFade</li>
+                        <li>slideRightFade</li>
+                        <li>slideRightLeftFade</li>
+                        <li>slideUpFade</li>
+                        <li>slideUpDownFade</li>
+                        <li>slideDownFade</li>
+                        <li>slideDownUpFade</li>
+                        <li>pinItUp</li>
+                        <li>pinItDow</li>
+                    </ul>
+                </p>
                 <br/>
                 <h3>The css structure</h3>
 
@@ -224,7 +241,9 @@ toast.toast(type, message, duration);
 .toast.fade-hide { opacity: 0; }
 /* ------------------------------------------------------------------------- */
 </code></pre>
-
+                
+                <br/>
+                <h3>The new Transition</h3>
                 <p>Based on the previous css structure, you can create a new CSS3 transition as follows: </p>
 
 <pre><code class="language-css">/* Note that the "transition" property
@@ -245,8 +264,10 @@ toast.toast(type, message, duration);
 .toast.scale-hide { opacity: 0; transform: scale(0); }
 /* ------------------------------------------------------------------------- */
 </code></pre>
-
-                <p>now, register the new transition:</p>
+                
+                <br/>
+                <h3>Registering transition</h3>
+                <p>now, you able to register the new transition:</p>
 
 <pre><code class="language-js">// the main Toasty function:
 var toast = new Toasty({
@@ -268,10 +289,18 @@ toast.info("You have been registred a new scale transition correctly.");
             </div>
         </section>
 
-        <section id="configuration">
+        <section id="restyling-toasts">
             <div class="content">
                 <h2>Re-styling Toasts.</h2>
                 <p>You are allowed to re-stylize the toast messages as you need them. Like a easily themeable plugin.</p>
+                <p><b>Have two options to re-styling Toasts:</b></p>
+                <p>
+                    <ol>
+                        <li>Replacing the CSS properties on the same default classes in the toasty.css file (preserving default CSS3 transitions in the plugin).</li>
+                        <li>Creating new classes, properties and CSS3 transitions (default transitions in the plugin are lost).</li>
+                    </ol>
+                </p>
+                <p><i>In this example we will do everything by the long way (option 2).</i></p>
                 <br/>
                 <h3>The css structure</h3>
                 <p>Required properties are written in each corresponding class:</p>
@@ -338,9 +367,10 @@ toast.info("You have been registred a new scale transition correctly.");
 .toast-progressbar--success {}
 .toast-progressbar--warning {}
 .toast-progressbar--error {}
-
 </code></pre>
 
+                <br/>
+                <h3>Re-styled Toasts</h3>
                 <p>
                     Based on the previous css structure, then the plugin could
                     be re-stylized as follows:
@@ -351,10 +381,20 @@ toast.info("You have been registred a new scale transition correctly.");
     position: fixed;
     z-index: 999999;
     pointer-events: none;
+
+    background-color: rgba(255,255,255, 0.32);
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    text-align: center;
 }
 /* the wrapper where the toast messages appends: */
 .alert-container .alert-wrapper {
     position: relative;
+
+    display: inline-block;
+    margin: 0 auto;
 }
 /* the class that is assigned to the sound player. */
 /* Normally, this is a hidden wildcard: */
@@ -372,24 +412,35 @@ toast.info("You have been registred a new scale transition correctly.");
     position: relative;
     pointer-events: none;
     transition: 0.32s all ease-in-out;
+
+    display: block;
+    margin: 4% auto 0 auto;
+    padding: 2em 2em;
+    background-color: #fff;
+    color: #505050;
+    max-width: 100%;
+    font-size: 1.25em;
+    overflow: hidden;
+    border-radius: 6px;
+    box-shadow: 1px 1px 12px 2px rgba(0,0,0, 0.32);
 }
 
 /* informational toast class: */
-.alert--info {}
+.alert--info { color: #31708F; }
 
 /* successful toast class: */
-.alert--success {}
+.alert--success { color: #3C763D; }
 
 /* warning toast class: */
-.alert--warning {}
+.alert--warning { color: #8A6D3B; }
 
 /* error toast class: */
-.alert--error {}
+.alert--error { color: #A94442; }
 
 /* this class is assigned to each toast message when autoClose
  * plugin option is set to BOOLEAN false. */
 /* Normally, this is a pointer events handler:*/
-.toast.close-on-click {
+.alert.close-on-click {
     cursor: pointer;
     pointer-events: auto;
 }
@@ -401,16 +452,47 @@ toast.info("You have been registred a new scale transition correctly.");
 /* each progress bar gets this style: */
 .alert-progressbar {
     transition: width 0s ease;
+
+    position: absolute;
+    height: 4px;
+    width: 0%;
+    left: 0px;
+    bottom: 0px;
+    opacity: 0.5;
 }
 
 /* progress bar color for each toast type: */
-.alert-progressbar--info {}
-.alert-progressbar--success {}
-.alert-progressbar--warning {}
-.alert-progressbar--error {}
-
+.alert-progressbar--info { background-color: #91C5F2; }
+.alert-progressbar--success { background-color: #A6CA8A; }
+.alert-progressbar--warning { background-color: #F2C779; }
+.alert-progressbar--error { background-color: #F5ACA6; }
 </code></pre>
+                
+                <br/>
+                <h3>The new Transition</h3>
+                <p>We will use the same transition created in the section <a href="#creating-transitions">Creating Transitions</a>.</p>
 
+<pre><code class="language-css">/* Note that the "transition" property
+ * must be present in the main class. */
+/* each toast message gets this style: */
+.alert {
+    transition: 0.32s all ease-in-out;
+}
+
+/* a [scale] transition: */
+.alert-container--scale {
+     right: 0;  
+    bottom: 0;
+}
+.alert-container--scale .alert-wrapper { display: inline-block; }
+.alert.scale-init { opacity: 0; transform: scale(0); }
+.alert.scale-show { opacity: 1; transform: scale(1); }
+.alert.scale-hide { opacity: 0; transform: scale(0); }
+/* ------------------------------------------------------------------------- */
+</code></pre>
+                
+                <br/>
+                <h3>Trying new config</h3>
                 <p>Now, you must configure the toast plugin to attach new CSS styles:</p>
 
 <pre><code class="language-js">// the main Toasty function:
@@ -421,11 +503,23 @@ var toast = new Toasty({
     // .... re-stylized the plugin and default toast styles, including css3 transitions are lost.
     classname: "alert",
     // STRING: name of the CSS transition that will be used to show and hide the toast:
-    transition: "slideDown"
+    transition: "scale",
+    // BOOLEAN: specifies the way in which the toasts will be inserted in the html code:
+    // .... Set to BOOLEAN TRUE and the toast messages will be inserted before those already generated toasts.
+    // .... Set to BOOLEAN FALSE otherwise.
+    insertBefore: false,
+    // BOOLEAN: enable or disable the progressbar:
+    // .... Set to BOOLEAN TRUE  - enable the progressbar only if the autoClose option value is set to BOOLEAN TRUE.
+    // .... Set to BOOLEAN FALSE - disable the progressbar. 
+    progressBar: true,
+    // BOOLEAN: enable or disable toast sounds:
+    // .... Set to BOOLEAN TRUE  - to enable toast sounds.
+    // .... Set to BOOLEAN FALSE - otherwise.
+    enableSounds: false
 });
 
 // register the new transition:
-toast.transition("slideDown");
+toast.transition("scale");
 
 // and run the first alert message:
 toast.info("The toast messages have been re-stylized correctly.");

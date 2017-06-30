@@ -28,15 +28,29 @@
 /* ------------------------------------------------------------------------- */
 
 
+/**
+ * EXAMPLE TO: Re-styled Toasts
+ * ------------------------------------------------------------------------- */
+
 /* the main container: */
 .alert-container {
     position: fixed;
     z-index: 999999;
     pointer-events: none;
+
+    background-color: rgba(255,255,255, 0.32);
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    text-align: center;
 }
 /* the wrapper where the toast messages appends: */
 .alert-container .alert-wrapper {
     position: relative;
+
+    display: inline-block;
+    margin: 0 auto;
 }
 /* the class that is assigned to the sound player. */
 /* Normally, this is a hidden wildcard: */
@@ -53,25 +67,40 @@
 .alert {
     position: relative;
     pointer-events: none;
-    transition: 0.32s all ease-in-out;
+    -webkit-transition: all 0.48s ease-in-out;
+       -moz-transition: all 0.48s ease-in-out;
+        -ms-transition: all 0.48s ease-in-out;
+         -o-transition: all 0.48s ease-in-out;
+            transition: all 0.48s ease-in-out;
+
+    display: block;
+    margin: 4% auto 0 auto;
+    padding: 2em 2em;
+    background-color: #fff;
+    color: #505050;
+    max-width: 100%;
+    font-size: 1.25em;
+    overflow: hidden;
+    border-radius: 6px;
+    box-shadow: 1px 1px 12px 2px rgba(0,0,0, 0.32);
 }
 
 /* informational toast class: */
-.alert--info {}
+.alert--info { color: #31708F; }
 
 /* successful toast class: */
-.alert--success {}
+.alert--success { color: #3C763D; }
 
 /* warning toast class: */
-.alert--warning {}
+.alert--warning { color: #8A6D3B; }
 
 /* error toast class: */
-.alert--error {}
+.alert--error { color: #A94442; }
 
 /* this class is assigned to each toast message when autoClose
  * plugin option is set to BOOLEAN false. */
 /* Normally, this is a pointer events handler:*/
-.toast.close-on-click {
+.alert.close-on-click {
     cursor: pointer;
     pointer-events: auto;
 }
@@ -81,25 +110,54 @@
  * -------------------------------------------------- */
 
 /* each progress bar gets this style: */
-.alert-progressbar {}
+.alert-progressbar {
+    -webkit-transition: width 0s ease;
+       -moz-transition: width 0s ease;
+        -ms-transition: width 0s ease;
+         -o-transition: width 0s ease;
+            transition: width 0s ease;
+
+    position: absolute;
+    height: 4px;
+    width: 0%;
+    left: 0px;
+    bottom: 0px;
+    opacity: 0.5;
+}
 
 /* progress bar color for each toast type: */
-.alert-progressbar--info {}
-.alert-progressbar--success {}
-.alert-progressbar--warning {}
-.alert-progressbar--error {}
+.alert-progressbar--info { background-color: #91C5F2; }
+.alert-progressbar--success { background-color: #A6CA8A; }
+.alert-progressbar--warning { background-color: #F2C779; }
+.alert-progressbar--error { background-color: #F5ACA6; }
+/* ------------------------------------------------------------------------- */
 
-/**
- * Alert transitions:
- * ------------------------------------------------------------------------- */
 
-/* TRANSITION 01 - a [slideDown] transition: */
-.alert-container--slideDown {
-     right: 0;
+/* a [scale] transition: */
+.alert-container--scale {
+     right: 0;  
     bottom: 0;
 }
-.alert-container--slideDown .alert-wrapper { display: inline-block; }
-.alert.slideDown-init { opacity: 0; }
-.alert.slideDown-show { opacity: 1; }
-.alert.slideDown-hide { opacity: 0; }
+.alert-container--scale .alert-wrapper { display: inline-block; }
+.alert.scale-init {
+    opacity: 0;
+    -webkit-transform: scale(0);
+        -ms-transform: scale(0);   
+       -moz-transform: scale(0);
+            transform: scale(0);
+}
+.alert.scale-show {
+    opacity: 1;
+    -webkit-transform: scale(1);
+        -ms-transform: scale(1);   
+       -moz-transform: scale(1);
+            transform: scale(1);
+}
+.alert.scale-hide {
+    opacity: 0;
+    -webkit-transform: scale(0);
+        -ms-transform: scale(0);   
+       -moz-transform: scale(0);
+            transform: scale(0);
+}
 /* ------------------------------------------------------------------------- */
