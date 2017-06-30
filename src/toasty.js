@@ -35,6 +35,7 @@
         // BOOLEAN: enable or disable toast sounds:
         // .... Set to BOOLEAN TRUE  - to enable toast sounds.
         // .... Set to BOOLEAN FALSE - otherwise.
+        // NOTE: this is not supported by mobile devices.
         enableSounds: false,
         // BOOLEAN: enable or disable auto hiding on toast messages:
         // .... Set to BOOLEAN TRUE  - to enable auto hiding.
@@ -458,10 +459,10 @@
             el = document.createElement('transitionElement');
 
         var transitions = {
-            'transition'      : 'transitionend',
-            'OTransition'     : 'oTransitionEnd',
-            'MozTransition'   : 'transitionend',
-            'WebkitTransition': 'webkitTransitionEnd'
+            WebkitTransition : 'webkitTransitionEnd',
+            MozTransition    : 'transitionend',
+            OTransition      : 'oTransitionEnd otransitionend',
+            transition       : 'transitionend'
         };
 
         for (t in transitions) if (el.style[t] !== undefined) {

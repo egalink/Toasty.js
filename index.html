@@ -29,6 +29,8 @@
                     </a>
                 </p>
                 <br/>
+                <p class="text-center">Works on all major browsers and IE10+</p>
+                <br/>
                 <p class="text-center transition-select">
                     <select id="select-transition">
                         <option value="fade" data-insertbefore="true">transition: fade</option>
@@ -130,6 +132,7 @@ toast.error("Something terrible happened!");
     // BOOLEAN: enable or disable toast sounds:
     // .... Set to BOOLEAN TRUE  - to enable toast sounds.
     // .... Set to BOOLEAN FALSE - otherwise.
+    // NOTE: this is not supported by mobile devices.
     enableSounds: false,
     // BOOLEAN: enable or disable auto hiding on toast messages:
     // .... Set to BOOLEAN TRUE  - to enable auto hiding.
@@ -548,6 +551,7 @@ var toast = new Toasty({
     // BOOLEAN: enable or disable toast sounds:
     // .... Set to BOOLEAN TRUE  - to enable toast sounds.
     // .... Set to BOOLEAN FALSE - otherwise.
+    // NOTE: this is not supported by mobile devices.
     enableSounds: false
 });
 
