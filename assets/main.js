@@ -90,7 +90,7 @@
         toast.transition("scale");
 
         // and run the first alert message:
-        toast.info("You have been registred a new scale transition correctly.", 4000);
+        toast.info("You have been registred a new scale transition correctly.", 2500);
     });
 
     // alerts-re-stylized example:
