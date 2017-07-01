@@ -115,7 +115,7 @@
     };
 
     // show the toast message with an CSS3 transition:
-    var _showToast = function (type, el, container, animate, insertBefore, callback) {
+    var _showToast = function (type, el, container, animate, duration, insertBefore, callback) {
         //
         var timer = 0;
 
@@ -125,23 +125,32 @@
         };
 
         function onShowToast (e) {
-            e.target.removeEventListener(e.type, onShowToast, false);
+            _removeEvent(e.target, e.type, onShowToast, false);
             if (typeof callback === 'function')
                 callback(type);
         }
 
         function show () {
-            el.addEventListener(whichTransitionEvent(), onShowToast, false);
+            _addEvent(el, whichTransitionEvent(), onShowToast, false);
             _addClass(el, animate.show);
         };
 
         var beforeNode = container.childNodes;
             beforeNode = beforeNode[insertBefore === true ? 0 : beforeNode.length];
-        
+
         // insert in the DOM:
         container.insertBefore(el, beforeNode);
-        // initialize the css transition:
-        delay(show, 100);
+
+        if (whichTransitionEvent() == undefined) {
+            // navigator does not support transitionend event:
+            delay(function() {
+                _addClass(el, animate.show);
+                callback(type);
+            }, 100);
+        } else {
+            // initialize the css transition:
+            delay(show, 100);
+        }
     };
 
     // hide the toast message with an CSS3 transition:
@@ -155,7 +164,7 @@
         };
 
         function onHideToast(e) {
-            e.target.removeEventListener(e.type, onHideToast, false);
+            _removeEvent(e.target, e.type, onHideToast, false);
             delay(remove, 0);
             if (typeof callback === 'function')
                 callback(type);
@@ -171,12 +180,20 @@
         };
 
         function hide () {
-            el.addEventListener(whichTransitionEvent(), onHideToast, false);
+            _addEvent(el, whichTransitionEvent(), onHideToast, false);
             _addClass(el, animate.hide);
         };
 
-        // initialize the css transition:
-        delay(hide, duration +100);
+        if (whichTransitionEvent() == undefined) {
+            // navigator does not support transitionend event:
+            delay(function() {
+                remove();
+                callback(type);
+            }, duration +100);
+        } else {
+            // initialize the css transition:
+            delay(hide, duration +100);
+        }
     };
 
     // hide the toast message with an CSS3 transition when the user
@@ -278,7 +295,7 @@
                 _addClass = function (el, className) {
                     if (! el)
                         return false;
-                    if (containsClass(el, className) == false)
+                    if (! _containsClass(el, className))
                         el.className += (el.className ? " " : "") + className;
                 }
 
@@ -307,12 +324,12 @@
             else
                 _toggleClass = function (el, className)
                 {
-                    if (containsClass(el, className) == true) {
-                        _removeClass(el, className);
-                        return false;
-                    } else {
+                    if (! _containsClass(el, className)) {
                         _addClass(el, className);
                         return true;
+                    } else {
+                        _removeClass(el, className);
+                        return false;
                     }
                 }
 
@@ -320,6 +337,79 @@
         };
 
     // ------------------------------------------------------------------------
+
+
+    /**
+     * Add Event
+     * fn arg can be an object or a function, thanks to handleEvent
+     * read more at: http://www.thecssninja.com/javascript/handleevent
+     *
+     * @param  {element}  element
+     * @param  {event}    event
+     * @param  {Function} fn
+     * @param  {boolean}  bubbling
+     */
+    var _addEvent = function (el, evt, fn, bubble) {
+        //
+        if ("addEventListener" in el) {
+            // BBOS6 doesn't support handleEvent, catch and polyfill
+            try {
+                el.addEventListener(evt, fn, bubble);
+            } catch (e) {
+                if (typeof fn === "object" && fn.handleEvent) {
+                    el.addEventListener(evt, function (e) {
+                        // Bind fn as this and set first arg as event object
+                        fn.handleEvent.call(fn, e);
+                    }, bubble);
+                } else {
+                    throw e;
+                }
+            }
+        } else if ("attachEvent" in el) {
+            // check if the callback is an object and contains handleEvent
+            if (typeof fn === "object" && fn.handleEvent) {
+                el.attachEvent("on" + evt, function () {
+                    // Bind fn as this
+                    fn.handleEvent.call(fn);
+                });
+            } else {
+                el.attachEvent("on" + evt, fn);
+            }
+        }
+    };
+        
+    /**
+     * Remove Event
+     *
+     * @param  {element}  element
+     * @param  {event}    event
+     * @param  {Function} fn
+     * @param  {boolean}  bubbling
+     */
+    var _removeEvent = function (el, evt, fn, bubble) {
+        //
+        if ("removeEventListener" in el) {
+            try {
+                el.removeEventListener(evt, fn, bubble);
+            } catch (e) {
+                if (typeof fn === "object" && fn.handleEvent) {
+                    el.removeEventListener(evt, function (e) {
+                        fn.handleEvent.call(fn, e);
+                    }, bubble);
+                } else {
+                    throw e;
+                }
+            }
+        } else if ("detachEvent" in el) {
+            if (typeof fn === "object" && fn.handleEvent) {
+                el.detachEvent("on" + evt, function () {
+                    fn.handleEvent.call(fn);
+                });
+            } else {
+                el.detachEvent("on" + evt, fn);
+            }
+        }
+    };
 
 
     /*!
@@ -430,6 +520,7 @@
             newToast,
             container,
             transition.animate,
+            duration,
             options.insertBefore,
             options.onShow
         );
@@ -548,6 +639,13 @@
     function parentElement (el) {
         //
         return el.parentElement || el.parentNode;
+    }
+
+    function wtf_IEversion () {
+        var uA = window.navigator.userAgent,
+        __isIE = /msie\s|trident\/|edge\//i.test(uA) && !! (document.uniqueID || document.documentMode || window.ActiveXObject || window.MSInputMethodContext),
+        checkVersion = (__isIE && +(/(edge\/|rv:|msie\s)([\d.]+)/i.exec(uA)[2])) || NaN;
+        return checkVersion;
     }
 
     /**

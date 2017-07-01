@@ -105,9 +105,11 @@
             enableSounds: true
         });
 
+        // register the new transition:
         toast.transition("scale");
 
-        toast.info("The toast messages have been re-stylized correctly.", 4000);
+        // and run the first alert message:
+        toast.info("The toast messages have been re-stylized correctly.", 2500);
     });
 
 })(window);
