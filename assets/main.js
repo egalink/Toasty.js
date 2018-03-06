@@ -3,16 +3,10 @@
     'use strict';
 
     var toasty = new Toasty({
-        duration: 0,
-        autoClose: true,
+        duration: 0, // calculated automatically.
         enableSounds: true,
         progressBar: true,
-        sounds: {
-            info: "./dist/sounds/info/1.mp3",
-            success: "./dist/sounds/success/1.mp3",
-            warning: "./dist/sounds/warning/1.mp3",
-            error: "./dist/sounds/error/1.mp3",
-        },
+        autoClose: true,
         onShow: function (type) { console.log("a toast " + type + " message is shown!"); },
         onHide: function (type) { console.log("the toast " + type + " message is hidden!"); }
     });

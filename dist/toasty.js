@@ -1,10 +1,15 @@
-/*! Toasty.js - v1.3.0 - 2017-07-01
+/*! Toasty.js - v1.5.0 - 2018-03-06
 * https://egalink.github.io/Toasty.js/
-* Copyright (c) 2015-2017 Jakim Hernández; Licensed MIT */
+* Copyright (c) 2015-2018 Jakim Hernández; Licensed MIT */
 ;(function () {
 
     'use strict';
     
+    /**
+     * All available default CSS transitions for plug-in:
+     *
+     * @var array
+     */
     var _transitions = [
         "fade",
         "slideLeftFade",
@@ -19,11 +24,16 @@
         "pinItDown"
     ];
 
+    /**
+     * Default configuration for plug-in:
+     *
+     * @var object
+     */
     var _defaults = {
         // STRING: main class name used to styling each toast message with CSS:
         // .... IMPORTANT NOTE:
         // .... if you change this, the configuration consider that you´re
-        // .... re-stylized the plugin and default toast styles, including css3 transitions are lost.
+        // .... re-stylized the plug-in and default toast styles, including css3 transitions are lost.
         classname: "toast", 
         // STRING: name of the CSS transition that will be used to show and hide the toast:
         transition: "fade",
@@ -74,106 +84,446 @@
         prependTo: document.body.childNodes[0]
     };
 
+    /**
+     * Map to create each necessary CSS classess:
+     *
+     * @var object
+     */
     var _mappings = {
-        container: "{:classname}-container",
-        mainwrapp: "{:classname}-wrapper",
+        container: "{:class-name}-container",
+        mainwrapp: "{:class-name}-wrapper",
         toasts: {
-               info: "{:classname}--info",
-            success: "{:classname}--success",
-            warning: "{:classname}--warning",
-              error: "{:classname}--error",
+               info: "{:class-name}--info",
+            success: "{:class-name}--success",
+            warning: "{:class-name}--warning",
+              error: "{:class-name}--error",
         },
         animate: {
             init: "{:transition}-init",
             show: "{:transition}-show",
             hide: "{:transition}-hide",
         },
-        progressbar: "{:classname}-progressbar",
-        playerclass: "{:classname}-soundplayer"
+        progressbar: "{:class-name}-progressbar",
+        playerclass: "{:class-name}-soundplayer"
     };
 
-    /*!
-     * Private functions:
+    /**
+     * A time offset to define the plug-in behavior:
+     *
+     * @var object
      */
+    var timeOffset = 100;
 
-    // the method to extend default options in settings:
-    var _extend = function (defaults, options) {
-        //
-        var config = {};
+    /**
+     * A native JS extend() function
+     *
+     * Returns a new object instead, preserving all of the original objects
+     * and their properties. Supported back to IE6.
+     *
+     * All credits to author.
+     * https://gomakethings.com/vanilla-javascript-version-of-jquery-extend/
+     *
+     * @return object
+     */
+    function extend () {
+
+        var extended = {};
+        var deep = false;
+        var i = 0;
+        var length = arguments.length;
+
+        // check if a deep merge
+        if (Object.prototype.toString.call(arguments[0]) === '[object Boolean]' ) {
+            deep = arguments[0];
+            i ++;
+        }
+
+        // merge the object into the extended object
+        var merge = function (obj) {
+            for (var prop in obj) if (Object.prototype.hasOwnProperty.call(obj, prop) === true) {
+                // if deep merge and property is an object, merge properties
+                if (deep && Object.prototype.toString.call(obj[prop]) === '[object Object]')
+                    extended[prop] = extend(true, extended[prop], obj[prop]);
+                else
+                    extended[prop] = obj[prop];
+            }
+        };
+
+        // loop through each object and conduct a merge
+        for (i; i < length; i++) {
+            var obj = arguments[i];
+            merge(obj);
+        }
+
+        return extended;
+    }
+
+    /**
+     * Simple creation of an Element Node with the specified 'name'.
+     *
+     * @return HTML Element
+     */
+    function node(name) {
+        return document.createElement(name || 'div');
+    }
+
+    /**
+     * Returns the parent Element or Node from any other HTML Element.
+     *
+     * @return HTML Element
+     */
+    function parentElement (el) {
+        return el.parentElement || el.parentNode;
+    }
+
+    /**
+     * Regexp to find a className on a string.
+     *
+     * @return RegExp Obj
+     */
+    function classReg (className) {
+        return new RegExp('(^|\\s+)' + className + '(\\s+|$)');
+    }
+
+    /**
+     * Returns a Boolean value, indicating whether an element has
+     * the specified class name.
+     * 
+     * Usage:
+     *
+     * var exists = containsClass(element, 'className');
+     * 
+     * @return bool
+     */
+    function containsClass (el, className) {
+        var fn;
+        if (document.documentElement.classList) {
+            fn = function (el, className) { return el.classList.contains(className); }
+        } else {
+            fn = function (el, className) {
+                if (! el || ! el.className)
+                    return false;
+                return el.className.match(classReg(className));
+            }
+        }
+        return fn(el, className);
+    }
+
+    /**
+     * Adds one or more class names to an element.
+     * If the specified class already exist, the class will not be added.
+     *
+     * Usage:
+     *
+     * addClass(el, 'class1', 'class2', 'class3', ...);
+     *
+     * @return HTML Element|bool false
+     */
+    function addClass (el) {
+        var fn;
+        var classNames = arguments;
+        if (classNames.length <= 1 || typeof el != 'object')
+            return false;
+
+        if (document.documentElement.classList)
+            fn = function (el, classNames) {
+                for (var i = 1; i < classNames.length; i ++) if (typeof classNames[i] == 'string') {
+                    el.classList.add(classNames[i]);
+                }
+                return el;
+            }
+        else
+            fn = function (el, classNames) {
+                for (var i = 1; i < classNames.length; i ++) if (! containsClass(el, classNames[i]) && typeof classNames[i] == 'string') {
+                    el.className += (el.className ? ' ' : '') + classNames[i];
+                }
+                return el;
+            }
+
+        return fn(el, classNames);
+    }
+
+    /**
+     * Removes one or more class names from an element.
+     * Note: Removing a class that does not exist, does NOT throw an error.
+     *
+     * Usage:
+     *
+     * removeClass(el, 'class1', 'class2', 'class3', ...);
+     *
+     * @return HTML Element|bool false
+     */
+    function removeClass (el) {
+        var fn;
+        var classNames = arguments;
+        if (classNames.length <= 1 || typeof el != 'object')
+            return false;
         
-        for (var key in defaults)
-            config[key] = options.hasOwnProperty(key)? options[key] : defaults[key];
+        if (document.documentElement.classList)
+            fn = function (el, classNames) {
+                for (var i = 1; i < classNames.length; i ++) if (typeof classNames[i] == 'string') {
+                    el.classList.remove(classNames[i]);
+                }
+                return el;
+            }
+        else
+            fn = function (el, classNames) {
+                for (var i = 1; i < classNames.length; i ++) if (containsClass(el, classNames[i]) && typeof classNames[i] == 'string') {
+                    el.className = el.className.replace(classReg(classNames[i]), '$2');
+                }
+                return el;
+            }
 
-        return config;
-    };
+        return fn(el, classNames);
+    }
 
-    // get the auto close duration to be set in each toast message:
-    var _getAutoCloseDuration = function (message, duration, settings) {
-        //
+    /**
+     * Toggles between a class name for an element.
+     * 
+     * Usage:
+     *
+     * var result = toggleClass(el, 'className');
+     *
+     * @return bool
+     */
+    function toggleClass (el, className) {
+        var fn;
+        if (document.documentElement.classList)
+            fn = function (el, className) { return el.classList.toggle(className); }
+        else
+            fn = function (el, className) {
+                var exists = containsClass(el, className);
+                var caller = exists === true ? removeClass : addClass;
+                    caller(el, className);
+                return ! exists;
+            }
+        return fn(el, className);
+    }
+
+    /**
+     * Add Event
+     *
+     * Attaches an event handler to the document.
+     *
+     * http://www.thecssninja.com/javascript/handleevent
+     *
+     * @param  {element}  element
+     * @param  {event}    event
+     * @param  {Function} fn
+     * @param  {boolean}  bubbling
+     * @return el
+     */
+    function addEvent (el, evt, fn, bubble) {
+        if ('addEventListener' in el) {
+            // BBOS6 doesn't support handleEvent, catch and polyfill:
+            try {
+                el.addEventListener(evt, fn, bubble);
+            } catch (e) {
+                if (typeof fn === 'object' && fn.handleEvent) {
+                    el.addEventListener(evt, function (e) {
+                        // bind fn as this and set first arg as event object:
+                        fn.handleEvent.call(fn, e);
+                    }, bubble);
+                } else {
+                    throw e;
+                }
+            }
+        } else if ('attachEvent' in el) {
+            // check if the callback is an object and contains handleEvent:
+            if (typeof fn === 'object' && fn.handleEvent) {
+                el.attachEvent('on' + evt, function () {
+                    // bind fn as this:
+                    fn.handleEvent.call(fn);
+                });
+            } else {
+                el.attachEvent('on' + evt, fn);
+            }
+        }
+
+        return el;
+    }
+        
+    /**
+     * Remove Event
+     *
+     * Removes an event handler that has been attached with the 'addEvent' method.
+     *
+     * http://www.thecssninja.com/javascript/handleevent
+     *
+     * @param  {element}  element
+     * @param  {event}    event
+     * @param  {Function} fn
+     * @param  {boolean}  bubbling
+     * @return el
+     */
+    function removeEvent (el, evt, fn, bubble) {
+        if ('removeEventListener' in el) {
+            try {
+                el.removeEventListener(evt, fn, bubble);
+            } catch (e) {
+                if (typeof fn === 'object' && fn.handleEvent) {
+                    el.removeEventListener(evt, function (e) {
+                        fn.handleEvent.call(fn, e);
+                    }, bubble);
+                } else {
+                    throw e;
+                }
+            }
+        } else if ('detachEvent' in el) {
+            if (typeof fn === 'object' && fn.handleEvent) {
+                el.detachEvent('on' + evt, function () {
+                    fn.handleEvent.call(fn);
+                });
+            } else {
+                el.detachEvent('on' + evt, fn);
+            }
+        }
+
+        return el
+    }
+
+    /**
+     * Detect the property name of supported transition event.
+     * 
+     * Function from David Walsh:
+     * http://davidwalsh.name/css-animation-callback
+     *
+     * @return string|undefined (if transitions not supported by client)
+     */
+    function whichTransitionEvent () {
+        var t,
+            el = node('transitionElement');
+
+        var transitions = {
+            WebkitTransition : 'webkitTransitionEnd',
+            MozTransition    : 'transitionend',
+            OTransition      : 'oTransitionEnd otransitionend',
+            transition       : 'transitionend'
+        };
+
+        for (t in transitions) if (el.style[t] !== undefined) {
+            return transitions[t];
+        }
+    }
+
+    /**
+     * Calculates the auto close duration to be set in
+     * each toast message:
+     * 
+     * @return number
+     */
+    function getAutoCloseDuration (message, duration, settings) {
             duration = duration || settings.duration;
         if (duration == 0)
-            duration = message.length *50;
-
+            duration = message.length * (timeOffset /2);
         return Math.floor(duration);
+    }
+
+    /**
+     * Replace each object values with a map of key => values:
+     *
+     * @return object
+     */
+    function walker (obj, map) {
+
+        for (var o in obj) if (obj.hasOwnProperty(o) === true) {
+        // ini loop:
+            switch (typeof obj[o]) {
+                case 'object':
+                    walker(obj[o], map);
+                    break;
+                case 'string':
+                    for (var m in map) if (map.hasOwnProperty(m) === true) {
+                        obj[o] = obj[o].replace(m, map[m]);
+                    }
+                    break;
+            }
+        // end loop.
+        }
+
+        return obj;
+    }
+
+    /**
+     * Generate an HTML audio instance for each type of
+     * toast message:
+     *
+     * @return void
+     */
+    var playSound = function (type, container, sounds, playerclass) {
+        var sound = sounds[type],
+            audio = addClass(node('audio'), playerclass);
+            addEvent(audio, 'ended', function() {
+                var parent = parentElement(this);
+                    this.remove();
+                // also, remove the main container if it empty:
+                if (parent.childNodes.length < 1) parentElement(parent).remove();
+            });
+        audio.setAttribute('autoplay', 'autoplay');
+        audio.innerHTML = '<source src="' + sound + '" type="audio/mpeg"/>' +
+                          '<embed hidden="true" autoplay="false" loop="false" src="' + sound + '" />';
+        parentElement(container).appendChild(audio);
     };
 
-    // show the toast message with an CSS3 transition:
-    var _showToast = function (type, el, container, animate, duration, insertBefore, callback) {
-        //
-        var timer = 0;
+    /**
+     * Show the toast message with an CSS3 transition
+     * if transition event is supported:
+     *
+     * @return void
+     */
+    var showToast = function (type, el, container, animate, duration, insertBefore, callback) {
 
-        function delay (callback, ms) {
+        var timer = 0;
+        var delay = function (callback, ms) {
             clearTimeout(timer);
             timer = setTimeout(callback, ms);
         };
 
-        function onShowToast (e) {
-            _removeEvent(e.target, e.type, onShowToast, false);
-            if (typeof callback === 'function')
-                callback(type);
-        }
-
-        function show () {
-            _addEvent(el, whichTransitionEvent(), onShowToast, false);
-            _addClass(el, animate.show);
+        var onShowToast = function (e) {
+            removeEvent(e.target, e.type, onShowToast, false);
+            if (typeof callback == 'function') callback(type);
         };
 
+        var show = function () {
+            var transitionEvent = whichTransitionEvent();
+            if (transitionEvent !== undefined) {
+                // initialize the CSS transition event:
+                addEvent(el, transitionEvent, onShowToast, false);
+            } else {
+                // navigator does not support transition events:
+                if (typeof callback == 'function') callback(type);
+            }
+            addClass(el, animate.show);
+        };
+
+        // insert in the DOM and show toast:
         var beforeNode = container.childNodes;
             beforeNode = beforeNode[insertBefore === true ? 0 : beforeNode.length];
-
-        // insert in the DOM:
         container.insertBefore(el, beforeNode);
-
-        if (whichTransitionEvent() == undefined) {
-            // navigator does not support transitionend event:
-            delay(function() {
-                _addClass(el, animate.show);
-                callback(type);
-            }, 100);
-        } else {
-            // initialize the css transition:
-            delay(show, 100);
-        }
+        delay(show, timeOffset);
     };
 
-    // hide the toast message with an CSS3 transition:
-    var _hideToast = function (type, el, duration, animate, callback) {
-        //
+    /**
+     * Hide the toast message with an CSS3 transition
+     * if transition event is supported:
+     *
+     * @return void
+     */
+    var hideToast = function (type, el, duration, animate, callback) {
+
         var timer = 0;
-        
-        function delay (callback, ms) {
+        var delay = function (callback, ms) {
             clearTimeout(timer);
             timer = setTimeout(callback, ms);
         };
 
-        function onHideToast(e) {
-            _removeEvent(e.target, e.type, onHideToast, false);
-            delay(remove, 0);
-            if (typeof callback === 'function')
-                callback(type);
+        var onHideToast = function (e) {
+            removeEvent(e.target, e.type, onHideToast, false);
+            remove();
+            if (typeof callback == 'function') callback(type);
         };
 
-        function remove () {
+        var remove = function () {
             var container = parentElement(el); // the wrapper.
             el.remove();
             var num = container.childNodes.length;
@@ -182,74 +532,57 @@
             }
         };
 
-        function hide () {
-            _addEvent(el, whichTransitionEvent(), onHideToast, false);
-            _addClass(el, animate.hide);
+        var hide = function () {
+            var transitionEvent = whichTransitionEvent();
+            if (transitionEvent !== undefined) {
+                // initialize the CSS transition event:
+                addEvent(el, transitionEvent, onHideToast, false);
+            } else {
+                // navigator does not support transition events:
+                remove();
+                if (typeof callback == 'function') callback(type);
+            }
+            addClass(el, animate.hide);
         };
 
-        if (whichTransitionEvent() == undefined) {
-            // navigator does not support transitionend event:
-            delay(function() {
-                remove();
-                callback(type);
-            }, duration +100);
-        } else {
-            // initialize the css transition:
-            delay(hide, duration +100);
-        }
+        delay(hide, (timeOffset *10) + duration);
     };
 
-    // hide the toast message with an CSS3 transition when the user
-    // clicks on the message:
-    var _hideToastOnClick = function (type, el, duration, animate, callback, class2close) {
-        //
-        function hideOnClick (e) {
+    /**
+     * Hide the toast message with an CSS3 transition when
+     * the user clicks on the message:
+     *
+     * @return void
+     */
+    var hideToastOnClick = function (type, el, animate, callback, class2close) {
+        var hideOnClick = function (e) {
             e.stopPropagation();
-            _removeClass(el, class2close);
-            _hideToast(type, el, duration, animate, callback);
+            removeClass(el, class2close);
+            hideToast(type, el, 0, animate, callback);
         }
-
-        _addClass(el, class2close);
-        el.addEventListener('click', hideOnClick);
+        addClass(el, class2close);
+        addEvent(el, 'click', hideOnClick);
     };
 
-    var _playSound = function (type, container, sounds, playerclass) {
-        //
-        var sound = sounds[type],
-            audio = document.createElement('audio');
-            audio.autoplay = 'autoplay';
-            audio.onended = function() {
-                var parent = parentElement(this);
-                    this.remove();
-                if (parent.childNodes.length < 1)
-                    parentElement(parent).remove();
-            }
-
-        audio.className = playerclass;
-        audio.innerHTML = '<source src="' + sound + '" type="audio/mpeg"/>' +
-                          '<embed hidden="true" autoplay="false" loop="false" src="' + sound + '" />';
-
-        parentElement(container).appendChild(audio);
-    };
-
-    var _showProgressBar = function (type, el, duration, transition) {
-        //
-        var timer = 0;
+    /**
+     * The progressbar.
+     *
+     * @return void
+     */
+    var showProgressBar = function (type, el, duration, transition) {
         
-        function delay (callback, ms) {
+        var timer = 0;
+        var delay = function (callback, ms) {
             clearTimeout(timer);
             timer = setTimeout(callback, ms);
         };
 
-        function progressbar () {
-            var progressBar = document.createElement('div');
-            _addClass(progressBar, transition.progressbar);
-            _addClass(progressBar, transition.progressbar + '--' + type);
+        var progressbar = function () {
+            var progressBar = addClass(node('div'), transition.progressbar, transition.progressbar + '--' + type);
             el.appendChild(progressBar);
 
             var iterat = 0,
                 offset = 0;
-
             var interval = setInterval(function() {
 
                 iterat ++;
@@ -264,167 +597,18 @@
             }, 10);
         }
 
-        delay(progressbar, 100);
+        delay(progressbar, timeOffset *10);
     };
-
-
-    /**
-     * ClassList Fallback
-     * Thanks to: Jean David Daviet
-     * Gist: https://gist.github.com/JeanDavidDaviet/4745497
-     * --------------------------------------------------------------------- */
-    
-        var _containsClass = function (el, className) {
-            //
-            if (document.documentElement.classList) {
-                _containsClass = function (el, className) { return el.classList.contains(className); }
-            } else {
-                _containsClass = function (el, className) {
-                    if (! el || ! el.className)
-                        return false;
-                    var regex = new RegExp('(^|\\s)' + className + '(\\s|$)');
-                    return el.className.match(regex);
-                }
-            }
-
-            return _containsClass(el, className);
-        };
-
-        var _addClass = function (el, className) {
-            //
-            if (document.documentElement.classList)
-                _addClass = function (el, className) { el.classList.add(className); }
-            else
-                _addClass = function (el, className) {
-                    if (! el)
-                        return false;
-                    if (! _containsClass(el, className))
-                        el.className += (el.className ? " " : "") + className;
-                }
-
-            _addClass(el, className);
-        };
-
-        var _removeClass = function (el, className) {
-            //
-            if (document.documentElement.classList)
-                _removeClass = function (el, className) { el.classList.remove(className); }
-            else
-                _removeClass = function (el, className) {
-                    if (! el || ! el.className)
-                        return false;
-                    var regexp = new RegExp("(^|\\s)" + className + "(\\s|$)", "g");
-                    el.className = el.className.replace(regexp, "$2");
-                }
-
-            _removeClass(el, className);
-        };
-
-        var _toggleClass = function (el, className) {
-            //
-            if (document.documentElement.classList)
-                _toggleClass = function (el, className) { return el.classList.toggle(className); }
-            else
-                _toggleClass = function (el, className)
-                {
-                    if (! _containsClass(el, className)) {
-                        _addClass(el, className);
-                        return true;
-                    } else {
-                        _removeClass(el, className);
-                        return false;
-                    }
-                }
-
-            return _toggleClass(el, className);
-        };
-
-    // ------------------------------------------------------------------------
-
-
-    /**
-     * Add Event
-     * fn arg can be an object or a function, thanks to handleEvent
-     * read more at: http://www.thecssninja.com/javascript/handleevent
-     *
-     * @param  {element}  element
-     * @param  {event}    event
-     * @param  {Function} fn
-     * @param  {boolean}  bubbling
-     */
-    var _addEvent = function (el, evt, fn, bubble) {
-        //
-        if ("addEventListener" in el) {
-            // BBOS6 doesn't support handleEvent, catch and polyfill
-            try {
-                el.addEventListener(evt, fn, bubble);
-            } catch (e) {
-                if (typeof fn === "object" && fn.handleEvent) {
-                    el.addEventListener(evt, function (e) {
-                        // Bind fn as this and set first arg as event object
-                        fn.handleEvent.call(fn, e);
-                    }, bubble);
-                } else {
-                    throw e;
-                }
-            }
-        } else if ("attachEvent" in el) {
-            // check if the callback is an object and contains handleEvent
-            if (typeof fn === "object" && fn.handleEvent) {
-                el.attachEvent("on" + evt, function () {
-                    // Bind fn as this
-                    fn.handleEvent.call(fn);
-                });
-            } else {
-                el.attachEvent("on" + evt, fn);
-            }
-        }
-    };
-        
-    /**
-     * Remove Event
-     *
-     * @param  {element}  element
-     * @param  {event}    event
-     * @param  {Function} fn
-     * @param  {boolean}  bubbling
-     */
-    var _removeEvent = function (el, evt, fn, bubble) {
-        //
-        if ("removeEventListener" in el) {
-            try {
-                el.removeEventListener(evt, fn, bubble);
-            } catch (e) {
-                if (typeof fn === "object" && fn.handleEvent) {
-                    el.removeEventListener(evt, function (e) {
-                        fn.handleEvent.call(fn, e);
-                    }, bubble);
-                } else {
-                    throw e;
-                }
-            }
-        } else if ("detachEvent" in el) {
-            if (typeof fn === "object" && fn.handleEvent) {
-                el.detachEvent("on" + evt, function () {
-                    fn.handleEvent.call(fn);
-                });
-            } else {
-                el.detachEvent("on" + evt, fn);
-            }
-        }
-    };
-
 
     /*!
      * The exposed public object:
      */
 
     var Toasty = function (options, transitions_) {
-        //
         this.settings = {};
         this.classmap = {};
         this.configure(typeof options === 'object' ? options : {});
-        
+
         // add classmap for default transitions:
         if (typeof _transitions === 'object')
             for (var key in _transitions) if (_transitions.hasOwnProperty(key) === true) {
@@ -439,63 +623,48 @@
     };
 
     Toasty.prototype.configure = function (options) {
-        //
-        var hasSettings = Object.keys(this.settings).length;
-        if (hasSettings > 1)
-            this.settings = _extend(this.settings, options);
-        else
-            this.settings = _extend(_defaults, options);
-
+        this.settings = extend(true, _defaults, this.settings, options);
         return this;
     };
 
     Toasty.prototype.transition = function (name) {
-        //
-        this.classmap[name] = cloner(_mappings);
-        this.classmap[name] = walker(this.classmap[name], {
-            '{:classname}': this.settings.classname,
-            '{:transition}': name
-        });
+        if (typeof name === "string") {
+            this.classmap[name] = extend(true, _mappings, {});
+            this.classmap[name] = walker(this.classmap[name], {
+                '{:class-name}': this.settings.classname,
+                '{:transition}': name
+            });
+        }
         return this;
     };
 
     Toasty.prototype.toast = function (type, message, duration) {
-        //
+        
         var classes = this.classmap;
         var options = this.settings;
-
         var transition = classes[options.transition];
         var container = null;
 
         // check if the toast container exists:
-        if (typeof options.transition == 'string')
+        if (typeof options.transition === 'string')
             container = document.querySelector('.' + transition.container + '--' + options.transition);
         else
             container = document.querySelector('.' + transition.container);
 
         var containerExists = !! container;
-
-        // create the toast container if not exists:
         if (containerExists) {
+            // create the toast container if not exists:
             container = container.querySelector('.' + transition.mainwrapp); // use the wrapper instead of main container.
         } else {
-            container = document.createElement('div');
-            _addClass(container, transition.container);
-            _addClass(container, transition.container + '--' + options.transition);
-
+            container = addClass(node('div'), transition.container, transition.container + '--' + options.transition);
             // create a alert wrapper instance:
-            var wrapp = document.createElement('div');
-            _addClass(wrapp, transition.mainwrapp);
-
+            var wrapp = addClass(node('div'), transition.mainwrapp);
             // append the alert wrapper and now, this is the main container:
             container.appendChild(container = wrapp);
         }
 
         // create a new toast instance
-        var newToast = document.createElement('div');
-            _addClass(newToast, options.classname);
-            _addClass(newToast, transition.toasts[type]);
-            _addClass(newToast, transition.animate.init);
+        var newToast = addClass(node('div'), options.classname, transition.toasts[type], transition.animate.init);
             newToast.innerHTML = message;
 
         // insert the toast container into the HTML:
@@ -504,157 +673,69 @@
                     .insertBefore(parentElement(container), options.prependTo);
 
 
-        // enable or disable toast sounds:
+        // OPTIONAL STEP (must be first):
+        // INI: enable or disable toast sounds.
+        // --------------------------------------------------------------------
         if (options.enableSounds == true)
-            _playSound(
-                type,
-                container,
-                options.sounds,
-                transition.playerclass
-            );
+            playSound(type, container, options.sounds, transition.playerclass);
+        // --------------------------------------------------------------------
+        // END: enable or disable toast sounds.
 
 
         // STEP 1:
         // INI: showing the toas message
         // --------------------------------------------------------------------
-
-        _showToast(
-            type,
-            newToast,
-            container,
-            transition.animate,
-            duration,
-            options.insertBefore,
-            options.onShow
-        );
-
+        showToast(type, newToast, container, transition.animate, duration, options.insertBefore, options.onShow);
         // --------------------------------------------------------------------
         // END: showing the toas message
+
 
         // STEP 2:
         // INI: prepare the toast to hide it.
         // --------------------------------------------------------------------
-
-        if (! options.autoClose)
-            // hide the toast message on click it with an CSS3 transition:
-            _hideToastOnClick(
-                type,
-                newToast,
-                0, // duration
-                transition.animate,
-                options.onHide,
-                'close-on-click'
-            );
-        else
+        if (options.autoClose == true)
             // hide the toast message automatically:
-            _hideToast(
-                type,
-                newToast,
-                duration,
-                transition.animate,
-                options.onHide
-            );
-            
+            hideToast(type, newToast, duration, transition.animate, options.onHide);
+        else
+            // hide the toast message on click it with an CSS3 transition:
+            hideToastOnClick(type, newToast, transition.animate, options.onHide, 'close-on-click');
         // --------------------------------------------------------------------
         // END: prepare the toast to hide it.
 
-        // enable or disable the progressbar:
+
+        // OPTIONAL STEP (must be last):
+        // INI: Enable or disable the progressbar.
+        // --------------------------------------------------------------------
         if (options.progressBar == true && options.autoClose == true)
-            _showProgressBar(
-                type,
-                newToast,
-                duration,
-                transition
-            );
+            showProgressBar(type, newToast, duration, transition);
+        // --------------------------------------------------------------------
+        // END: Enable or disable the progressbar.
 
 
         return this;
     };
 
     Toasty.prototype.info = function (message, duration) {
-        //
-        duration = _getAutoCloseDuration(message, duration, this.settings);
+        duration = getAutoCloseDuration(message, duration, this.settings);
         this.toast("info", message, duration);
     };
 
     Toasty.prototype.success = function (message, duration) {
-        //
-        duration = _getAutoCloseDuration(message, duration, this.settings);
+        duration = getAutoCloseDuration(message, duration, this.settings);
         this.toast("success", message, duration);
     };
 
     Toasty.prototype.warning = function (message, duration) {
-        //
-        duration = _getAutoCloseDuration(message, duration, this.settings);
+        duration = getAutoCloseDuration(message, duration, this.settings);
         this.toast("warning", message, duration);
     };
 
     Toasty.prototype.error = function (message, duration) {
-        //
-        duration = _getAutoCloseDuration(message, duration, this.settings);
+        duration = getAutoCloseDuration(message, duration, this.settings);
         this.toast("error", message, duration);
     };
 
-    // helpers:
-
-    function walker (obj, map) {
-        //
-        for (var o in obj) if (obj.hasOwnProperty(o) == true) {
-            // ini loop:
-            switch (typeof obj[o]) {
-                case 'object':
-                    walker(obj[o], map);
-                    break;
-                case 'string':
-                    for (var m in map) if (map.hasOwnProperty(m) == true) obj[o] = obj[o].replace(m, map[m]);
-                    break;
-            }
-            // end loop.
-        }
-
-        return obj;
-    }
-
-    function cloner (object) {
-        //
-        var string = JSON.stringify(object);
-        var cloned = JSON.parse(string);
-        return cloned;
-    }
-
-    function whichTransitionEvent () {
-        //
-        var t,
-            el = document.createElement('transitionElement');
-
-        var transitions = {
-            WebkitTransition : 'webkitTransitionEnd',
-            MozTransition    : 'transitionend',
-            OTransition      : 'oTransitionEnd otransitionend',
-            transition       : 'transitionend'
-        };
-
-        for (t in transitions) if (el.style[t] !== undefined) {
-            return transitions[t];
-        }
-    }
-
-    function parentElement (el) {
-        //
-        return el.parentElement || el.parentNode;
-    }
-
-    function wtf_IEversion () {
-        var uA = window.navigator.userAgent,
-        __isIE = /msie\s|trident\/|edge\//i.test(uA) && !! (document.uniqueID || document.documentMode || window.ActiveXObject || window.MSInputMethodContext),
-        checkVersion = (__isIE && +(/(edge\/|rv:|msie\s)([\d.]+)/i.exec(uA)[2])) || NaN;
-        return checkVersion;
-    }
-
-    /**
-     * IE Fallbacks:
-     */
-
+    // FALLBACK:
     // Create Element.remove() function if not exist:
     if ('remove' in Element.prototype) {
         // the browser supports .remove() function...
@@ -665,7 +746,6 @@
         };
     }
 
-    // object:
     window.Toasty = Toasty;
 
 })(window, document);
