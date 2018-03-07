@@ -30,17 +30,17 @@
         // STRING: main class name used to styling each toast message with CSS:
         // .... IMPORTANT NOTE:
         // .... if you change this, the configuration consider that you´re
-        // .... re-stylized the plug-in and default toast styles, including css3 transitions are lost.
-        classname: "toast", 
-        // STRING: name of the CSS transition that will be used to show and hide the toast:
+        // .... re-stylized the plug-in and default toast styles, including CSS3 transitions are lost.
+        classname: "toast",
+        // STRING: name of the CSS transition that will be used to show and hide all toast by default:
         transition: "fade",
-        // BOOLEAN: specifies the way in which the toasts will be inserted in the html code:
+        // BOOLEAN: specifies the way in which the toasts will be inserted in the HTML code:
         // .... Set to BOOLEAN TRUE and the toast messages will be inserted before those already generated toasts.
         // .... Set to BOOLEAN FALSE otherwise.
         insertBefore: true,
         // INTEGER: duration that the toast will be displayed in milliseconds:
         // .... Default value is set to 4000 (4 seconds). 
-        // .... If it set to 0, the duration for each toast is calculated by message length.
+        // .... If it set to 0, the duration for each toast is calculated by text-message length.
         duration: 4000,
         // BOOLEAN: enable or disable toast sounds:
         // .... Set to BOOLEAN TRUE  - to enable toast sounds.
@@ -55,9 +55,10 @@
         // .... Set to BOOLEAN TRUE  - enable the progressbar only if the autoClose option value is set to BOOLEAN TRUE.
         // .... Set to BOOLEAN FALSE - disable the progressbar. 
         progressBar: false,
-        // Yep, support custom sounds for each toast message when are shown
-        // if the enableSounds option value is set to BOOLEAN TRUE:
-        // NOTE: The paths must point from the project's root folder.
+        // IMPORTANT: mobile browsers does not support this feature!
+        // Yep, support custom sounds for each toast message when are shown if the
+        // enableSounds option value is set to BOOLEAN TRUE:
+        // NOTE: the paths must point from the project's root folder.
         sounds: {
             // path to sound for informational message:
             info: "./dist/sounds/info/1.mp3",
@@ -77,7 +78,7 @@
         // onHide function will be fired when a toast message disappears.
         onHide: function (type) {},
 
-        // The placement where prepend the toast container:
+        // the placement where prepend the toast container:
         prependTo: document.body.childNodes[0]
     };
 
@@ -109,7 +110,7 @@
      *
      * @var object
      */
-    var timeOffset = 100;
+    var _timeOffset = 100;
 
     /**
      * A native JS extend() function
@@ -412,7 +413,7 @@
     function getAutoCloseDuration (message, duration, settings) {
             duration = duration || settings.duration;
         if (duration == 0)
-            duration = message.length * (timeOffset /2);
+            duration = message.length * (_timeOffset /2);
         return Math.floor(duration);
     }
 
@@ -497,7 +498,7 @@
         var beforeNode = container.childNodes;
             beforeNode = beforeNode[insertBefore === true ? 0 : beforeNode.length];
         container.insertBefore(el, beforeNode);
-        delay(show, timeOffset);
+        delay(show, _timeOffset);
     };
 
     /**
@@ -542,7 +543,7 @@
             addClass(el, animate.hide);
         };
 
-        delay(hide, (timeOffset *10) + duration);
+        delay(hide, (_timeOffset *10) + duration);
     };
 
     /**
@@ -562,7 +563,7 @@
     };
 
     /**
-     * The progressbar.
+     * The progressbar:
      *
      * @return void
      */
@@ -594,28 +595,37 @@
             }, 10);
         }
 
-        delay(progressbar, timeOffset *10);
+        delay(progressbar, _timeOffset *10);
+    };
+
+    /**
+     * Register a new transition only:
+     *
+     * @return string
+     */
+    var registerTransition = function (self, name) {
+        if (typeof name === "string") {
+            self.classmap[name] = extend(true, _mappings, {});
+            self.classmap[name] = walker(self.classmap[name], {
+                '{:class-name}': self.settings.classname,
+                '{:transition}': name
+            });
+        }
+        return name;
     };
 
     /*!
      * The exposed public object:
      */
 
-    var Toasty = function (options, transitions_) {
+    var Toasty = function (options) {
         this.settings = {};
         this.classmap = {};
         this.configure(typeof options === 'object' ? options : {});
-
         // add classmap for default transitions:
         if (typeof _transitions === 'object')
             for (var key in _transitions) if (_transitions.hasOwnProperty(key) === true) {
-                this.transition(_transitions[key]);
-            }
-
-        // add classmap for the user defined transitions:
-        if (typeof transitions_ === 'object')
-            for (var key in transitions_) if (transitions_.hasOwnProperty(key) === true) {
-                this.transition(transitions_[key]);
+                registerTransition(this, _transitions[key]);
             }
     };
 
@@ -625,13 +635,7 @@
     };
 
     Toasty.prototype.transition = function (name) {
-        if (typeof name === "string") {
-            this.classmap[name] = extend(true, _mappings, {});
-            this.classmap[name] = walker(this.classmap[name], {
-                '{:class-name}': this.settings.classname,
-                '{:transition}': name
-            });
-        }
+        this.settings.transition = registerTransition(this, name);
         return this;
     };
 
@@ -639,10 +643,15 @@
         
         var classes = this.classmap;
         var options = this.settings;
+
+        // check if the transition name provided in options
+        // exists in classes, if not register it:
+        if (classes.hasOwnProperty(options.transition) === false) registerTransition(this, options.transition);
+        // use the transition name provided in options:
         var transition = classes[options.transition];
-        var container = null;
 
         // check if the toast container exists:
+        var container = null;
         if (typeof options.transition === 'string')
             container = document.querySelector('.' + transition.container + '--' + options.transition);
         else

@@ -16,7 +16,7 @@
         <section id="presentation">
             <div class="content">
                 <h1 class="text-center">
-                    <b data-version="v1.5.0">Toasty.js</b>
+                    <b data-version="v1.5.10">Toasty.js</b>
                 </h1>
                 <p class="main-description text-center">
                     A minimal JavaScript notification plugin that provides a simple way
@@ -29,7 +29,7 @@
                     </a>
                     <span class="separator"></span>
                     <a class="btn btn--default" href="//github.com/egalink/Toasty.js">
-                        <span class="fa fa-github"></span> See repo
+                        <span class="fa fa-github"></span> on GitHub
                     </a>
                 </p>
                 <br/>
@@ -103,6 +103,7 @@ toast.warning("Warning! Do not proceed any further!");
 
 // and this a error message:
 toast.error("Something terrible happened!");
+
 </code></pre>
 
                 <p>a message will appear in your web application!</p>
@@ -121,17 +122,17 @@ toast.error("Something terrible happened!");
     // STRING: main class name used to styling each toast message with CSS:
     // .... IMPORTANT NOTE:
     // .... if you change this, the configuration consider that you´re
-    // .... re-stylized the plugin and default toast styles, including css3 transitions are lost.
-    classname: "toast", 
-    // STRING: name of the CSS transition that will be used to show and hide the toast:
+    // .... re-stylized the plug-in and default toast styles, including CSS3 transitions are lost.
+    classname: "toast",
+    // STRING: name of the CSS transition that will be used to show and hide all toast by default:
     transition: "fade",
-    // BOOLEAN: specifies the way in which the toasts will be inserted in the html code:
+    // BOOLEAN: specifies the way in which the toasts will be inserted in the HTML code:
     // .... Set to BOOLEAN TRUE and the toast messages will be inserted before those already generated toasts.
     // .... Set to BOOLEAN FALSE otherwise.
     insertBefore: true,
     // INTEGER: duration that the toast will be displayed in milliseconds:
     // .... Default value is set to 4000 (4 seconds). 
-    // .... If it set to 0, the duration for each toast is calculated by message length.
+    // .... If it set to 0, the duration for each toast is calculated by text-message length.
     duration: 4000,
     // BOOLEAN: enable or disable toast sounds:
     // .... Set to BOOLEAN TRUE  - to enable toast sounds.
@@ -146,9 +147,10 @@ toast.error("Something terrible happened!");
     // .... Set to BOOLEAN TRUE  - enable the progressbar only if the autoClose option value is set to BOOLEAN TRUE.
     // .... Set to BOOLEAN FALSE - disable the progressbar. 
     progressBar: false,
-    // Yep, support custom sounds for each toast message when are shown
-    // if the enableSounds option value is set to BOOLEAN TRUE:
-    // NOTE: The paths must point from the project's root folder.
+    // IMPORTANT: mobile browsers does not support this feature!
+    // Yep, support custom sounds for each toast message when are shown if the
+    // enableSounds option value is set to BOOLEAN TRUE:
+    // NOTE: the paths must point from the project's root folder.
     sounds: {
         // path to sound for informational message:
         info: "./dist/sounds/info/1.mp3",
@@ -168,7 +170,7 @@ toast.error("Something terrible happened!");
     // onHide function will be fired when a toast message disappears.
     onHide: function (type) {},
 
-    // The placement where prepend the toast container:
+    // the placement where prepend the toast container:
     prependTo: document.body.childNodes[0]
 };
 
@@ -194,16 +196,25 @@ toast.configure(options);
                 <p>List of available public methods:</p>
 
 <pre><code class="language-js">// the main Toasty function:
-var toast = new Toasty();
-
-// register a new transition for the plugin:
-toast.transition(name);
+var toast = new Toasty(options);
 
 // configure the plugin after be instantiated:
 toast.configure(options);
 
-// make a toast message:
-toast.toast(type, message, duration);
+// register a new transition for the plugin:
+toast.transition(name);
+
+// show an informational message:
+toast.info(message, duration);
+
+// show a successful message:
+toast.success(message, duration);
+
+// show a warning message:
+toast.warning(message, duration);
+
+// and this a error message:
+toast.error(message, duration);
 
 </code></pre>
 
@@ -281,12 +292,10 @@ toast.toast(type, message, duration);
                 <p>now, you able to register the new transition in plugin:</p>
 
 <pre><code class="language-js">// the main Toasty function:
-var toast = new Toasty({
-    // STRING: name of the CSS transition that will be used to show and hide the toast:
-    transition: "scale"
-});
+var toast = new Toasty();
 
-// register the new transition:
+// register the new CSS transition that will be used
+// to show and hide the toast:
 toast.transition("scale");
 
 // and run the first message with this new transition:
@@ -542,7 +551,7 @@ var toast = new Toasty({
     // .... if you change this, the configuration consider that you´re
     // .... re-stylized the plugin and default toast styles, including css3 transitions are lost.
     classname: "alert",
-    // STRING: name of the CSS transition that will be used to show and hide the toast:
+    // STRING: name of the CSS transition that will be used to show and hide all toast by default:
     transition: "scale",
     // BOOLEAN: specifies the way in which the toasts will be inserted in the html code:
     // .... Set to BOOLEAN TRUE and the toast messages will be inserted before those already generated toasts.

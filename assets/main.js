@@ -3,22 +3,26 @@
     'use strict';
 
     var toasty = new Toasty({
+        transition: "fade",
         duration: 0, // calculated automatically.
         enableSounds: true,
         progressBar: true,
         autoClose: true,
-        onShow: function (type) { console.log("a toast " + type + " message is shown!"); },
-        onHide: function (type) { console.log("the toast " + type + " message is hidden!"); }
+        onShow: function (type) {
+            console.log("a toast " + type + " message is shown!");
+        },
+        onHide: function (type) {
+            console.log("the toast " + type + " message is hidden!");
+        }
     });
 
     var tran = document.getElementById('select-transition');
     var btns = document.querySelectorAll('.btn-example');
     var down = document.getElementById('action-download');
 
-    var show = function (type, message) {
+    function show (type, message) {
         //
-        conf(tran);
-        
+        config (tran);
         switch (type) {
             case 'info':
                 toasty.info(message);
@@ -35,22 +39,21 @@
             default:
                 console.error("Error - no toast to show!");
         }
-
         return type;
     }
-    var conf = function(select) {
-        //
+
+    function config (select) {
         var option = select.options[select.selectedIndex];
             toasty.configure({
-                transition: select.value,
+                classname: "toast",
                 insertBefore: option.getAttribute('data-insertbefore') === 'true'
             });
+            toasty.transition(select.value);
     }
 
     for (var btn in btns) if (btns.hasOwnProperty(btn) === true) {
         //
         btns[btn].addEventListener('click', function(e) {
-            // show a toast:
             e.preventDefault();
             show(this.id, this.title);
         }, false);
@@ -58,7 +61,7 @@
 
     tran.addEventListener('change', function(e) {
         // change the transition:
-        conf(this)
+        config(this)
     }, false);
 
     down.addEventListener('click', function(e) {
@@ -69,41 +72,34 @@
         .success("<span class=\"fa fa-download\"></span> Preparing download...", 1000);
     });
 
-    conf(tran);
+    config(tran);
 
     // new-transition-scale example:
     document.getElementById('new-transition-scale').addEventListener('click', function(e) {
         e.preventDefault();
-
-        // the main Toasty function:
-        var toast = new Toasty({
-            transition: "scale"
-        });
-
         // register the new transition:
-        toast.transition("scale");
-
+        toasty.configure({ classname: "toast" });
+        toasty.transition("scale");
         // and run the first alert message:
-        toast.info("You have been registred a new scale transition correctly.", 2500);
+        toasty.info("You have been registred a new scale transition correctly.", 2500);
     });
 
     // alerts-re-stylized example:
     document.getElementById('alerts-re-stylized').addEventListener('click', function(e) {
         e.preventDefault();
 
-        var toast = new Toasty({
+        toasty.configure({
             classname: "alert",
-            transition: "scale",
             insertBefore: false,
             progressBar: true,
             enableSounds: true
         });
 
         // register the new transition:
-        toast.transition("scale");
+        toasty.transition("scale");
 
         // and run the first alert message:
-        toast.info("The toast messages have been re-stylized correctly.", 2500);
+        toasty.info("The toast messages have been re-stylized correctly.", 2500);
     });
 
 })(window);
