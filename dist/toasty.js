@@ -72,15 +72,12 @@
             // path to sound for error message:
             error: "./dist/sounds/error/1.mp3",
         },
-
         // callback:
         // onShow function will be fired when a toast message appears.
         onShow: function (type) {},
-
         // callback:
         // onHide function will be fired when a toast message disappears.
         onHide: function (type) {},
-
         // the placement where prepend the toast container:
         prependTo: document.body.childNodes[0]
     };
