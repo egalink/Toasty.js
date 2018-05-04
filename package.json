@@ -4,9 +4,9 @@
     "description": "A minimal JavaScript notification plugin that provides a simple way to display customizable toast messages on the web page with CSS3 transition effects.",
     "author": {
         "name": "Jakim Hernández",
-        "url": "http://egalink.github.io/"
+        "url": "http://jakim.me/"
     },
-    "homepage": "https://egalink.github.io/Toasty.js/",
+    "homepage": "https://jakim.me/Toasty.js/",
     "version": "1.5.0",
     "main": "dist/toasty.js",
     "devDependencies": {

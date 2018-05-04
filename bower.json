@@ -27,7 +27,7 @@
         "alerts"
     ],
     "license": "MIT",
-    "homepage": "https://egalink.github.io/Toasty.js/",
+    "homepage": "https://jakim.me/Toasty.js/",
     "ignore": [
         "**/.*",
         "assets",
