@@ -12,7 +12,7 @@
     </head>
     <body>
 
-        <!-- Presentation: --> 
+        <!-- Presentation: -->
         <section id="presentation">
             <div class="content">
                 <h1 class="text-center">
@@ -69,6 +69,10 @@
                     If you notice any bugs, please post them to
                     <a href="https://github.com/egalink/Toasty.js/issues" target="_blank">GitHub</a> issues.
                 </p>
+                <br/>
+                <h3>Install via NPM</h3>
+                <pre><code class="language-vim">npm i egalink-toasty.js</code></pre>
+                <p>Or you can download all  ready-to-use files from <a href="//github.com/egalink/Toasty.js/archive/master.zip">here</a>.</p>
                 <br/>
                 <h3>Link Files</h3>
                 <p>All ready-to-use files are located in the dist/ directory.</p>
@@ -131,7 +135,7 @@ toast.error("Something terrible happened!");
     // .... Set to BOOLEAN FALSE otherwise.
     insertBefore: true,
     // INTEGER: duration that the toast will be displayed in milliseconds:
-    // .... Default value is set to 4000 (4 seconds). 
+    // .... Default value is set to 4000 (4 seconds).
     // .... If it set to 0, the duration for each toast is calculated by text-message length.
     duration: 4000,
     // BOOLEAN: enable or disable toast sounds:
@@ -145,7 +149,7 @@ toast.error("Something terrible happened!");
     autoClose: true,
     // BOOLEAN: enable or disable the progressbar:
     // .... Set to BOOLEAN TRUE  - enable the progressbar only if the autoClose option value is set to BOOLEAN TRUE.
-    // .... Set to BOOLEAN FALSE - disable the progressbar. 
+    // .... Set to BOOLEAN FALSE - disable the progressbar.
     progressBar: false,
     // IMPORTANT: mobile browsers does not support this feature!
     // Yep, support custom sounds for each toast message when are shown if the
@@ -175,7 +179,7 @@ toast.error("Something terrible happened!");
 };
 
 // more js code...</code></pre>
-                
+
                 <br/>
                 <h3>Configure it</h3>
                 <p>Configure the plugin by passing any of these options as parameter in:</p>
@@ -185,7 +189,7 @@ var toast = new Toasty(options);
 // or this public method:
 toast.configure(options);
 </code></pre>
-            
+
                 <p>now, the plugin has been configured.</p>
             </div>
         </section>
@@ -254,7 +258,7 @@ toast.error(message, duration);
 
 /* a [fade] transition (DEFAULT TRANSITION IN THE PLUGIN): */
 .toast-container--fade {
-     right: 0;  
+     right: 0;
     bottom: 0;
 }
 .toast-container--fade .toast-wrapper { display: inline-block; }
@@ -263,7 +267,7 @@ toast.error(message, duration);
 .toast.fade-hide { opacity: 0; }
 /* ------------------------------------------------------------------------- */
 </code></pre>
-                
+
                 <br/>
                 <h3>The new transition</h3>
                 <p>Based on the previous css structure, you can create a new CSS3 transition as follows: </p>
@@ -277,7 +281,7 @@ toast.error(message, duration);
 
 /* a [scale] transition: */
 .toast-container--scale {
-     right: 0;  
+     right: 0;
     bottom: 0;
 }
 .toast-container--scale .toast-wrapper { display: inline-block; }
@@ -286,7 +290,7 @@ toast.error(message, duration);
 .toast.scale-hide { opacity: 0; transform: scale(0); }
 /* ------------------------------------------------------------------------- */
 </code></pre>
-                
+
                 <br/>
                 <h3>Registering transition</h3>
                 <p>now, you able to register the new transition in plugin:</p>
@@ -516,7 +520,7 @@ toast.info("You have been registred a new scale transition correctly.");
 .alert-progressbar--warning { background-color: #F2C779; }
 .alert-progressbar--error { background-color: #F5ACA6; }
 </code></pre>
-                
+
                 <br/>
                 <h3>The new Transition</h3>
                 <p>We will use the same transition created in the section <a href="#creating-transitions">Creating Transitions</a>.</p>
@@ -530,7 +534,7 @@ toast.info("You have been registred a new scale transition correctly.");
 
 /* a [scale] transition: */
 .alert-container--scale {
-     right: 0;  
+     right: 0;
     bottom: 0;
 }
 .alert-container--scale .alert-wrapper { display: inline-block; }
@@ -539,7 +543,7 @@ toast.info("You have been registred a new scale transition correctly.");
 .alert.scale-hide { opacity: 0; transform: scale(0); }
 /* ------------------------------------------------------------------------- */
 </code></pre>
-                
+
                 <br/>
                 <h3>Trying new config</h3>
                 <p>Now, you must configure the plugin to attach new CSS styles:</p>
@@ -559,7 +563,7 @@ var toast = new Toasty({
     insertBefore: false,
     // BOOLEAN: enable or disable the progressbar:
     // .... Set to BOOLEAN TRUE  - enable the progressbar only if the autoClose option value is set to BOOLEAN TRUE.
-    // .... Set to BOOLEAN FALSE - disable the progressbar. 
+    // .... Set to BOOLEAN FALSE - disable the progressbar.
     progressBar: true,
     // BOOLEAN: enable or disable toast sounds:
     // .... Set to BOOLEAN TRUE  - to enable toast sounds.
