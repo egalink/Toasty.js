@@ -7,7 +7,7 @@
         "url": "http://jakim.me/"
     },
     "homepage": "https://jakim.me/Toasty.js/",
-    "version": "1.5.4",
+    "version": "1.5.5",
     "main": "dist/toasty.js",
     "devDependencies": {
         "grunt": "^1.0.1",
