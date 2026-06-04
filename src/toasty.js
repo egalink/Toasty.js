@@ -75,8 +75,10 @@
         // callback:
         // onHide function will be fired when a toast message disappears.
         onHide: function (type) {},
-        // the placement where prepend the toast container:
-        prependTo: document.body.childNodes[0]
+
+        // the placement where prepend the toast container (optional):
+        // If null, the toast container will be appended to document.body.
+        prependTo: null
     };
 
     /**
@@ -408,9 +410,12 @@
      * @return number
      */
     function getAutoCloseDuration (message, duration, settings) {
-            duration = duration || settings.duration;
-        if (duration == 0)
-            duration = message.length * (_timeOffset /2);
+        if (typeof duration === 'undefined' || duration === null) {
+            duration = settings.duration;
+        }
+        if (duration === 0) {
+            duration = message.length * (_timeOffset / 2);
+        }
         return Math.floor(duration);
     }
 
@@ -636,12 +641,17 @@
         return this;
     };
 
-    Toasty.prototype.toast = function (type, message, duration) {
+    Toasty.prototype.toast = function (type, message, duration, onShow, onHide) {
         
         var classes = this.classmap;
         var options = this.settings;
 
-        // check if the transition name provided in options
+        // per-toast callbacks take precedence over global settings
+        var showCallback = typeof onShow === 'function' ? onShow : options.onShow;
+        var hideCallback = typeof onHide === 'function' ? onHide : options.onHide;
+
+        // check if the transition name prov
+        // check if the transition name provUso visual studio code, pero le metieron IA copilot, no me gusta, anteiormente usaba atom o sublime text, aun existen esos proyectos?ided in options
         // exists in classes, if not register it:
         if (classes.hasOwnProperty(options.transition) === false) registerTransition(this, options.transition);
         // use the transition name provided in options:
@@ -671,9 +681,18 @@
             newToast.innerHTML = message;
 
         // insert the toast container into the HTML:
-        if (! containerExists)
-            document.body
-                    .insertBefore(parentElement(container), options.prependTo);
+        if (! containerExists) {
+            var outer = parentElement(container);
+            if (options.prependTo && options.prependTo.nodeType && options.prependTo.parentNode) {
+                try {
+                    options.prependTo.parentNode.insertBefore(outer, options.prependTo);
+                } catch (e) {
+                    document.body.appendChild(outer);
+                }
+            } else {
+                document.body.appendChild(outer);
+            }
+        }
 
 
         // OPTIONAL STEP (must be first):
@@ -688,7 +707,7 @@
         // STEP 1:
         // INI: showing the toas message
         // --------------------------------------------------------------------
-        showToast(type, newToast, container, transition.animate, duration, options.insertBefore, options.onShow);
+        showToast(type, newToast, container, transition.animate, duration, options.insertBefore, showCallback);
         // --------------------------------------------------------------------
         // END: showing the toas message
 
@@ -698,10 +717,10 @@
         // --------------------------------------------------------------------
         if (options.autoClose == true)
             // hide the toast message automatically:
-            hideToast(type, newToast, duration, transition.animate, options.onHide);
+            hideToast(type, newToast, duration, transition.animate, hideCallback);
         else
             // hide the toast message on click it with an CSS3 transition:
-            hideToastOnClick(type, newToast, transition.animate, options.onHide, 'close-on-click');
+            hideToastOnClick(type, newToast, transition.animate, hideCallback, 'close-on-click');
         // --------------------------------------------------------------------
         // END: prepare the toast to hide it.
 
@@ -718,24 +737,24 @@
         return this;
     };
 
-    Toasty.prototype.info = function (message, duration) {
+    Toasty.prototype.info = function (message, duration, onShow, onHide) {
         duration = getAutoCloseDuration(message, duration, this.settings);
-        this.toast("info", message, duration);
+        this.toast("info", message, duration, onShow, onHide);
     };
 
-    Toasty.prototype.success = function (message, duration) {
+    Toasty.prototype.success = function (message, duration, onShow, onHide) {
         duration = getAutoCloseDuration(message, duration, this.settings);
-        this.toast("success", message, duration);
+        this.toast("success", message, duration, onShow, onHide);
     };
 
-    Toasty.prototype.warning = function (message, duration) {
+    Toasty.prototype.warning = function (message, duration, onShow, onHide) {
         duration = getAutoCloseDuration(message, duration, this.settings);
-        this.toast("warning", message, duration);
+        this.toast("warning", message, duration, onShow, onHide);
     };
 
-    Toasty.prototype.error = function (message, duration) {
+    Toasty.prototype.error = function (message, duration, onShow, onHide) {
         duration = getAutoCloseDuration(message, duration, this.settings);
-        this.toast("error", message, duration);
+        this.toast("error", message, duration, onShow, onHide);
     };
 
     // FALLBACK:
